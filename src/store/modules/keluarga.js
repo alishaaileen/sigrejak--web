@@ -29,6 +29,9 @@ const mutations = {
     setStatus(state, status) {
         state.status = status
     },
+    setToken(state, token) {
+        state.token = token
+    },
     resetData(state) {
         state.id = null
         state.nama_keluarga = null
@@ -44,6 +47,7 @@ const actions = {
             let response = await Axios.post(`${API_URL}/login`, user)
 
             localStorage.setItem('keluarga-token', response.data.token)
+            commit("setToken", response.data.token);
             commit("setStatus", 'success');
 
             return true

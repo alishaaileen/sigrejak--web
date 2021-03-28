@@ -10,7 +10,7 @@ const importView = (path) => {
 Vue.use(VueRouter)
 
 const keluargaRouteGuard = (to,from, next) => {
-  if(!store.getters.isAuthenticated) {
+  if(!localStorage.getItem('keluarga-token')) {
     next('/')
     return
   }
@@ -33,6 +33,14 @@ const routes = [
     path: '/',
     name: 'KeluargaLogin',
     component: importView("Login/loginKeluarga"),
+    beforeEnter: (to,from, next) => {
+      if(localStorage.getItem('keluarga-token')) {
+        next('/keluarga/dashboard')
+        return
+      }
+    
+      next()
+    }
   },
   // KELUARGA =======================================
   {
@@ -55,6 +63,14 @@ const routes = [
     path: '/admin-login',
     name: 'loginAdmin',
     component: importView("Login/loginAdmin"),
+    beforeEnter: (to,from, next) => {
+      if(localStorage.getItem('admin-token')) {
+        next('/admin/dashboard')
+        return
+      }
+    
+      next()
+    }
   },
   {
     path: '/admin',
