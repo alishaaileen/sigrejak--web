@@ -1,0 +1,126 @@
+<template>
+  <div>
+    <!------------- NAVBAR ----------->
+    <v-app-bar color="white" light flat>
+      <v-spacer></v-spacer>
+      <v-btn
+        text
+        small
+        class="btn text-none ma-2"
+      >
+        <v-icon
+          >mdi-logout</v-icon
+        >
+        Logout
+      </v-btn>
+    </v-app-bar>
+    <!-- SIDEBAR -->
+    <v-navigation-drawer light permanent fixed width="240" app>
+      <v-list dense nav class="py-0">
+        <v-list-item two-line>
+          <v-avatar size="24" tile>
+            <img src="" />
+          </v-avatar>
+
+          <v-list-item-content>
+            <v-list-item-title class="sidebar-app-name"
+              >Nama Keluarga</v-list-item-title
+            >
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-divider></v-divider>
+
+        <!-- MENU-MENU -->
+
+        <div v-for="(menu, i) in menus" :key="i">
+          <v-list-item v-if="!menu.hasOption" tag="router-link" :to="menu.to">
+            <v-list-item-icon>
+              <v-icon color="#17B978">{{ menu.icon }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title class="sidebar-menu-option">{{
+                menu.title
+              }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-group
+            v-else
+            :prepend-icon="menu.icon"
+            no-action
+            value="true"
+            color="#17B978"
+          >
+            <template v-slot:activator>
+              <v-list-item-title class="sidebar-menu-option">{{
+                menu.title
+              }}</v-list-item-title>
+            </template>
+
+            <v-list-item
+              v-for="(option, i) in menu.options"
+              tag="router-link"
+              :to="option.to"
+              :key="i"
+              link
+            >
+              <v-list-item-title
+                v-text="option.optionTitle"
+                class="sidebar-menu-option"
+              ></v-list-item-title>
+            </v-list-item>
+          </v-list-group>
+        </div>
+      </v-list>
+
+      <!-- <template v-slot:append>
+        <div class="pa-2">
+          <v-btn
+            color="error"
+            @click="logout"
+            class="btn text-transform-none text-none"
+            block
+            >Keluar</v-btn
+          >
+        </div>
+      </template> -->
+    </v-navigation-drawer>
+
+    <div class="grey-bg">
+      <router-view />
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      menus: [
+        {
+          title: "Karyawan",
+          icon: "mdi-account",
+          to: "/user",
+        },
+        {
+          title: "Kelola Data",
+          icon: "mdi-book",
+          hasOption: true,
+          options: [
+            {
+              optionTitle: "Spesies",
+              to: "/spesies",
+            },
+            {
+              optionTitle: "Famili",
+              to: "/famili",
+            },
+          ],
+        },
+      ],
+    }
+  }
+}
+</script>

@@ -1,5 +1,9 @@
-.login {
+#login {
   height: 100vh !important;
+}
+
+.login-form-box {
+  padding: 50px;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store'
 
 const importView = (path) => {
   console.log(`../views/${path}.vue`)
@@ -8,26 +9,59 @@ const importView = (path) => {
 
 Vue.use(VueRouter)
 
+const keluargaRouteGuard = (to,from, next) => {
+  if(!store.getters.isAuthenticated) {
+    next('/')
+    return
+  }
+
+  next()
+}
+
+const adminRouteGuard = (to,from, next) => {
+  if(!store.getters.isAuthenticated) {
+    next('/admin-login')
+    return
+  }
+
+  next()
+}
+
 const routes = [
-  // USER =======================================
+  // KELUARGA LOGIN
   {
     path: '/',
-    name: 'LoginUser',
-    component: importView("Login/loginUser"),
+    name: 'KeluargaLogin',
+    component: importView("Login/loginKeluarga"),
+  },
+  // KELUARGA =======================================
+  {
+    path: '/keluarga',
+    name: 'Keluarga',
+    component: importView("Keluarga/Keluarga"),
+    beforeEnter: keluargaRouteGuard,
+    redirect: '/keluarga/dashboard',
     children: [
-      // Dashboard User =========================
+      // Dashboard Keluarga =========================
       {
-        path: '/dashboard',
-        name: 'DashboardUser',
-        component: importView("User/Dashboard")
+        path: '/keluarga/dashboard',
+        name: 'DashboardKeluarga',
+        component: importView("Keluarga/Dashboard")
       }
     ]
   },
   // ADMIN =======================================
   {
+    path: '/admin-login',
+    name: 'loginAdmin',
+    component: importView("Login/loginAdmin"),
+  },
+  {
     path: '/admin',
     name: 'LoginAdmin',
-    component: importView("Login/loginAdmin"),
+    component: importView("Admin/Admin"),
+    beforeEnter: adminRouteGuard,
+    redirect: '/admin/dashboard',
     children: [
       // Dashboard Admin =========================
       {

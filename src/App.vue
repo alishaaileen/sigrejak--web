@@ -5,8 +5,9 @@
     </v-main>
   </div>
 </template>
-<style scoped>
-#app , .main{
+<style>
+
+/* #app , .main{
   height: 100vh;
-}
+} */
 </style>
