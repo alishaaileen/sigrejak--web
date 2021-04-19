@@ -1,5 +1,6 @@
-import Axios from 'axios'
+import axios from 'axios'
 import { API_URL } from '../../constants'
+// import { getProfileKeluarga } from '../../utils'
 
 const state = () => {
     return {
@@ -8,8 +9,9 @@ const state = () => {
         username: null,
         email: null,
         nama_lingkungan_diketuai: null,
-        token: localStorage.getItem('keluarga-token') || null,
+        token: localStorage.getItem('token') || null,
         status: null,
+        tempIdForDetail: null,
     }
 }
 
@@ -32,34 +34,85 @@ const mutations = {
     setToken(state, token) {
         state.token = token
     },
-    resetData(state) {
+    resetData() {
         state.id = null
         state.nama_keluarga = null
         state.username = null
         state.email = null
         state.nama_lingkungan_diketuai = null
+    },
+    setTempIdForDetail(state, id) {
+        state.tempIdForDetail = id
     }
 }
 
 const actions = {
     async login({ commit }, user) {
         try {
-            let response = await Axios.post(`${API_URL}/login`, user)
+            let response = await axios.post(`${API_URL}/login`, user)
 
-            localStorage.setItem('keluarga-token', response.data.token)
-            commit("setToken", response.data.token);
-            commit("setStatus", 'success');
+            localStorage.setItem('token', response.data.token)
+            commit('setToken', response.data.token);
+            commit('setStatus', 'success');
+        } catch (e) {
+            console.error(e)
+            commit('setStatus', 'error');
+        }
+    },
+    async getProfileKeluarga({ commit, state }) {
+        const config = {
+            headers: { Authorization: `Bearer ${state.token}` }
+        };
+        
+        const bodyParameters = {
+           key: "value"
+        };
+
+        try {
+            let response = await axios.get(`${API_URL}/keluarga/profile`,bodyParameters, config)
+
+            commit('setData', response.data.keluarga);
 
             return true
         } catch (e) {
             console.error(e)
-            commit("setStatus", 'error');
+            commit('setStatus', 'error');
 
             return false
         }
     },
+    checkIfTokenExpired() {
+        let headers = {
+            'cache-control': 'no-cache'
+        };
+        let accessToken = localStorage.getItem('jwt-token');
+    
+        if (accessToken && accessToken !== '') {
+            headers.Authorization = accessToken;
+        }
+        const instance = axios.create({
+            baseURL: API_URL,
+            headers: headers
+        });
+    
+        instance.interceptors.response.use((response) => {
+            if(response.status === 401) {
+                 //add your code
+                 alert("You are not authorized");
+            }
+            return response;
+        }, (error) => {
+            if (error.response && error.response.data) {
+                 //add your code
+                 return Promise.reject(error.response.data);
+            }
+            return Promise.reject(error.message);
+        });
+    
+        return instance;
+    },
     logout({ commit }) {
-        localStorage.removeItem('keluarga-token')
+        localStorage.removeItem('token')
         commit('resetData')
     }
 }

@@ -4,7 +4,11 @@ Vue.use(Vuex)
 
 import admin from './modules/admin'
 import keluarga from './modules/keluarga'
+
 import notifikasi from './modules/notifikasi'
+import snackbar from './modules/snackbar'
+import deleteData from './modules/deleteData'
+import loading from './modules/loading'
 
 const debug = process.env.NODE_ENV !== 'production'
 
@@ -13,6 +17,9 @@ export default new Vuex.Store({
     admin,
     keluarga,
     notifikasi,
+    snackbar,
+    deleteData,
+    loading
   },
   strict: debug,
 //   plugins: debug ? [createLogger()] : []

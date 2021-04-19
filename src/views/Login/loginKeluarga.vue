@@ -1,18 +1,18 @@
 <template>
   <div id="login" class="d-flex align-center justify-center">
-    <v-card class="login-form-box mx-auto" max-width="500" outlined>
-      <h1>asdfasndfin</h1>
+    <v-card class="login-form-box mx-auto" width="600" outlined>
+      <h1>Masuk Akun Keluarga</h1>
 
       <v-form @submit.prevent="login">
         <v-text-field
-          placeholder="username"
+          placeholder="Username"
           v-model="user.username"
           append-icon="mdi-account"
         >
         </v-text-field>
 
         <v-text-field
-          placeholder="password"
+          placeholder="Password"
           v-model="user.password"
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           :type="showPassword ? 'text' : 'password'"
@@ -34,6 +34,8 @@
         </v-card-actions>
       </v-form>
     </v-card>
+
+    <loading-overlay></loading-overlay>
   </div>
 </template>
 
@@ -53,6 +55,8 @@ export default {
   },
   methods: {
     async login() {
+      this.$store.dispatch('loading/openLoading')
+
       this.$store.dispatch('keluarga/login', {
         username: this.user.username,
         password: this.user.password
@@ -61,6 +65,8 @@ export default {
       }).catch((error) => {
         console.error(error)
       })
+
+      this.$store.dispatch('loading/closeLoading')
     },
   }
 }

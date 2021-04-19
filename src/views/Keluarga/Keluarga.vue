@@ -3,21 +3,47 @@
     <!------------- NAVBAR ----------->
     <v-app-bar color="white" light flat>
       <v-spacer></v-spacer>
-      <v-btn
-        text
-        small
-        class="btn text-none ma-2"
-      >
-        <v-icon
-          >mdi-logout</v-icon
-        >
-        Logout
+      <v-btn icon class="btn text-none ma-2">
+        <v-icon>mdi-bell-outline</v-icon>
       </v-btn>
+
+      <v-menu
+        offset-y
+        transition="slide-y-transition"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="text-none"
+            text
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-account-circle</v-icon>
+            {{ keluarga.nama_keluarga }}
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item @click="() => {}">
+            <v-list-item-title>
+              <v-icon>mdi-account</v-icon>
+              Profile Keluarga
+            </v-list-item-title>
+          </v-list-item>
+          <v-divider></v-divider>
+          <v-list-item @click="logout">
+            <v-btn class="text-none" text color="error" block>
+              <v-icon small>mdi-logout</v-icon>
+              Log out
+            </v-btn>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
     <!-- SIDEBAR -->
-    <v-navigation-drawer light permanent fixed width="240" app>
-      <v-list dense nav class="py-0">
-        <v-list-item two-line>
+    <v-navigation-drawer color="blue-grey darken-3" dark permanent fixed width="240" app>
+      <v-list dense nav class="my-1">
+        <!-- <v-list-item two-line>
           <v-avatar size="24" tile>
             <img src="" />
           </v-avatar>
@@ -27,9 +53,9 @@
               >Nama Keluarga</v-list-item-title
             >
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
 
-        <v-divider></v-divider>
+        <!-- <v-divider></v-divider> -->
 
         <!-- MENU-MENU -->
 
@@ -88,38 +114,64 @@
       </template> -->
     </v-navigation-drawer>
 
-    <div class="grey-bg">
+    <div class="app-container">
       <router-view />
     </div>
+
+    <loading-overlay></loading-overlay>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { setAxiosBearerToken } from '../../utils'
+
 export default {
+  computed: mapState({
+    keluarga: 'keluarga'
+  }),
   data() {
     return {
       menus: [
         {
-          title: "Karyawan",
-          icon: "mdi-account",
-          to: "/user",
+          title: "Dashboard",
+          icon: "mdi-view-dashboard-outline",
+          to: "/keluarga/dashboard",
         },
         {
-          title: "Kelola Data",
-          icon: "mdi-book",
-          hasOption: true,
-          options: [
-            {
-              optionTitle: "Spesies",
-              to: "/spesies",
-            },
-            {
-              optionTitle: "Famili",
-              to: "/famili",
-            },
-          ],
+          title: "Anggota Keluarga",
+          icon: "mdi-account-group-outline",
+          to: "/keluarga/anggota-keluarga",
+        },
+        {
+          title: "Kelola Surat",
+          icon: "mdi-book-outline",
+          to: "/keluarga/kelola-surat"
+          // hasOption: true,
+          // options: [
+          //   {
+          //     optionTitle: "Surat Pindah",
+          //     to: "/spesies",
+          //   },
+          // ],
+        },
+        {
+          title: "Kelola Data Lingkungan",
+          icon: "mdi-book-account-outline",
+          to: "/keluarga/kelola-data-lingkungan",
         },
       ],
+    }
+  },
+  created() {
+    setAxiosBearerToken()
+
+    this.$store.dispatch('keluarga/getProfileKeluarga')
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('keluarga/logout')
+      this.$router.push('/')
     }
   }
 }
