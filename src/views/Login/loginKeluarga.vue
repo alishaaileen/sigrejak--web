@@ -8,6 +8,7 @@
           placeholder="Username"
           v-model="user.username"
           append-icon="mdi-account"
+          @input="resetErrorMsg"
         >
         </v-text-field>
 
@@ -17,8 +18,13 @@
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           :type="showPassword ? 'text' : 'password'"
           @click:append="showPassword = !showPassword"
+          @input="resetErrorMsg"
         >
         </v-text-field>
+
+        <small v-show="errorMsg" class="error--text font-weight-medium">
+          {{ errorMsg }}
+        </small>
 
         <v-card-actions>
           <v-btn
@@ -48,26 +54,33 @@ export default {
         username: '',
         password: '',
       },
+      errorMsg: null,
     }
   },
-  created() {
-
-  },
   methods: {
-    async login() {
+    login() {
       this.$store.dispatch('loading/openLoading')
 
       this.$store.dispatch('keluarga/login', {
         username: this.user.username,
         password: this.user.password
-      }).then(() => {
-        this.$router.push("/keluarga/dashboard");
+      }).then((res) => {
+        if(res === 400) {
+          this.errorMsg = "Username atau Password salah"
+        } else if (res === 422) {
+          this.errorMsg = "Harap isi Username dan Password dengan benar"
+        } else if (res === 200) {
+          this.$router.push("/keluarga/dashboard");
+        }
       }).catch((error) => {
         console.error(error)
       })
 
       this.$store.dispatch('loading/closeLoading')
     },
+    resetErrorMsg() {
+      this.errorMsg = null
+    }
   }
 }
 </script>

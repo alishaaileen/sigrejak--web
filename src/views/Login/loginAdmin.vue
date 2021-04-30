@@ -8,6 +8,7 @@
           placeholder="Email"
           v-model="admin.email"
           append-icon="mdi-account"
+          @input="resetErrorMsg"
         >
         </v-text-field>
 
@@ -17,8 +18,13 @@
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           :type="showPassword ? 'text' : 'password'"
           @click:append="showPassword = !showPassword"
+          @input="resetErrorMsg"
         >
         </v-text-field>
+
+        <small v-show="errorMsg" class="error--text font-weight-medium">
+          {{ errorMsg }}
+        </small>
 
         <v-card-actions>
           <v-btn
@@ -48,10 +54,8 @@ export default {
         email: '',
         password: '',
       },
+      errorMsg: null,
     }
-  },
-  created() {
-
   },
   methods: {
     async login() {
@@ -60,14 +64,23 @@ export default {
       this.$store.dispatch('admin/login', {
         email: this.admin.email,
         password: this.admin.password
-      }).then(() => {
-        this.$router.push("/admin/dashboard");
+      }).then((res) => {
+        if(res === 400) {
+          this.errorMsg = "Email atau Password salah"
+        } else if (res === 422) {
+          this.errorMsg = "Harap isi Email dan Password dengan benar"
+        } else if (res === 200) {
+          this.$router.push("/admin/dashboard");
+        }
       }).catch((error) => {
         console.error(error)
       })
 
       this.$store.dispatch('loading/closeLoading')
     },
+    resetErrorMsg() {
+      this.errorMsg = null
+    }
   }
 }
 </script>

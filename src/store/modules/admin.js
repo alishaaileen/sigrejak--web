@@ -45,15 +45,16 @@ const actions = {
             let response = await axios.post(`${API_URL}/login-admin`, admin)
 
             localStorage.setItem('token', response.data.token)
-            commit('setToken', response.data.token);
+            commit('setToken', response.data.admin.token);
+            commit('setData', response.data.admin);
             commit('setStatus', 'success');
-
-            return true
+            
+            return response.status
         } catch (e) {
             console.error(e)
             commit('setStatus', 'error');
-
-            return false
+            
+            return e.response.status
         }
     },
     async getProfileAdmin({ commit, state }) {

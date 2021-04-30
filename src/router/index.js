@@ -83,6 +83,11 @@ const routes = [
         name: 'ViewSuratKeteranganPindah',
         component: importView("Keluarga/KelolaSurat/SuratKeteranganPindah/ViewAll")
       },
+      {
+        path: '/keluarga/kelola-surat/surat-keterangan-pindah/buat-surat',
+        name: 'AddSuratKeteranganPindah',
+        component: importView("Keluarga/KelolaSurat/SuratKeteranganPindah/Add")
+      },
       // Ketua Lingkungan =========================
       {
         path: '/keluarga/kelola-data-lingkungan',
@@ -141,19 +146,19 @@ const routes = [
       },
       // Kelola Keluarga =========================
       {
-        path: '/admin/kelola-admin',
-        name: 'ViewAnggotaKeluarga',
-        component: importView("Keluarga/AnggotaKeluarga/ViewAll")
+        path: '/admin/kelola-keluarga',
+        name: 'ViewAllKeluarga',
+        component: importView("Admin/KelolaKeluarga/ViewAll")
       },
       {
-        path: '/keluarga/tambah-anggota',
+        path: '/admin/tambah-keluarga',
         name: 'AddAnggotaKeluarga',
-        component: importView("Keluarga/AnggotaKeluarga/Add")
+        component: importView("Admin/KelolaKeluarga/Add")
       },
       {
-        path: '/keluarga/detail-anggota-keluarga',
+        path: '/admin/detail-keluarga/:id',
         name: 'DetailAnggotaKeluarga',
-        component: importView("Keluarga/AnggotaKeluarga/Detail")
+        component: importView("Admin/KelolaKeluarga/Detail")
       },
       // Kelola Paroki =========================
       {

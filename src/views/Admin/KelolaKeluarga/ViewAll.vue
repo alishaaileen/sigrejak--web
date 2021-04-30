@@ -6,7 +6,7 @@
       <v-card flat outlined>
         <v-data-table
           :headers="headers"
-          :items="familyMembers"
+          :items="families"
           :search="search"
           :page.sync="page"
           :items-per-page="selectedJumlahData"
@@ -36,11 +36,11 @@
                     class="btn text-none"
                     color="success"
                     tag="router-link"
-                    to="tambah-anggota"
+                    to="tambah-keluarga"
                     dark
                     depressed
                   >
-                    Tambah anggota keluarga
+                    Tambah keluarga
                   </v-btn>
                 </v-col>
               </v-row>
@@ -120,7 +120,7 @@ export default {
         text: '', value: 'action',
       },
     ],
-    family: [],
+    families: [],
     page: 1,
     pageCount: 0,
     selectedJumlahData: 10,
@@ -130,7 +130,7 @@ export default {
   async mounted() {
     this.tableLoading = true
 
-    this.family = await this.getAllFamily('/keluarga')
+    this.families = await this.getAllFamily('/keluarga')
     
     this.tableLoading = false
   },
@@ -145,8 +145,7 @@ export default {
       }
     },
     goToDetail(id) {
-      this.$store.commit('admin/setTempIdForDetail', id)
-      this.$router.push('/admin/detail-keluarga')
+      this.$router.push(`/admin/detail-keluarga/${id}`)
     },
     openConfirmDelete(id) {
       this.deleteId = id

@@ -80,7 +80,7 @@
             color="#17B978"
           >
             <template v-slot:activator>
-              <v-list-item-title class="sidebar-menu-option">{{
+              <v-list-item-title class="sidebar-menu-option font-semi-bold">{{
                 menu.title
               }}</v-list-item-title>
             </template>
@@ -175,7 +175,7 @@ export default {
   created() {
     setAxiosBearerToken()
 
-    this.$store.dispatch('admin/getProfileAdmin')
+    // this.$store.dispatch('admin/getProfileAdmin')
   },
   methods: {
     logout() {

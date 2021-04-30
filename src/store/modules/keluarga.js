@@ -54,9 +54,12 @@ const actions = {
             localStorage.setItem('token', response.data.token)
             commit('setToken', response.data.token);
             commit('setStatus', 'success');
+
+            return response.status
         } catch (e) {
             console.error(e)
             commit('setStatus', 'error');
+            return e.response.status
         }
     },
     async getProfileKeluarga({ commit, state }) {
