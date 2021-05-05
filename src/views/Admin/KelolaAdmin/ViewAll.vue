@@ -126,25 +126,13 @@ export default {
   }),
   async mounted() {
     this.tableLoading = true
-
     // this.admins = await this.getAllAdmin('/admin')
     this.admins = await getData('/admin')
-    
     this.tableLoading = false
   },
   methods: {
-    async getAllAdmin(url) {
-      try {
-        let response = await getData(url)
-
-        return response
-      } catch (e) {
-        console.error(e)
-      }
-    },
     goToDetail(id) {
-      this.$store.commit('admin/setTempIdForDetail', id)
-      this.$router.push('/admin/detail-keluarga')
+      this.$router.push(`/admin/detail-admin/${id}`)
     },
     openConfirmDelete(id) {
       this.deleteId = id
@@ -161,28 +149,20 @@ export default {
 
       if (decision) {
         try {
-          let response = await deleteData('/umat', this.deleteId)
+          let response = await deleteData('/admin', this.deleteId)
           
           if (response.status === 200) {
-            snackbar = {
-              active: true,
-              color: 'success',
-              text: 'Data berhasil dihapus',
-            }
+            snackbar.color = 'success',
+            snackbar.text = 'Data berhasil dihapus'
+
+            this.admins = await getData('/admin')
           } else {
-            snackbar = {
-              active: true,
-              color: 'error',
-              text: 'Terjadi kesalahan. Silahkan refresh dan coba lagi',
-            }
+            snackbar.color = 'error'
+            snackbar.text = 'Terjadi kesalahan. Silahkan refresh dan coba lagi'
           }
         } catch (error) {
-          snackbar = {
-            active: true,
-            color: 'error',
-            text: error,
-          }
-          console.error(error)
+          snackbar.color = 'error'
+          snackbar.text = error
         }
         this.$store.dispatch('snackbar/openSnackbar', snackbar)
       }

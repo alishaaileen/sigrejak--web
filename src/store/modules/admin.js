@@ -42,11 +42,10 @@ const mutations = {
 const actions = {
     async login({ commit }, admin) {
         try {
-            let response = await axios.post(`${API_URL}/login-admin`, admin)
+            let response = await axios.post(`${API_URL}/admin/login`, admin)
 
             localStorage.setItem('token', response.data.token)
-            commit('setToken', response.data.admin.token);
-            commit('setData', response.data.admin);
+            commit('setToken', response.data.token);
             commit('setStatus', 'success');
             
             return response.status
@@ -67,9 +66,9 @@ const actions = {
         };
 
         try {
-            let response = await axios.get(`${API_URL}/keluarga/profile`,bodyParameters, config)
+            let response = await axios.get(`${API_URL}/check-user`,bodyParameters, config)
 
-            commit('setData', response.data.keluarga);
+            commit('setData', response.data.admin[0]);
 
             return true
         } catch (e) {
@@ -112,6 +111,7 @@ const actions = {
     logout({ commit }) {
         localStorage.removeItem('token')
         commit('resetData')
+        console.log(localStorage.getItem('token'))
     }
 }
 

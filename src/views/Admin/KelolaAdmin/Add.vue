@@ -15,7 +15,7 @@
 
           <label>Email*</label>
           <v-text-field
-            v-model="formData.nama_baptis"
+            v-model="formData.email"
             required
             outlined
             dense
@@ -23,8 +23,8 @@
 
           <label>Jabatan*</label>
           <v-select
-            :items="[ 'Sekretariat', 'Romo', '' ]"
-            v-model="formData.jenis_kelamin"
+            :items="[ 'Sekretariat', 'Romo', 'Super Admin' ]"
+            v-model="formData.role"
             outlined
             dense
           ></v-select>
@@ -64,21 +64,30 @@ export default {
     formData: {
       nama: '',
       email: '',
-      role: '',
-      password: '',
+      role: null,
     }
   }),
   methods: {
     async submit() {
       this.$store.dispatch('loading/openLoading')
-
       let snackbar = {}
 
-      try {
-        await postData('/admin/store', this.formData)
+      if (this.formData.role === "Super Admin") this.formData.role = 1;
+      else if (this.formData.role === "Sekretariat") this.formData.role = 2;
+      else if (this.formData.role === "Romo") this.formData.role = 3;
 
-        snackbar.color = 'success'
-        snackbar.text = 'Data berhasil ditambahkan!'
+      try {
+        let response = await postData('/admin/register', this.formData)
+        
+        if(response.status >= 200 && response.status < 300) {
+          snackbar.color = 'success'
+          snackbar.text = 'Data berhasil ditambahkan!'
+
+          this.$router.push('kelola-admin')
+        } else {
+          snackbar.color = 'error'
+          snackbar.text = 'Harap periksa kembali inputan anda!'
+        }
       } catch (error) {
         console.error(error)
 

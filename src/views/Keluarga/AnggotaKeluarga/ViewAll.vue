@@ -140,7 +140,7 @@ export default {
   methods: {
     async getAllFamilyMembers() {
       try {
-        let url = `/keluarga/anggota/${this.$store.state.keluarga.id}`
+        let url = `/umat/keluarga/${this.$store.state.keluarga.id}`
         
         let response = await getData(url)
 
@@ -150,8 +150,7 @@ export default {
       }
     },
     goToDetail(id) {
-      this.$store.commit('keluarga/setTempIdForDetail', id)
-      this.$router.push('/keluarga/detail-anggota-keluarga')
+      this.$router.push(`/keluarga/detail-anggota-keluarga/${id}`)
     },
     openConfirmDelete(id) {
       this.deleteId = id

@@ -14,7 +14,7 @@ export async function getData(endpoint) {
     try {
         let response = await axios.get(url)
 
-        return response.data.data
+        return response.data.result
     } catch (error) {
         return error
     }
@@ -44,12 +44,14 @@ export async function deleteData(endpoint, id) {
     }
 }
 
-export function randomPassword(length) {
-    var result           = [];
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-      result.push(characters.charAt(Math.floor(Math.random() * charactersLength)));
+export async function editData(endpoint, id, data) {
+    let url = `${API_URL}${endpoint}/${id}`
+
+    try {
+        let response = await axios.patch(url, data)
+
+        return response
+    } catch (error) {
+        return error
     }
-    return result.join('');
 }

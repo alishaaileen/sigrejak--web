@@ -2,7 +2,6 @@
   <div>
     <v-menu
       ref="dateMenu"
-      value="tgl"
       v-model="dateMenu"
       :close-on-content-click="false"
       transition="scale-transition"
@@ -13,6 +12,7 @@
         <v-text-field
           v-model="birthDate"
           prepend-inner-icon="mdi-calendar"
+          :value="tgl"
           dense
           readonly
           outlined
@@ -22,7 +22,10 @@
       </template>
       <v-date-picker
         ref="picker"
-        value="tgl"
+        show-current
+        :value="tgl"
+        :readonly="editable"
+        :disabled="editable"
         v-model="birthDate"
         :max="new Date().toISOString().substr(0, 10)"
         @change="saveDate"
@@ -35,6 +38,7 @@
 export default {
   props: {
     tgl: String,
+    editable: Boolean,
   },
   data: () => ({
     dateMenu: false,

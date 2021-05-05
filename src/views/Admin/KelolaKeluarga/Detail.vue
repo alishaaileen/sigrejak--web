@@ -4,10 +4,9 @@
 
     <v-divider></v-divider>
 
-
-    <div class="form mt-5" @submit.prevent="submit">
+    <div class="form mt-5">
       <h2 class="page-title">Informasi Keluarga</h2>
-      <v-card class="pa-3 mx-auto" outlined>
+      <div class="my-3">
         <v-form>
           <label>Nama keluarga*</label>
           <v-text-field
@@ -36,7 +35,7 @@
           <div class="d-flex justify-end">
             <v-btn
               class="btn text-none"
-              type="submit"
+              @click="save"
               color="success"
               dark
               depressed
@@ -45,20 +44,22 @@
             </v-btn>
           </div>
         </v-form>
-      </v-card>
+      </div>
     </div>
 
-    <div class="mt-5">
+    <div class="mt-10">
       <h2 class="page-title">Anggota Keluarga</h2>
 
       <div class="data-table">
-        <v-card flat outlined>
+        <div class="my-3">
           <v-data-table
             :headers="headers"
             :items="familyMembers"
             :search="search"
             :page.sync="page"
             :items-per-page="selectedJumlahData"
+            :expanded.sync="expanded"
+            show-expand
             :loading="tableLoading"
             loading-text="Memuat data ..."
             hide-default-footer
@@ -66,40 +67,69 @@
           >
             <!-- TABLE TOP -->
             <template v-slot:top>
-              <v-card-title>
-                <v-row>
-                  <v-col>
-                    <v-text-field
-                      v-model="search"
-                      prepend-inner-icon="mdi-magnify"
-                      label="Cari"
-                      single-line
-                      hide-details
-                      outlined
-                      dense
-                      background-color="#FAFAFA"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="3">
-                    <v-btn
-                      class="btn text-none"
-                      color="success"
-                      tag="router-link"
-                      to="tambah-anggota"
-                      dark
-                      depressed
-                    >
-                      Tambah anggota keluarga
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-card-title>
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    v-model="search"
+                    prepend-inner-icon="mdi-magnify"
+                    label="Cari"
+                    single-line
+                    hide-details
+                    outlined
+                    dense
+                    background-color="#FAFAFA"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="3">
+                  <v-btn
+                    class="btn text-none"
+                    color="success"
+                    tag="router-link"
+                    to="tambah-anggota"
+                    dark
+                    depressed
+                  >
+                    Tambah anggota keluarga
+                  </v-btn>
+                </v-col>
+              </v-row>
             </template>
 
             <!-- TABLE CONTENT -->
             <template v-slot:[`item.telepon`]="{ item }">
-              <p v-if="item === null">-</p>
-              <p>{{ item }}</p>
+              <p v-if="item.telepon === null">-</p>
+              <p v-else>{{ item.telepon }}</p>
+            </template>
+            <template v-slot:[`item.is_umat_active`]="{ item }">
+              <span v-if="item.is_umat_active === 0">
+                <v-icon color="grey darken-2">
+                  mdi-checkbox-blank-circle
+                </v-icon>
+              </span>
+              <span v-else>
+                <v-icon color="green darken-2">
+                  mdi-checkbox-marked-circle
+                </v-icon>
+              </span>
+            </template>
+            <template v-slot:[`item.is_dead`]="{ item }">
+              <span v-if="item.is_dead === 0"></span>
+              <span v-else>
+                <v-icon color="grey darken-2">
+                  mdi-hospital
+                </v-icon>
+              </span>
+            </template>
+            <template v-slot:expanded-item="{ headers, item }">
+              <td class="ma-5" :colspan="headers.length">
+                Tempat Lahir: {{ item.tempat_lahir }}
+                <br>
+                Tanggal Lahir: {{ item.tgl_lahir }}
+                <br>
+                Alamat: {{ item.alamat }}
+                <br>
+                Pekerjaan: {{ item.pekerjaan }}
+              </td>
             </template>
             <template v-slot:[`item.action`]="{ item }">
               <div>
@@ -134,7 +164,7 @@
               </div>
             </template>
           </v-data-table>
-        </v-card>
+        </div>
       </div>
     </div>
     <snackbar></snackbar>
@@ -142,7 +172,7 @@
 </template>
 
 <script>
-import { getData, postData } from '../../../utils'
+import { getData, editData } from '../../../utils'
 
 export default {
   data: () => ({
@@ -150,25 +180,28 @@ export default {
       nama_keluarga: '',
       username: '',
       email: '',
-      password: ''
     },
     tableLoading: true,
     search: '',
+    expanded: [],
     headers: [
       {
         text: 'Nama', value: 'nama',
       },
       {
-        text: 'Tempat lahir', value: 'tempat_lahir',
-      },
-      {
-        text: 'Tgl Lahir', value: 'tgl_lahir',
+        text: 'Nama baptis', value: 'nama_baptis',
       },
       {
         text: 'Jenis kelamin', value: 'jenis_kelamin',
       },
       {
         text: 'Telepon', value: 'no_telp',
+      },
+      {
+        text: 'Aktif', value: 'is_umat_active',
+      },
+      {
+        text: '', value: 'is_dead',
       },
       {
         text: '', value: 'action',
@@ -185,31 +218,32 @@ export default {
     this.tableLoading = true
 
     this.keluarga = await getData(`/keluarga/${this.$route.params.id}`)
+    this.keluarga = this.keluarga[0]
 
-    this.familyMembers = await getData(`/keluarga/anggota/${this.$route.params.id}`)
+    this.familyMembers = await getData(`/umat/keluarga/${this.$route.params.id}`)
     
     this.tableLoading = false
   },
   methods: {
-    async submit() {
+    async save() {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
       let snackbar = {}
 
       try {
-        let response = await postData('/keluarga/register', this.formData)
+        let response = await editData('/keluarga', this.$route.params.id, this.keluarga)
 
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
-          snackbar.text = 'Data berhasil ditambahkan!'
+          snackbar.text = 'Data berhasil tersimpan!'
           this.$router.push('kelola-keluarga')
         } else {
-          snackbar.color = 'error',
+          snackbar.color = 'error'
           snackbar.text = 'Harap periksa kembali inputan anda'
         }
       } catch (error) {
-        snackbar.color = 'error',
+        snackbar.color = 'error'
         snackbar.text = error
 
         console.error = error

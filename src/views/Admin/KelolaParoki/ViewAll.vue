@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     goToDetail(id) {
-      this.$router.push(`/paroki/detail-paroki/${id}`)
+      this.$router.push(`/admin/detail-paroki/${id}`)
     },
     openConfirmDelete(id) {
       this.deleteId = id

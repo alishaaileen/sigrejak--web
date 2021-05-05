@@ -113,7 +113,7 @@
         </div>
       </template> -->
     </v-navigation-drawer>
-    <div class="app-container">
+    <div class="app-container px-7">
       <router-view />
     </div>
 
@@ -149,13 +149,8 @@ export default {
         },
         {
           title: "Kelola Paroki",
-          icon: "mdi-cross-outline",
-          to: "/admin/kelola-paroki",
-        },
-        {
-          title: "Kelola Lingkungan",
           icon: "mdi-home-group",
-          to: "/admin/kelola-lingkungan",
+          to: "/admin/kelola-paroki",
         },
         {
           title: "Kelola Surat",
@@ -175,7 +170,7 @@ export default {
   created() {
     setAxiosBearerToken()
 
-    // this.$store.dispatch('admin/getProfileAdmin')
+    this.$store.dispatch('admin/getProfileAdmin')
   },
   methods: {
     logout() {

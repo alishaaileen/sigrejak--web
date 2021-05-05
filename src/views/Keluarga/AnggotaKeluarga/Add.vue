@@ -143,8 +143,8 @@ export default {
       alamat: '',
       no_telp: '',
       pekerjaan: '',
-      status_meninggal: 0,
-      status_umat_aktif: 1,
+      is_dead: 0,
+      is_umat_active: 1,
       lingkungan_id: '',
       paroki_id: '',
       keluarga_id: '',
@@ -199,34 +199,27 @@ export default {
     },
     async submit () {
       this.$store.dispatch('loading/openLoading')
-
       let snackbar = {}
 
       // Assign keluarga_id to the form
       this.formData.keluarga_id = this.$store.state.keluarga.id
       
-      let endpoint = '/umat/store'
-      let response
-
       try {
-        response = await postData(endpoint, this.formData)
+        let endpoint = '/umat/add'
+        let response = await postData(endpoint, this.formData)
 
-        if (response.data.result) {
-          endpoint = '/detail-umat/store'
+        if (response.status === 200) {
+          endpoint = '/detail-umat/add'
           postData(endpoint, {
-            id_umat: response.data.result.id
+            id_umat: response.data.result.insertId
           })
+          snackbar.color = 'success',
+          snackbar.text = 'Data berhasil ditambahkan!'
         }
-
-        snackbar.color = 'success',
-        snackbar.text = 'Data berhasil ditambahkan!'
-
         this.$router.push('anggota-keluarga')
       } catch (error) {
         snackbar.color = 'error',
         snackbar.text = error
-        
-        console.error(error)
       }
       this.$store.dispatch('loading/closeLoading')
       this.$store.dispatch('snackbar/openSnackbar', snackbar)

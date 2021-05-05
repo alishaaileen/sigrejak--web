@@ -29,6 +29,8 @@
             dense
           ></v-text-field>
 
+          <small>Password keluarga otomatis terkirim ke email</small>
+
           <div class="d-flex justify-end">
             <v-btn
               class="btn text-none"
@@ -48,7 +50,7 @@
 </template>
 
 <script>
-import { randomPassword, postData } from '../../../utils'
+import { postData } from '../../../utils'
 
 export default {
   data: () => ({
@@ -56,7 +58,6 @@ export default {
       nama_keluarga: '',
       username: '',
       email: '',
-      password: ''
     },
   }),
   methods: {
@@ -65,8 +66,6 @@ export default {
       this.$store.commit('snackbar/resetSnackbar')
 
       let snackbar = {}
-
-      this.formData.password = randomPassword(6)
 
       try {
         let response = await postData('/keluarga/register', this.formData)

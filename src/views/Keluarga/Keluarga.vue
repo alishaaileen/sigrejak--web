@@ -24,7 +24,7 @@
         </template>
 
         <v-list>
-          <v-list-item @click="() => {}">
+          <v-list-item @click="() => {this.$router.push('/keluarga/profile')}">
             <v-list-item-title>
               <v-icon>mdi-account</v-icon>
               Profile Keluarga
@@ -114,7 +114,7 @@
       </template> -->
     </v-navigation-drawer>
 
-    <div class="app-container">
+    <div class="app-container px-7">
       <router-view />
     </div>
 

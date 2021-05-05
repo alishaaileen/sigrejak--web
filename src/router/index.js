@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 // import store from '../store'
 
 const importView = (path) => {
-  console.log(`../views/${path}.vue`)
   return () => import(`../views/${path}.vue`)
 }
 
@@ -56,6 +55,12 @@ const routes = [
         name: 'DashboardKeluarga',
         component: importView("Keluarga/Dashboard")
       },
+      // Profile Keluarga =========================
+      {
+        path: '/keluarga/profile',
+        name: 'ProfileKeluarga',
+        component: importView("Keluarga/Profile")
+      },
       // Anggota Keluarga =========================
       {
         path: '/keluarga/anggota-keluarga',
@@ -68,7 +73,7 @@ const routes = [
         component: importView("Keluarga/AnggotaKeluarga/Add")
       },
       {
-        path: '/keluarga/detail-anggota-keluarga',
+        path: '/keluarga/detail-anggota-keluarga/:id',
         name: 'DetailAnggotaKeluarga',
         component: importView("Keluarga/AnggotaKeluarga/Detail")
       },
@@ -136,28 +141,33 @@ const routes = [
       },
       {
         path: '/admin/tambah-admin',
-        name: 'AddAnggotaKeluarga',
+        name: 'AddAdmin',
         component: importView("Admin/KelolaAdmin/Add")
       },
       {
-        path: '/admin/detail-anggota-keluarga',
-        name: 'DetailAnggotaKeluarga',
+        path: '/admin/detail-admin/:id',
+        name: 'AdminDetailAdmin',
         component: importView("Admin/KelolaAdmin/Detail")
       },
       // Kelola Keluarga =========================
       {
         path: '/admin/kelola-keluarga',
-        name: 'ViewAllKeluarga',
+        name: 'AdminViewAllKeluarga',
         component: importView("Admin/KelolaKeluarga/ViewAll")
       },
       {
         path: '/admin/tambah-keluarga',
-        name: 'AddAnggotaKeluarga',
+        name: 'AdminAddKeluarga',
         component: importView("Admin/KelolaKeluarga/Add")
       },
       {
         path: '/admin/detail-keluarga/:id',
-        name: 'DetailAnggotaKeluarga',
+        name: 'AdminDetailKeluarga',
+        component: importView("Admin/KelolaKeluarga/Detail")
+      },
+      {
+        path: '/admin/detail-anggota-keluarga/:id',
+        name: 'AdminDetailAnggotaKeluarga',
         component: importView("Admin/KelolaKeluarga/Detail")
       },
       // Kelola Paroki =========================
@@ -172,25 +182,19 @@ const routes = [
         component: importView("Admin/KelolaParoki/Add")
       },
       {
-        path: '/admin/detail-paroki',
+        path: '/admin/detail-paroki/:id',
         name: 'DetailParoki',
         component: importView("Admin/KelolaParoki/Detail")
       },
-      // Kelola Lingkungan =========================
       {
-        path: '/admin/kelola-lingkungan',
-        name: 'ViewLingkungan',
-        component: importView("Admin/KelolaLingkungan/ViewAll")
-      },
-      {
-        path: '/admin/tambah-lingkungan',
+        path: '/admin/paroki/tambah-lingkungan/:id',
         name: 'AddLingkungan',
-        component: importView("Admin/KelolaLingkungan/Add")
+        component: importView("Admin/KelolaParoki/KelolaLingkungan/Add")
       },
       {
-        path: '/admin/detail-lingkungan',
+        path: '/admin/paroki/detail-lingkungan/:id',
         name: 'DetailLingkungan',
-        component: importView("Admin/KelolaLingkungan/Detail")
+        component: importView("Admin/KelolaParoki/KelolaLingkungan/Detail")
       },
     ]
   },
