@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="page-title">Tambah Keluarga</h1>
+    <h1>Tambah Keluarga</h1>
 
     <div class="form mt-5" @submit.prevent="submit">
       <v-card class="pa-3 mx-auto" outlined>

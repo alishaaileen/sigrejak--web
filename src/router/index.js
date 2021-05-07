@@ -170,31 +170,21 @@ const routes = [
         name: 'AdminDetailAnggotaKeluarga',
         component: importView("Admin/KelolaKeluarga/Detail")
       },
-      // Kelola Paroki =========================
+      // Kelola Lingkungan =========================
       {
-        path: '/admin/kelola-paroki',
-        name: 'ViewParoki',
-        component: importView("Admin/KelolaParoki/ViewAll")
+        path: '/admin/kelola-lingkungan',
+        name: 'ViewLingkungan',
+        component: importView("Admin/KelolaLingkungan/ViewAll")
       },
       {
-        path: '/admin/tambah-paroki',
-        name: 'AddParoki',
-        component: importView("Admin/KelolaParoki/Add")
-      },
-      {
-        path: '/admin/detail-paroki/:id',
-        name: 'DetailParoki',
-        component: importView("Admin/KelolaParoki/Detail")
-      },
-      {
-        path: '/admin/paroki/tambah-lingkungan/:id',
+        path: '/admin/tambah-lingkungan',
         name: 'AddLingkungan',
-        component: importView("Admin/KelolaParoki/KelolaLingkungan/Add")
+        component: importView("Admin/KelolaLingkungan/Add")
       },
       {
-        path: '/admin/paroki/detail-lingkungan/:id',
+        path: '/admin/detail-lingkungan/:id',
         name: 'DetailLingkungan',
-        component: importView("Admin/KelolaParoki/KelolaLingkungan/Detail")
+        component: importView("Admin/KelolaLingkungan/Detail")
       },
     ]
   },

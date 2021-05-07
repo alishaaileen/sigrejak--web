@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="page-title">Anggota Keluarga</h1>
+    <h1>Anggota Keluarga</h1>
 
     <div class="data-table mt-5">
       <v-card flat outlined>

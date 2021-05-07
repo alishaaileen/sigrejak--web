@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="page-title">Daftar Keluarga</h1>
+    <h1>Daftar Keluarga</h1>
 
     <div class="data-table mt-5">
       <v-card flat outlined>
@@ -115,9 +115,6 @@ export default {
       },
       {
         text: 'E-mail', value: 'email',
-      },
-      {
-        text: 'Ketua lingkungan', value: 'nama_lingkungan_diketuai',
       },
       {
         text: '', value: 'action',

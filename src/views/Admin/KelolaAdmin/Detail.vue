@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="page-title">Detail Admin</h1>
+    <h1>Detail Admin</h1>
 
     <div class="form mt-5">
       <v-form>

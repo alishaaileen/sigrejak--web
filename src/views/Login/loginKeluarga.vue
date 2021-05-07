@@ -10,7 +10,7 @@
         height="100%"
       >
         <div class="d-flex align-center">
-          <div>
+          <div class="mx-auto">
             <h1 class="mb-10">Masuk Akun Keluarga</h1>
 
             <v-form @submit.prevent="login">

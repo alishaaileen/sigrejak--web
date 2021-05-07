@@ -1,20 +1,36 @@
 <template>
   <div>
-    <h1 class="page-title">Detail Paroki</h1>
+    <h1>Detail Lingkungan</h1>
 
     <v-divider></v-divider>
 
     <div class="form mt-5">
-      <h2 class="page-title">Informasi Paroki</h2>
+      <h2>Informasi Lingkungan</h2>
       <div class="my-3">
         <v-form>
-          <label>Nama paroki*</label>
+          <label>Nama lingkungan*</label>
           <v-text-field
-            v-model="paroki.nama_paroki"
+            v-model="lingkungan.nama_lingkungan"
             required
             outlined
             dense
           ></v-text-field>
+
+          <label>Nama paroki</label>
+          <v-text-field
+            :value="paroki.nama_paroki"
+            readonly
+            disabled
+            outlined
+            dense
+          ></v-text-field>
+
+          <autocomplete
+            :value="keluargaKetuaLingkungan[0].nama_keluarga"
+            label="Keluarga ketua lingkungan*"
+            :suggestionList="keluargaNameList"
+            @changeData="changeIdKeluarga"
+          ></autocomplete>
 
           <div class="d-flex justify-end">
             <v-btn
@@ -28,11 +44,12 @@
             </v-btn>
           </div>
         </v-form>
+
       </div>
     </div>
 
     <div class="mt-10">
-      <h2 class="page-title">Lingkungan</h2>
+      <h2>Keluarga</h2>
 
       <div class="data-table">
         <div class="my-3">

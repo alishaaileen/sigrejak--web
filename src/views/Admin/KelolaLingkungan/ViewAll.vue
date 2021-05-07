@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="page-title">Daftar Paroki</h1>
+    <h1>Daftar Lingkungan</h1>
 
     <div class="data-table mt-5">
       <v-card flat outlined>
@@ -36,11 +36,11 @@
                     class="btn text-none"
                     color="success"
                     tag="router-link"
-                    to="tambah-paroki"
+                    :to="`/admin/lingkungan/tambah-lingkungan`"
                     dark
                     depressed
                   >
-                    Tambah Paroki
+                    Tambah lingkungan
                   </v-btn>
                 </v-col>
               </v-row>
@@ -48,9 +48,8 @@
           </template>
 
           <!-- TABLE CONTENT -->
-          <template v-slot:[`item.telepon`]="{ item }">
-            <p v-if="item === null">-</p>
-            <p>{{ item }}</p>
+          <template v-slot:[`item.ketua_lingkungan_id`]="{ item }">
+            <p>{{ getNamaKeluarga(item.ketua_lingkungan_id) }}</p>
           </template>
           <template v-slot:[`item.action`]="{ item }">
             <div>
@@ -105,11 +104,11 @@ export default {
     search: '',
     headers: [
       {
-        text: 'Nama Paroki', value: 'nama_paroki',
+        text: 'Nama lingkungan', value: 'nama_lingkungan',
       },
-      // {
-      //   text: 'Romo Paroki', value: 'id_romo_paroki',
-      // },
+      {
+        text: 'Ketua lingkungan', value: 'ketua_lingkungan_id',
+      },
       {
         text: '', value: 'action',
       },
@@ -123,15 +122,12 @@ export default {
   }),
   async mounted() {
     this.tableLoading = true
-
-    // this.data = await this.getAllAdmin('/admin')
-    this.data = await getData('/paroki')
-    
+    this.data = await getData(`/lingkungan`)
     this.tableLoading = false
   },
   methods: {
     goToDetail(id) {
-      this.$router.push(`/admin/detail-paroki/${id}`)
+      this.$router.push(`/admin/detail-lingkungan/${id}`)
     },
     openConfirmDelete(id) {
       this.deleteId = id
@@ -148,7 +144,7 @@ export default {
 
       if (decision) {
         try {
-          let response = await deleteData('/paroki', this.deleteId)
+          let response = await deleteData('/lingkungan', this.deleteId)
           
           if (response.status >= 200 && response.status < 300) {
             snackbar = {
@@ -157,7 +153,7 @@ export default {
               text: 'Data berhasil dihapus',
             }
 
-            this.data = await getData('/paroki')
+            this.data = await getData('/lingkungan')
           } else {
             snackbar = {
               active: true,

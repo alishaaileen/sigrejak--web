@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="page-title">Daftar Admin</h1>
+    <h1>Daftar Admin</h1>
 
     <div class="data-table mt-5">
       <v-card flat outlined>

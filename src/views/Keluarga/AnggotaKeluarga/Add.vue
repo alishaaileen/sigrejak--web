@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="page-title">Tambah Anggota Keluarga</h1>
+    <h1>Tambah Anggota Keluarga</h1>
     
     <div class="form mt-5" @submit.prevent="submit">
       <v-form>

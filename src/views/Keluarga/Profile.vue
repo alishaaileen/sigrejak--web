@@ -5,7 +5,6 @@
     <div class="form mt-5">
       <h2>Informasi Umum</h2>
       <v-divider class="my-3"></v-divider>
-      <!-- <v-card class="pa-3 mx-auto" outlined> -->
         <v-form>
           <label>Nama keluarga</label>
           <v-text-field
@@ -44,9 +43,10 @@
           </div>
         </v-form>
 
-        <div class="mt-10">
-          <h2>Anggota Keluarga</h2>
-          <v-divider class="my-3"></v-divider>
+      <div class="mt-10">
+        <h2 class="my-3">Anggota Keluarga</h2>
+        <!-- <v-divider class="my-3"></v-divider> -->
+        <v-card class="mx-auto" outlined>
           <v-data-table
             :headers="headers"
             :items="familyMembers"
@@ -60,9 +60,9 @@
           >
             <!-- TABLE TOP -->
             <template v-slot:top>
-              <!-- <v-card-title> -->
+              <v-card-title>
                 <v-row>
-                  <v-col cols="7">
+                  <v-col>
                     <v-text-field
                       v-model="search"
                       prepend-inner-icon="mdi-magnify"
@@ -75,7 +75,7 @@
                     ></v-text-field>
                   </v-col>
                 </v-row>
-              <!-- </v-card-title> -->
+              </v-card-title>
             </template>
 
             <!-- TABLE CONTENT -->
@@ -97,9 +97,9 @@
               </div>
             </template>
           </v-data-table>
-        </div>
+        </v-card>
+      </div>
 
-      <!-- </v-card> -->
     </div>
     <snackbar></snackbar>
   </div>

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1 class="page-title">Detail Anggota Keluarga</h1>
+    <h1>Detail Anggota Keluarga</h1>
     
     <div class="form mt-5">
-      <h2 class="page-title">Informasi Umum</h2>
+      <h2>Informasi Umum</h2>
 
       <v-divider class="mt-4"></v-divider>
       
@@ -106,7 +106,7 @@
     </div>
 
     <div class="mt-7">
-      <h2 class="page-title">Informasi lain</h2>
+      <h2>Informasi lain</h2>
 
       <v-divider class="mt-4"></v-divider>
 

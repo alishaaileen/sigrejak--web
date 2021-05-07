@@ -148,9 +148,9 @@ export default {
           to: "/admin/kelola-keluarga",
         },
         {
-          title: "Kelola Paroki",
+          title: "Kelola Lingkungan",
           icon: "mdi-home-group",
-          to: "/admin/kelola-paroki",
+          to: "/admin/kelola-lingkungan",
         },
         {
           title: "Kelola Surat",
