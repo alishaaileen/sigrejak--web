@@ -4,12 +4,10 @@
       <div v-for="(card, i) in cards" :key="i">
         <router-link :to="card.to" class="text-decoration-none">
           <v-card
-            class="sm mb-4 mr-4 align-stretch"
-            color="blue-grey lighten-4"
+            class="sm mb-5 mr-4 align-stretch"
             outlined
-            width="500"
+            width="700"
             hover
-            tile
           >
             <div>
               <v-card-title

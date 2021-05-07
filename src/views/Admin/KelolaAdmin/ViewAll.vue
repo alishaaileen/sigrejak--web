@@ -48,9 +48,10 @@
           </template>
 
           <!-- TABLE CONTENT -->
-          <template v-slot:[`item.telepon`]="{ item }">
-            <p v-if="item === null">-</p>
-            <p>{{ item }}</p>
+          <template v-slot:[`item.role`]="{ item }">
+            <p v-if="item.role === 1">Super Admin</p>
+            <p v-else-if="item.role === 2">Sekretariat</p>
+            <p v-else>Romo</p>
           </template>
           <template v-slot:[`item.action`]="{ item }">
             <div>
@@ -112,6 +113,9 @@ export default {
       },
       {
         text: 'Jabatan', value: 'role',
+      },
+      {
+        text: 'Nomor telepon', value: 'no_telp',
       },
       {
         text: '', value: 'action',

@@ -144,8 +144,9 @@ export default {
     this.tableLoading = true
 
     this.profile = await getData(`/keluarga/${this.$store.state.keluarga.id}`)
+    this.profile = this.profile[0]
 
-    this.familyMembers = await getData(`/keluarga/anggota/${this.$store.state.keluarga.id}`)
+    this.familyMembers = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     
     this.tableLoading = false
   },
@@ -154,16 +155,17 @@ export default {
       let snackbar ={}
       
       try {
-        let response = await editData(`/keluarga`, this.profile.id, this.profile)
-        
-        if (response.status === 200) {
+        console.log(this.profile)
+        let response = await editData(`/keluarga`, this.$store.state.keluarga.id, this.profile)
+        console.log(response.status)
+        // if (response.status === 200) {
           this.profile = await getData(`/keluarga/${this.$store.state.keluarga.id}`)
           snackbar.color = 'success',
-          snackbar.text = 'Data berhasil ditambahkan!'
-        } else {
-          snackbar.color = 'error',
-          snackbar.text = 'Harap periksa kembali inputan anda'
-        }
+          snackbar.text = 'Profile keluarga berhasil diubah!'
+        // } else {
+        //   snackbar.color = 'error',
+        //   snackbar.text = 'Harap periksa kembali inputan anda'
+        // }
       }catch(e) {
         console.log(e)
         snackbar.color = 'error',

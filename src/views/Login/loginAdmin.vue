@@ -1,51 +1,68 @@
 <template>
-  <div id="login" class="d-flex align-center justify-center">
-    <v-card class="login-form-box mx-auto" width="600" outlined>
-      <h1>Masuk Admin</h1>
+  <div id="login" class="login-admin">
+    <div class="d-flex align-stretch justify-start">
+      <v-card
+        class="side-login"
+        width="500"
+        outlined
+        elevation="5"
+        tile
+        height="100%"
+      >
+        <div class="d-flex align-center">
+          <div>
+            <h1 class="mb-10">Masuk Akun Admin</h1>
 
-      <v-form @submit.prevent="login">
-        <v-text-field
-          placeholder="Email"
-          v-model="admin.email"
-          append-icon="mdi-account"
-          @input="resetErrorMsg"
-        >
-        </v-text-field>
+            <v-form @submit.prevent="login">
+              <v-text-field
+                placeholder="Email"
+                v-model="admin.email"
+                @input="resetErrorMsg"
+                outlined
+              ></v-text-field>
 
-        <v-text-field
-          placeholder="Password"
-          v-model="admin.password"
-          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="showPassword ? 'text' : 'password'"
-          @click:append="showPassword = !showPassword"
-          @input="resetErrorMsg"
-        >
-        </v-text-field>
+              <v-text-field
+                placeholder="Password"
+                v-model="admin.password"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="showPassword ? 'text' : 'password'"
+                @click:append="showPassword = !showPassword"
+                @input="resetErrorMsg"
+                outlined
+              ></v-text-field>
 
-        <small v-show="errorMsg" class="error--text font-weight-medium">
-          {{ errorMsg }}
-        </small>
+              <small v-show="errorMsg" class="error--text font-weight-medium">
+                {{ errorMsg }}
+              </small>
 
-        <v-card-actions>
-          <v-btn
-            color="#20A2BA"
-            rounded
-            block
-            large
-            dark
-            type="submit"
-            @click="login"
-            >Masuk</v-btn
-          >
-        </v-card-actions>
-      </v-form>
-    </v-card>
-
+              <v-card-actions>
+                <v-btn
+                  color="indigo accent-4"
+                  rounded
+                  block
+                  large
+                  dark
+                  type="submit"
+                  @click="login"
+                  >Masuk</v-btn
+                >
+              </v-card-actions>
+              <div class="text-center mt-3">
+                <small><a href="">Lupa password?</a></small>
+              </div>
+            </v-form>
+          </div>
+        </div>
+      </v-card>
+    </div>
     <loading-overlay></loading-overlay>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import { API_URL } from '../../constants'
+
 export default {
   data() {
     return {
@@ -60,22 +77,17 @@ export default {
   methods: {
     async login() {
       this.$store.dispatch('loading/openLoading')
-      
-      this.$store.dispatch('admin/login', {
-        email: this.admin.email,
-        password: this.admin.password
-      }).then((res) => {
-        if(res === 400) {
-          this.errorMsg = "Email atau Password salah"
-        } else if (res === 422) {
-          this.errorMsg = "Harap isi Email dan Password dengan benar"
-        } else if (res === 200) {
-          this.$router.push("/admin/dashboard");
-        }
-      }).catch((error) => {
-        console.error(error)
-      })
 
+      try {
+        let response = await axios.post(`${API_URL}/admin/login`, this.admin)
+
+        this.$store.dispatch('admin/login', response.data)
+        this.$router.push("/admin/dashboard");
+      } catch (error) {
+        if(error.response.status >= 400 && error.response.status < 500 ) {
+          this.errorMsg = "Email atau Password salah"
+        }
+      }
       this.$store.dispatch('loading/closeLoading')
     },
     resetErrorMsg() {

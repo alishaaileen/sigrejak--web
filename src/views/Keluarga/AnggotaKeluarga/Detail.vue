@@ -113,7 +113,7 @@
       <v-banner>
         <v-avatar
           slot="icon"
-          color="deep-purple"
+          color="yellow darken-3"
           size="40"
         >
           <v-icon

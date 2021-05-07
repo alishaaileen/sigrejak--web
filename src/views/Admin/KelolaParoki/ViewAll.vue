@@ -107,9 +107,9 @@ export default {
       {
         text: 'Nama Paroki', value: 'nama_paroki',
       },
-      {
-        text: 'Romo Paroki', value: 'id_romo_paroki',
-      },
+      // {
+      //   text: 'Romo Paroki', value: 'id_romo_paroki',
+      // },
       {
         text: '', value: 'action',
       },

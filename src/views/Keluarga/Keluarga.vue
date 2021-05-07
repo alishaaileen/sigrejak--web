@@ -114,7 +114,7 @@
       </template> -->
     </v-navigation-drawer>
 
-    <div class="app-container px-7">
+    <div class="app-container pa-7">
       <router-view />
     </div>
 
@@ -155,11 +155,11 @@ export default {
           //   },
           // ],
         },
-        {
-          title: "Kelola Data Lingkungan",
-          icon: "mdi-book-account-outline",
-          to: "/keluarga/kelola-data-lingkungan",
-        },
+        // {
+        //   title: "Kelola Data Lingkungan",
+        //   icon: "mdi-book-account-outline",
+        //   to: "/keluarga/kelola-data-lingkungan",
+        // },
       ],
     }
   },

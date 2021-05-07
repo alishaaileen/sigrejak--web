@@ -44,7 +44,7 @@
             dark
             depressed
           >
-            Tambah anggota
+            Simpan
           </v-btn>
         </div>
       </v-form>

@@ -1,15 +1,18 @@
 h1, h2, h3, h4, h5 {
+    color: $black !important;
     font-family: 'Poppins', sans-serif !important;
 }
-
 h2, h3 {
     font-weight: 600;
 }
-
 p, span, a, label {
+    font-size: 14px;
     font-family: 'Open Sans', sans-serif !important;
 }
-
+p, span, label {
+    color: $black;
+    font-weight: 600;
+}
 .font-semi-bold {
     font-weight: 600 !important;
 }

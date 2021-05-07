@@ -3,119 +3,117 @@
     <h1 class="page-title">Tambah Anggota Keluarga</h1>
     
     <div class="form mt-5" @submit.prevent="submit">
-      <v-card class="pa-3 mx-auto" outlined>
-        <v-form>
-          <label>Nama lengkap*</label>
-          <v-text-field
-            v-model="formData.nama"
-            required
-            outlined
-            dense
-          ></v-text-field>
+      <v-form>
+        <label>Nama lengkap*</label>
+        <v-text-field
+          v-model="formData.nama"
+          required
+          outlined
+          dense
+        ></v-text-field>
 
-          <label>Nama baptis</label>
-          <v-text-field
-            v-model="formData.nama_baptis"
-            required
-            outlined
-            dense
-          ></v-text-field>
+        <label>Nama baptis</label>
+        <v-text-field
+          v-model="formData.nama_baptis"
+          required
+          outlined
+          dense
+        ></v-text-field>
 
-          <label>Jenis kelamin*</label>
-          <v-select
-            :items="[ 'Pria', 'Wanita' ]"
-            v-model="formData.jenis_kelamin"
-            outlined
-            dense
-          ></v-select>
+        <label>Jenis kelamin*</label>
+        <v-select
+          :items="[ 'Pria', 'Wanita' ]"
+          v-model="formData.jenis_kelamin"
+          outlined
+          dense
+        ></v-select>
 
-          <label>Tempat lahir*</label>
-          <v-text-field
-            v-model="formData.tempat_lahir"
-            required
-            outlined
-            dense
-          ></v-text-field>
+        <label>Tempat lahir*</label>
+        <v-text-field
+          v-model="formData.tempat_lahir"
+          required
+          outlined
+          dense
+        ></v-text-field>
 
-          <label>Tanggal lahir</label>
-          <v-menu
-            ref="dateMenu"
-            v-model="dateMenu"
-            :close-on-content-click="false"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="formData.tgl_lahir"
-                prepend-inner-icon="mdi-calendar"
-                dense
-                readonly
-                outlined
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              ref="picker"
+        <label>Tanggal lahir</label>
+        <v-menu
+          ref="dateMenu"
+          v-model="dateMenu"
+          :close-on-content-click="false"
+          transition="scale-transition"
+          offset-y
+          min-width="auto"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
               v-model="formData.tgl_lahir"
-              :max="new Date().toISOString().substr(0, 10)"
-              @change="saveDate"
-            ></v-date-picker>
-          </v-menu>
+              prepend-inner-icon="mdi-calendar"
+              dense
+              readonly
+              outlined
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+            ref="picker"
+            v-model="formData.tgl_lahir"
+            :max="new Date().toISOString().substr(0, 10)"
+            @change="saveDate"
+          ></v-date-picker>
+        </v-menu>
 
-          <label>Nomor telepon</label>
-          <v-text-field
-            v-model="formData.no_telp"
-            required
-            outlined
-            dense
-          ></v-text-field>
+        <label>Nomor telepon</label>
+        <v-text-field
+          v-model="formData.no_telp"
+          required
+          outlined
+          dense
+        ></v-text-field>
 
-          <label>Pekerjaan*</label>
-          <v-text-field
-            v-model="formData.pekerjaan"
-            required
-            outlined
-            dense
-          ></v-text-field>
+        <label>Pekerjaan*</label>
+        <v-text-field
+          v-model="formData.pekerjaan"
+          required
+          outlined
+          dense
+        ></v-text-field>
 
-          <label>Alamat*</label>
-          <v-text-field
-            v-model="formData.alamat"
-            required
-            outlined
-            dense
-          ></v-text-field>
+        <label>Alamat*</label>
+        <v-text-field
+          v-model="formData.alamat"
+          required
+          outlined
+          dense
+        ></v-text-field>
 
-          <autocomplete
-            :disable="false"
-            label="Paroki tempat tinggal*"
-            :suggestionList="parokiNameList"
-            @changeData="changeIdParoki"
-          ></autocomplete>
+        <autocomplete
+          :disable="false"
+          label="Paroki tempat tinggal*"
+          :suggestionList="parokiNameList"
+          @changeData="changeIdParoki"
+        ></autocomplete>
 
-          <autocomplete
-            :disable="lingkunganNameList.length == 0"
-            label="Lingkungan tempat tinggal*"
-            :suggestionList.sync="lingkunganNameList"
-            @changeData="changeIdLingkungan"
-          ></autocomplete>
+        <autocomplete
+          :disable="lingkunganNameList.length == 0"
+          label="Lingkungan tempat tinggal*"
+          :suggestionList.sync="lingkunganNameList"
+          @changeData="changeIdLingkungan"
+        ></autocomplete>
 
-          <div class="d-flex justify-end">
-            <v-btn
-              class="btn text-none"
-              type="submit"
-              color="success"
-              dark
-              depressed
-            >
-              Tambah anggota
-            </v-btn>
-          </div>
-        </v-form>
-      </v-card>
+        <div class="d-flex justify-end">
+          <v-btn
+            class="btn text-none"
+            type="submit"
+            color="success"
+            dark
+            depressed
+          >
+            Tambah anggota
+          </v-btn>
+        </div>
+      </v-form>
     </div>
 
     <snackbar></snackbar>

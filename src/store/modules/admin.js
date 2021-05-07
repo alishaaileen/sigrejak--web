@@ -40,21 +40,10 @@ const mutations = {
 }
 
 const actions = {
-    async login({ commit }, admin) {
-        try {
-            let response = await axios.post(`${API_URL}/admin/login`, admin)
-
-            localStorage.setItem('token', response.data.token)
-            commit('setToken', response.data.token);
-            commit('setStatus', 'success');
-            
-            return response.status
-        } catch (e) {
-            console.error(e)
-            commit('setStatus', 'error');
-            
-            return e.response.status
-        }
+    async login({ commit }, login) {
+        localStorage.setItem('token', login.token)
+        commit('setToken', login.token);
+        commit('setStatus', 'success');
     },
     async getProfileAdmin({ commit, state }) {
         const config = {

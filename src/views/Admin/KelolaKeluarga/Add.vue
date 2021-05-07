@@ -81,8 +81,6 @@ export default {
       } catch (error) {
         snackbar.color = 'error',
         snackbar.text = error
-
-        console.error = error
       }
 
       this.$store.dispatch('snackbar/openSnackbar', snackbar)

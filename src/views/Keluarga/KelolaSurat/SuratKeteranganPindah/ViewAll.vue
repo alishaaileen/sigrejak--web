@@ -6,7 +6,7 @@
       <!-- <v-card flat outlined> -->
         <v-data-table
           :headers="headers"
-          :items="familyMembers"
+          :items="surat"
           :search="search"
           :page.sync="page"
           :items-per-page="selectedJumlahData"
@@ -105,7 +105,7 @@ export default {
     search: '',
     headers: [
       {
-        text: 'Nama', value: 'nama',
+        text: 'No. surat', value: 'no_surat',
       },
       {
         text: 'Tempat lahir', value: 'tempat_lahir',
@@ -123,7 +123,7 @@ export default {
         text: '', value: 'action',
       },
     ],
-    familyMembers: [],
+    surat: [],
     page: 1,
     pageCount: 0,
     selectedJumlahData: 10,
@@ -133,22 +133,11 @@ export default {
   async mounted() {
     this.tableLoading = true
 
-    this.familyMembers = await this.getAllFamilyMembers()
-    
+    this.surat = await getData(`/surat-keterangan-pindah/keluarga/${this.$store.state.keluarga.id}`)
+    console.log(this.surat)
     this.tableLoading = false
   },
   methods: {
-    async getAllFamilyMembers() {
-      try {
-        let url = `/keluarga/anggota/${this.$store.state.keluarga.id}`
-        
-        let response = await getData(url)
-
-        return response
-      } catch (e) {
-        console.error(e)
-      }
-    },
     goToDetail(id) {
       this.$store.commit('keluarga/setTempIdForDetail', id)
       this.$router.push('/keluarga/detail-anggota-keluarga')

@@ -40,7 +40,7 @@
                     dark
                     depressed
                   >
-                    Tambah anggota keluarga
+                    Tambah anggota
                   </v-btn>
                 </v-col>
               </v-row>
