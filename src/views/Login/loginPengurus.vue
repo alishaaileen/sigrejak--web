@@ -37,7 +37,7 @@
 
               <v-card-actions>
                 <v-btn
-                  color="indigo accent-4"
+                  color="blue accent-4"
                   rounded
                   block
                   large

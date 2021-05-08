@@ -34,7 +34,7 @@
                 <v-col cols="3">
                   <v-btn
                     class="btn text-none mt-2"
-                    color="indigo accent-4"
+                    color="blue accent-4"
                     tag="router-link"
                     to="keluarga/tambah"
                     dark
@@ -83,7 +83,7 @@
                 v-model="page"
                 :length="pageCount"
                 :total-visible="6"
-                color="indigo accent-4"
+                color="blue accent-4"
               ></v-pagination>
             </div>
           </template>

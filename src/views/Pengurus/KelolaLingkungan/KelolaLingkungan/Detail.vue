@@ -36,7 +36,7 @@
             <v-btn
               class="btn text-none mt-2"
               @click="save"
-              color="indigo accent-4"
+              color="blue accent-4"
               dark
               depressed
             >
