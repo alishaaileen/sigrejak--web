@@ -41,7 +41,7 @@
       </v-menu>
     </v-app-bar>
     <!-- SIDEBAR -->
-    <v-navigation-drawer color="blue-grey darken-3" dark permanent fixed width="240" app>
+    <v-navigation-drawer color="blue-grey darken-4" dark permanent fixed width="240" app>
       <v-list dense nav class="my-1">
         <!-- <v-list-item two-line>
           <v-avatar size="24" tile>
@@ -62,7 +62,7 @@
         <div v-for="(menu, i) in menus" :key="i">
           <v-list-item v-if="!menu.hasOption" tag="router-link" :to="menu.to">
             <v-list-item-icon>
-              <v-icon color="#17B978">{{ menu.icon }}</v-icon>
+              <v-icon color="blue accent-3">{{ menu.icon }}</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
@@ -77,7 +77,7 @@
             :prepend-icon="menu.icon"
             no-action
             value="true"
-            color="#17B978"
+            color="blue accent-3"
           >
             <template v-slot:activator>
               <v-list-item-title class="sidebar-menu-option">{{
@@ -141,12 +141,12 @@ export default {
         {
           title: "Anggota Keluarga",
           icon: "mdi-account-group-outline",
-          to: "/keluarga/anggota-keluarga",
+          to: "/keluarga/anggota",
         },
         {
           title: "Kelola Surat",
           icon: "mdi-book-outline",
-          to: "/keluarga/kelola-surat"
+          to: "/keluarga/surat"
           // hasOption: true,
           // options: [
           //   {
@@ -158,7 +158,7 @@ export default {
         // {
         //   title: "Kelola Data Lingkungan",
         //   icon: "mdi-book-account-outline",
-        //   to: "/keluarga/kelola-data-lingkungan",
+        //   to: "/keluarga/ketua-lingkungan",
         // },
       ],
     }

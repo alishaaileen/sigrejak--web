@@ -17,9 +17,9 @@ const keluargaRouteGuard = (to,from, next) => {
   next()
 }
 
-// const adminRouteGuard = (to,from, next) => {
+// const pengurusRouteGuard = (to,from, next) => {
 //   if(!store.getters.isAuthenticated) {
-//     next('/admin-login')
+//     next('/pengurus-login')
 //     return
 //   }
 
@@ -63,44 +63,44 @@ const routes = [
       },
       // Anggota Keluarga =========================
       {
-        path: '/keluarga/anggota-keluarga',
+        path: '/keluarga/anggota',
         name: 'ViewAnggotaKeluarga',
         component: importView("Keluarga/AnggotaKeluarga/ViewAll")
       },
       {
-        path: '/keluarga/tambah-anggota',
+        path: '/keluarga/tambah',
         name: 'AddAnggotaKeluarga',
         component: importView("Keluarga/AnggotaKeluarga/Add")
       },
       {
-        path: '/keluarga/detail-anggota-keluarga/:id',
+        path: '/keluarga/anggota/:id',
         name: 'DetailAnggotaKeluarga',
         component: importView("Keluarga/AnggotaKeluarga/Detail")
       },
       // Kelola Surat =========================
       {
-        path: '/keluarga/kelola-surat',
+        path: '/keluarga/surat',
         name: 'KelolaSuratMenu',
         component: importView("Keluarga/KelolaSurat/KelolaSurat")
       },
       {
-        path: '/keluarga/kelola-surat/surat-keterangan-pindah',
+        path: '/keluarga/surat/surat-keterangan-pindah',
         name: 'ViewSuratKeteranganPindah',
         component: importView("Keluarga/KelolaSurat/SuratKeteranganPindah/ViewAll")
       },
       {
-        path: '/keluarga/kelola-surat/surat-keterangan-pindah/buat-surat',
+        path: '/keluarga/surat/surat-keterangan-pindah/tambah',
         name: 'AddSuratKeteranganPindah',
         component: importView("Keluarga/KelolaSurat/SuratKeteranganPindah/Add")
       },
       // Ketua Lingkungan =========================
       {
-        path: '/keluarga/kelola-data-lingkungan',
+        path: '/keluarga/ketua-lingkungan',
         name: 'KetuaLingkunganDashboard',
         component: importView("Keluarga/KetuaLingkungan/Dashboard")
       },
       // {
-      //   path: '/keluarga/kelola-data-lingkungan',
+      //   path: '/keluarga/ketua-lingkungan',
       //   name: 'KetuaLingkunganDashboard',
       //   component: importView("Keluarga/KetuaLingkungan/Dashboard")
       // },
@@ -108,12 +108,12 @@ const routes = [
   },
   // ADMIN =======================================
   {
-    path: '/login-admin',
-    name: 'loginAdmin',
-    component: importView("Login/loginAdmin"),
+    path: '/login-pengurus',
+    name: 'loginPengurus',
+    component: importView("Login/loginPengurus"),
     beforeEnter: (to,from, next) => {
       if(localStorage.getItem('token')) {
-        next('/admin/dashboard')
+        next('/pengurus/dashboard')
         return
       }
     
@@ -121,70 +121,75 @@ const routes = [
     },
   },
   {
-    path: '/admin',
-    name: 'Admin',
-    component: importView("Admin/Admin"),
-    // beforeEnter: adminRouteGuard,
-    redirect: '/admin/dashboard',
+    path: '/pengurus',
+    name: 'Pengurus',
+    component: importView("Pengurus/Pengurus"),
+    // beforeEnter: pengurusRouteGuard,
+    redirect: '/pengurus/dashboard',
     children: [
-      // Dashboard Admin =========================
+      // Dashboard Pengurus =========================
       {
-        path: '/admin/dashboard',
-        name: 'DashboardAdmin',
-        component: importView("Admin/Dashboard")
+        path: '/pengurus/dashboard',
+        name: 'DashboardPengurus',
+        component: importView("Pengurus/Dashboard")
       },
-      // Kelola Admin =========================
+      // Kelola Pengurus =========================
       {
-        path: '/admin/kelola-admin',
-        name: 'ViewAllAdmin',
-        component: importView("Admin/KelolaAdmin/ViewAll")
-      },
-      {
-        path: '/admin/tambah-admin',
-        name: 'AddAdmin',
-        component: importView("Admin/KelolaAdmin/Add")
+        path: '/pengurus/pengurus',
+        name: 'ViewAllPengurus',
+        component: importView("Pengurus/KelolaPengurus/ViewAll")
       },
       {
-        path: '/admin/detail-admin/:id',
-        name: 'AdminDetailAdmin',
-        component: importView("Admin/KelolaAdmin/Detail")
+        path: '/pengurus/pengurus/tambah',
+        name: 'AddPengurus',
+        component: importView("Pengurus/KelolaPengurus/Add")
+      },
+      {
+        path: '/pengurus/pengurus/:id',
+        name: 'PengurusDetailPengurus',
+        component: importView("Pengurus/KelolaPengurus/Detail")
       },
       // Kelola Keluarga =========================
       {
-        path: '/admin/kelola-keluarga',
-        name: 'AdminViewAllKeluarga',
-        component: importView("Admin/KelolaKeluarga/ViewAll")
+        path: '/pengurus/keluarga',
+        name: 'PengurusViewAllKeluarga',
+        component: importView("Pengurus/KelolaKeluarga/ViewAll")
       },
       {
-        path: '/admin/tambah-keluarga',
-        name: 'AdminAddKeluarga',
-        component: importView("Admin/KelolaKeluarga/Add")
+        path: '/pengurus/keluarga/tambah',
+        name: 'PengurusAddKeluarga',
+        component: importView("Pengurus/KelolaKeluarga/Add")
       },
       {
-        path: '/admin/detail-keluarga/:id',
-        name: 'AdminDetailKeluarga',
-        component: importView("Admin/KelolaKeluarga/Detail")
+        path: '/pengurus/keluarga/anggota/tambah',
+        name: 'PengurusAddAnggotaKeluarga',
+        component: importView("Keluarga/AnggotaKeluarga/Add")
       },
       {
-        path: '/admin/detail-anggota-keluarga/:id',
-        name: 'AdminDetailAnggotaKeluarga',
-        component: importView("Admin/KelolaKeluarga/Detail")
+        path: '/pengurus/keluarga/:id',
+        name: 'PengurusDetailKeluarga',
+        component: importView("Pengurus/KelolaKeluarga/Detail")
+      },
+      {
+        path: '/pengurus/keluarga/anggota/:id',
+        name: 'PengurusDetailAnggotaKeluarga',
+        component: importView("Pengurus/KelolaKeluarga/Detail")
       },
       // Kelola Lingkungan =========================
       {
-        path: '/admin/kelola-lingkungan',
+        path: '/pengurus/lingkungan',
         name: 'ViewLingkungan',
-        component: importView("Admin/KelolaLingkungan/ViewAll")
+        component: importView("Pengurus/KelolaLingkungan/ViewAll")
       },
       {
-        path: '/admin/tambah-lingkungan',
+        path: '/pengurus/lingkungan/tambah',
         name: 'AddLingkungan',
-        component: importView("Admin/KelolaLingkungan/Add")
+        component: importView("Pengurus/KelolaLingkungan/Add")
       },
       {
-        path: '/admin/detail-lingkungan/:id',
+        path: '/pengurus/lingkungan/:id',
         name: 'DetailLingkungan',
-        component: importView("Admin/KelolaLingkungan/Detail")
+        component: importView("Pengurus/KelolaLingkungan/Detail")
       },
     ]
   },

@@ -105,9 +105,9 @@
 
           <div class="d-flex justify-end">
             <v-btn
-              class="btn text-none"
+              class="btn text-none mt-2"
               type="submit"
-              color="success"
+              color="indigo accent-4"
               dark
               depressed
             >

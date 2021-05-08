@@ -33,10 +33,10 @@
                 </v-col>
                 <v-col cols="3">
                   <v-btn
-                    class="btn text-none"
-                    color="success"
+                    class="btn text-none mt-2"
+                    color="indigo accent-4"
                     tag="router-link"
-                    to="tambah-anggota"
+                    to="tambah"
                     dark
                     depressed
                   >
@@ -80,7 +80,7 @@
                 v-model="page"
                 :length="pageCount"
                 :total-visible="6"
-                color="blue"
+                color="indigo accent-4"
               ></v-pagination>
             </div>
           </template>
@@ -150,7 +150,7 @@ export default {
       }
     },
     goToDetail(id) {
-      this.$router.push(`/keluarga/detail-anggota-keluarga/${id}`)
+      this.$router.push(`/keluarga/anggota/${id}`)
     },
     openConfirmDelete(id) {
       this.deleteId = id

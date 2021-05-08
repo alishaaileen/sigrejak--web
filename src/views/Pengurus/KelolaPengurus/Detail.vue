@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1>Detail Admin</h1>
+    <h1>Detail Pengurus</h1>
 
     <div class="form mt-5">
       <v-form>
         <label>Nama*</label>
         <v-text-field
-          v-model="admin.nama"
+          v-model="pengurus.nama"
           required
           outlined
           dense
@@ -14,7 +14,7 @@
 
         <label>Email*</label>
         <v-text-field
-          v-model="admin.email"
+          v-model="pengurus.email"
           required
           outlined
           dense
@@ -22,15 +22,15 @@
 
         <label>Jabatan*</label>
         <v-select
-          :items="[ 'Sekretariat', 'Romo', 'Super Admin' ]"
-          v-model="admin.role"
+          :items="[ 'Sekretariat', 'Romo', 'Super Pengurus' ]"
+          v-model="pengurus.role"
           outlined
           dense
         ></v-select>
 
         <label>Nomor telepon</label>
         <v-text-field
-          v-model="admin.no_telp"
+          v-model="pengurus.no_telp"
           required
           outlined
           dense
@@ -40,7 +40,7 @@
           <v-btn
             class="btn text-none"
             @click="save"
-            color="success"
+            color="indigo accent-4"
             dark
             depressed
           >
@@ -59,7 +59,7 @@ import { getData, editData } from '../../../utils'
 
 export default {
   data: () => ({
-    admin: {
+    pengurus: {
       nama: '',
       email: '',
       role: null,
@@ -67,29 +67,29 @@ export default {
     }
   }),
   async mounted() {
-    this.admin = await getData(`/admin/${this.$route.params.id}`)
-    this.admin = this.admin[0]
+    this.pengurus = await getData(`/pengurus/${this.$route.params.id}`)
+    this.pengurus = this.pengurus[0]
 
-    if (this.admin.role === 1) this.admin.role = "Super Admin";
-    else if (this.admin.role === 2) this.admin.role = "Sekretariat";
-    else if (this.admin.role === 3) this.admin.role = "Romo";
+    if (this.pengurus.role === 1) this.pengurus.role = "Super Pengurus";
+    else if (this.pengurus.role === 2) this.pengurus.role = "Sekretariat";
+    else if (this.pengurus.role === 3) this.pengurus.role = "Romo";
   },
   methods: {
     async save() {
       this.$store.dispatch('loading/openLoading')
       let snackbar = {}
 
-      if (this.admin.role === "Super Admin") this.admin.role = 1;
-      else if (this.admin.role === "Sekretariat") this.admin.role = 2;
-      else if (this.admin.role === "Romo") this.admin.role = 3;
+      if (this.pengurus.role === "Super Pengurus") this.pengurus.role = 1;
+      else if (this.pengurus.role === "Sekretariat") this.pengurus.role = 2;
+      else if (this.pengurus.role === "Romo") this.pengurus.role = 3;
 
       try {
-        let response = await editData('/admin', this.$route.params.id, this.admin)
+        let response = await editData('/pengurus', this.$route.params.id, this.pengurus)
 
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
           snackbar.text = 'Data berhasil tersimpan!'
-          this.$router.push('/admin/kelola-admin')
+          this.$router.push('/pengurus/pengurus')
         } else {
           snackbar.color = 'error'
           snackbar.text = 'Harap periksa kembali inputan anda'

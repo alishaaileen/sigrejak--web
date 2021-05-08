@@ -1,5 +1,5 @@
 <template>
-  <div id="login" class="login-admin">
+  <div id="login" class="login-pengurus">
     <div class="d-flex align-stretch justify-start">
       <v-card
         class="side-login"
@@ -11,19 +11,19 @@
       >
         <div class="d-flex align-center">
           <div class="mx-auto">
-            <h1 class="mb-10">Masuk Akun Admin</h1>
+            <h1 class="mb-10">Masuk Akun Pengurus</h1>
 
             <v-form @submit.prevent="login">
               <v-text-field
                 placeholder="Email"
-                v-model="admin.email"
+                v-model="pengurus.email"
                 @input="resetErrorMsg"
                 outlined
               ></v-text-field>
 
               <v-text-field
                 placeholder="Password"
-                v-model="admin.password"
+                v-model="pengurus.password"
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="showPassword ? 'text' : 'password'"
                 @click:append="showPassword = !showPassword"
@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       showPassword: false,
-      admin: {
+      pengurus: {
         email: '',
         password: '',
       },
@@ -79,10 +79,10 @@ export default {
       this.$store.dispatch('loading/openLoading')
 
       try {
-        let response = await axios.post(`${API_URL}/admin/login`, this.admin)
+        let response = await axios.post(`${API_URL}/admin/login`, this.pengurus)
 
-        this.$store.dispatch('admin/login', response.data)
-        this.$router.push("/admin/dashboard");
+        this.$store.dispatch('pengurus/login', response.data)
+        this.$router.push("/pengurus/dashboard");
       } catch (error) {
         if(error.response.status >= 400 && error.response.status < 500 ) {
           this.errorMsg = "Email atau Password salah"

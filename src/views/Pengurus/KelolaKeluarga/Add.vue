@@ -33,9 +33,9 @@
 
           <div class="d-flex justify-end">
             <v-btn
-              class="btn text-none"
+              class="btn text-none mt-2"
               type="submit"
-              color="success"
+              color="indigo accent-4"
               dark
               depressed
             >
@@ -73,7 +73,7 @@ export default {
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
           snackbar.text = 'Data berhasil ditambahkan!'
-          this.$router.push('kelola-keluarga')
+          this.$router.push('keluarga')
         } else {
           snackbar.color = 'error',
           snackbar.text = 'Harap periksa kembali inputan anda'

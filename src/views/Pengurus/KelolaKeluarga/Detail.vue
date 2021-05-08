@@ -36,7 +36,7 @@
             <v-btn
               class="btn text-none"
               @click="save"
-              color="success"
+              color="indigo accent-4"
               dark
               depressed
             >
@@ -84,10 +84,10 @@
                     </v-col>
                     <v-col cols="3">
                       <v-btn
-                        class="btn text-none"
-                        color="success"
+                        class="btn text-none mt-2"
+                        color="indigo accent-4"
                         tag="router-link"
-                        to="tambah-anggota"
+                        to="tambah"
                         dark
                         depressed
                       >
@@ -162,7 +162,7 @@
                     v-model="page"
                     :length="pageCount"
                     :total-visible="6"
-                    color="blue"
+                    color="indigo accent-4"
                   ></v-pagination>
                 </div>
               </template>
@@ -241,7 +241,7 @@ export default {
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
           snackbar.text = 'Data berhasil tersimpan!'
-          this.$router.push('kelola-keluarga')
+          this.$router.push('keluarga')
         } else {
           snackbar.color = 'error'
           snackbar.text = 'Harap periksa kembali inputan anda'

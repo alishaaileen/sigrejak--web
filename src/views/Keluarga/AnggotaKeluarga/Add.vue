@@ -89,14 +89,6 @@
         ></v-text-field>
 
         <autocomplete
-          :disable="false"
-          label="Paroki tempat tinggal*"
-          :suggestionList="parokiNameList"
-          @changeData="changeIdParoki"
-        ></autocomplete>
-
-        <autocomplete
-          :disable="lingkunganNameList.length == 0"
           label="Lingkungan tempat tinggal*"
           :suggestionList.sync="lingkunganNameList"
           @changeData="changeIdLingkungan"
@@ -104,9 +96,9 @@
 
         <div class="d-flex justify-end">
           <v-btn
-            class="btn text-none"
+            class="btn text-none mt-2"
             type="submit"
-            color="success"
+            color="indigo accent-4"
             dark
             depressed
           >
@@ -155,35 +147,21 @@ export default {
     },
   },
   computed: {
-    parokiNameList() {
-      return this.parokiList.map(e => e.nama_paroki)
-    },
     lingkunganNameList() {
-      return this.lingkunganList.map(e => {
-        if (e.paroki_id === this.formData.paroki_id) {
-          return e.nama_lingkungan
-        } else {
-          return null
-        }
-      }).filter(e => e !== null)
+      return this.lingkunganList.map(e => e.nama_lingkungan)
+      // return this.lingkunganList.map(e => {
+      //   if (e.paroki_id === this.formData.paroki_id) {
+      //     return e.nama_lingkungan
+      //   } else {
+      //     return null
+      //   }
+      // }).filter(e => e !== null)
     },
   },
   async mounted() {
-    let endpoint = '/paroki'
-    this.parokiList = await getData(endpoint)
-    
-    endpoint = '/lingkungan'
-    this.lingkunganList = await getData(endpoint)
+    this.lingkunganList = await getData('/lingkungan')
   },
   methods: {
-    changeIdParoki(e) {
-      this.parokiList.map((_) => {
-        if (_.nama_paroki == e) {
-          this.formData.paroki_id = _.id;
-          return
-        }
-      })
-    },
     changeIdLingkungan(e) {
       this.lingkunganList.map((_) => {
         if (_.nama_lingkungan == e) {

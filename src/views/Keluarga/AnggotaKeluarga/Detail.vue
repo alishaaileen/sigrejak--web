@@ -95,7 +95,7 @@
           <v-btn
             class="btn text-none"
             @click="saveUmat"
-            color="success"
+            color="indigo accent-4"
             dark
             depressed
           >
@@ -198,7 +198,7 @@
           <v-btn
             class="btn text-none"
             @click="saveDetailUmat"
-            color="success"
+            color="indigo accent-4"
             dark
             depressed
           >

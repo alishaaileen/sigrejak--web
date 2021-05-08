@@ -8,6 +8,7 @@ const state = () => {
         nama: null,
         email: null,
         role: null,
+        no_telp: null,
         token: localStorage.getItem('token') || null,
         status: null,
     }
@@ -19,11 +20,12 @@ const getters = {
 }
 
 const mutations = {
-    setData(state, admin) {
-        state.id = admin.id
-        state.nama = admin.nama
-        state.email = admin.email
-        state.role = admin.role
+    setData(state, pengurus) {
+        state.id = pengurus.id
+        state.nama = pengurus.nama
+        state.email = pengurus.email
+        state.role = pengurus.role
+        state.no_telp = pengurus.no_telp
     },
     setStatus(state, status) {
         state.status = status
@@ -45,7 +47,7 @@ const actions = {
         commit('setToken', login.token);
         commit('setStatus', 'success');
     },
-    async getProfileAdmin({ commit, state }) {
+    async getProfilePengurus({ commit, state }) {
         const config = {
             headers: { Authorization: `Bearer ${state.token}` }
         };

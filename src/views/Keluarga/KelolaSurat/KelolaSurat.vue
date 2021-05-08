@@ -31,52 +31,52 @@ data: () => ({
       {
         title: 'Surat Keterangan Pindah',
         desc: 'lorem ipsum',
-        to: 'kelola-surat/surat-keterangan-pindah',
+        to: 'surat/surat-keterangan-pindah',
       },
       {
         title: 'Surat Keterangan Mati',
         desc: 'lorem ipsum',
-        to: 'kelola-surat/surat-keterangan-mati',
+        to: 'surat/surat-keterangan-mati',
       },
       {
         title: 'Surat Pelayanan Minyak Suci',
         desc: 'lorem ipsum',
-        to: 'kelola-surat/surat-pelayanan-minyak-suci',
+        to: 'surat/surat-pelayanan-minyak-suci',
       },
       {
         title: 'Surat Keterangan Calon Pengantin',
         desc: 'lorem ipsum',
-        to: 'kelola-surat/surat-keterangan-calon-pengantin',
+        to: 'surat/surat-keterangan-calon-pengantin',
       },
       {
         title: 'Surat Keterangan',
         desc: 'lorem ipsum',
-        to: 'kelola-surat/surat-keterangan',
+        to: 'surat/surat-keterangan',
       },
       {
         title: 'Surat Baptis Anak',
         desc: 'lorem ipsum',
-        to: 'kelola-surat/surat-baptis-anak',
+        to: 'surat/surat-baptis-anak',
       },
       {
         title: 'Surat Baptis Dewasa',
         desc: 'lorem ipsum',
-        to: 'kelola-surat/surat-baptis-dewasa',
+        to: 'surat/surat-baptis-dewasa',
       },
       {
         title: 'Surat Komuni',
         desc: 'lorem ipsum',
-        to: 'kelola-surat/surat-komuni',
+        to: 'surat/surat-komuni',
       },
       {
         title: 'Surat Keterangan Beasiswa', 
         desc: 'lorem ipsum',
-        to: 'kelola-surat/surat-keterangan-beasiswa',
+        to: 'surat/surat-keterangan-beasiswa',
       },
       {
         title: 'Surat Izin Pelayanan Ekaristi', 
         desc: 'lorem ipsum',
-        to: 'kelola-surat/surat-izin-pelayanan-ekaristi',
+        to: 'surat/surat-izin-pelayanan-ekaristi',
       },
     ]
   })

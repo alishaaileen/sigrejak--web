@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Tambah Admin</h1>
+    <h1>Tambah Pengurus</h1>
 
     <div class="form mt-5" @submit.prevent="submit">
       <v-card class="pa-3 mx-auto" outlined>
@@ -23,7 +23,7 @@
 
           <label>Jabatan*</label>
           <v-select
-            :items="[ 'Sekretariat', 'Romo', 'Super Admin' ]"
+            :items="[ 'Sekretariat', 'Romo', 'Super Pengurus' ]"
             v-model="formData.role"
             outlined
             dense
@@ -39,9 +39,9 @@
 
           <div class="d-flex justify-end">
             <v-btn
-              class="btn text-none"
+              class="btn text-none mt-2"
               type="submit"
-              color="success"
+              color="indigo accent-4"
               dark
               depressed
             >
@@ -72,18 +72,18 @@ export default {
       this.$store.dispatch('loading/openLoading')
       let snackbar = {}
 
-      if (this.formData.role === "Super Admin") this.formData.role = 1;
+      if (this.formData.role === "Super Pengurus") this.formData.role = 1;
       else if (this.formData.role === "Sekretariat") this.formData.role = 2;
       else if (this.formData.role === "Romo") this.formData.role = 3;
 
       try {
-        let response = await postData('/admin/register', this.formData)
+        let response = await postData('/pengurus/register', this.formData)
         
         if(response.status >= 200 && response.status < 300) {
           snackbar.color = 'success'
           snackbar.text = 'Data berhasil ditambahkan!'
 
-          this.$router.push('kelola-admin')
+          this.$router.push('pengurus')
         } else {
           snackbar.color = 'error'
           snackbar.text = 'Harap periksa kembali inputan anda!'

@@ -32,8 +32,8 @@
 
           <div class="d-flex justify-end">
             <v-btn
-              class="btn text-none"
-              color="success"
+              class="btn text-none mt-2"
+              color="indigo accent-4"
               @click="editProfile"
               dark
               depressed
@@ -92,7 +92,7 @@
                   v-model="page"
                   :length="pageCount"
                   :total-visible="6"
-                  color="blue"
+                  color="indigo accent-4"
                 ></v-pagination>
               </div>
             </template>

@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1>Daftar Admin</h1>
+    <h1>Daftar Keluarga</h1>
 
     <div class="data-table mt-5">
       <v-card flat outlined>
         <v-data-table
           :headers="headers"
-          :items="admins"
+          :items="families"
           :search="search"
           :page.sync="page"
           :items-per-page="selectedJumlahData"
@@ -33,14 +33,14 @@
                 </v-col>
                 <v-col cols="3">
                   <v-btn
-                    class="btn text-none"
-                    color="success"
+                    class="btn text-none mt-2"
+                    color="indigo accent-4"
                     tag="router-link"
-                    to="tambah-admin"
+                    to="keluarga/tambah"
                     dark
                     depressed
                   >
-                    Tambah admin
+                    Tambah keluarga
                   </v-btn>
                 </v-col>
               </v-row>
@@ -48,10 +48,9 @@
           </template>
 
           <!-- TABLE CONTENT -->
-          <template v-slot:[`item.role`]="{ item }">
-            <p v-if="item.role === 1">Super Admin</p>
-            <p v-else-if="item.role === 2">Sekretariat</p>
-            <p v-else>Romo</p>
+          <template v-slot:[`item.telepon`]="{ item }">
+            <p v-if="item === null">-</p>
+            <p>{{ item }}</p>
           </template>
           <template v-slot:[`item.action`]="{ item }">
             <div>
@@ -68,6 +67,9 @@
                   <v-list-item @click="openConfirmDelete(item.id)">
                     <v-list-item-title>Hapus</v-list-item-title>
                   </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title>Reset password</v-list-item-title>
+                  </v-list-item>
                 </v-list>
               </v-menu>
             </div>
@@ -81,7 +83,7 @@
                 v-model="page"
                 :length="pageCount"
                 :total-visible="6"
-                color="blue"
+                color="indigo accent-4"
               ></v-pagination>
             </div>
           </template>
@@ -106,22 +108,19 @@ export default {
     search: '',
     headers: [
       {
-        text: 'Nama', value: 'nama',
+        text: 'Nama keluarga', value: 'nama_keluarga',
+      },
+      {
+        text: 'Username', value: 'username',
       },
       {
         text: 'E-mail', value: 'email',
       },
       {
-        text: 'Jabatan', value: 'role',
-      },
-      {
-        text: 'Nomor telepon', value: 'no_telp',
-      },
-      {
         text: '', value: 'action',
       },
     ],
-    admins: [],
+    families: [],
     page: 1,
     pageCount: 0,
     selectedJumlahData: 10,
@@ -130,13 +129,23 @@ export default {
   }),
   async mounted() {
     this.tableLoading = true
-    // this.admins = await this.getAllAdmin('/admin')
-    this.admins = await getData('/admin')
+
+    this.families = await this.getAllFamily('/keluarga')
+    
     this.tableLoading = false
   },
   methods: {
+    async getAllFamily(url) {
+      try {
+        let response = await getData(url)
+
+        return response
+      } catch (e) {
+        console.error(e)
+      }
+    },
     goToDetail(id) {
-      this.$router.push(`/admin/detail-admin/${id}`)
+      this.$router.push(`/pengurus/keluarga/${id}`)
     },
     openConfirmDelete(id) {
       this.deleteId = id
@@ -153,20 +162,28 @@ export default {
 
       if (decision) {
         try {
-          let response = await deleteData('/admin', this.deleteId)
+          let response = await deleteData('/umat', this.deleteId)
           
           if (response.status === 200) {
-            snackbar.color = 'success',
-            snackbar.text = 'Data berhasil dihapus'
-
-            this.admins = await getData('/admin')
+            snackbar = {
+              active: true,
+              color: 'success',
+              text: 'Data berhasil dihapus',
+            }
           } else {
-            snackbar.color = 'error'
-            snackbar.text = 'Terjadi kesalahan. Silahkan refresh dan coba lagi'
+            snackbar = {
+              active: true,
+              color: 'error',
+              text: 'Terjadi kesalahan. Silahkan refresh dan coba lagi',
+            }
           }
         } catch (error) {
-          snackbar.color = 'error'
-          snackbar.text = error
+          snackbar = {
+            active: true,
+            color: 'error',
+            text: error,
+          }
+          console.error(error)
         }
         this.$store.dispatch('snackbar/openSnackbar', snackbar)
       }

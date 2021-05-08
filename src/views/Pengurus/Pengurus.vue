@@ -19,7 +19,7 @@
             v-on="on"
           >
             <v-icon>mdi-account-circle</v-icon>
-            {{ admin.nama }}
+            {{ pengurus.nama }}
           </v-btn>
         </template>
 
@@ -41,7 +41,7 @@
       </v-menu>
     </v-app-bar>
     <!-- SIDEBAR -->
-    <v-navigation-drawer color="blue-grey darken-3" dark permanent fixed width="240" app>
+    <v-navigation-drawer color="blue-grey darken-4" dark permanent fixed width="240" app>
       <v-list dense nav class="my-1">
         <!-- <v-list-item two-line>
           <v-avatar size="24" tile>
@@ -62,7 +62,7 @@
         <div v-for="(menu, i) in menus" :key="i">
           <v-list-item v-if="!menu.hasOption" tag="router-link" :to="menu.to">
             <v-list-item-icon>
-              <v-icon color="#17B978">{{ menu.icon }}</v-icon>
+              <v-icon color="blue accent-3">{{ menu.icon }}</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
@@ -77,7 +77,7 @@
             :prepend-icon="menu.icon"
             no-action
             value="true"
-            color="#17B978"
+            color="blue accent-3"
           >
             <template v-slot:activator>
               <v-list-item-title class="sidebar-menu-option font-semi-bold">{{
@@ -127,7 +127,7 @@ import { setAxiosBearerToken } from '../../utils'
 
 export default {
   computed: mapState({
-    admin: 'admin'
+    pengurus: 'pengurus'
   }),
   data() {
     return {
@@ -135,27 +135,27 @@ export default {
         {
           title: "Dashboard",
           icon: "mdi-view-dashboard-outline",
-          to: "/admin/dashboard",
+          to: "/pengurus/dashboard",
         },
         {
-          title: "Kelola Admin",
+          title: "Kelola Pengurus",
           icon: "mdi-account-tie-outline",
-          to: "/admin/kelola-admin",
+          to: "/pengurus/pengurus",
         },
         {
           title: "Kelola Keluarga",
           icon: "mdi-account-group-outline",
-          to: "/admin/kelola-keluarga",
+          to: "/pengurus/keluarga",
         },
         {
           title: "Kelola Lingkungan",
           icon: "mdi-home-group",
-          to: "/admin/kelola-lingkungan",
+          to: "/pengurus/lingkungan",
         },
         {
           title: "Kelola Surat",
           icon: "mdi-book-outline",
-          to: "/admin/kelola-surat"
+          to: "/pengurus/surat"
           // hasOption: true,
           // options: [
           //   {
@@ -170,12 +170,12 @@ export default {
   created() {
     setAxiosBearerToken()
 
-    this.$store.dispatch('admin/getProfileAdmin')
+    this.$store.dispatch('pengurus/getProfilePengurus')
   },
   methods: {
     logout() {
-      this.$store.dispatch('admin/logout')
-      this.$router.push('/login-admin')
+      this.$store.dispatch('pengurus/logout')
+      this.$router.push('/login-pengurus')
     }
   }
 }

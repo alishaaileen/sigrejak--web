@@ -37,9 +37,9 @@
 
           <div class="d-flex justify-end">
             <v-btn
-              class="btn text-none"
+              class="btn text-none mt-2"
               type="submit"
-              color="success"
+              color="indigo accent-4"
               dark
               depressed
             >
@@ -54,9 +54,9 @@
 </template>
 
 <script>
-import { getData, postData } from '../../../utils'
+import { getData, postData } from '../../../../utils'
 
-import Autocomplete from '../../../components/Autocomplete'
+import Autocomplete from '../../../../components/Autocomplete'
 
 export default {
   components: {
@@ -114,7 +114,7 @@ export default {
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
           snackbar.text = 'Data berhasil ditambahkan!'
-          this.$router.push(`/admin/detail-paroki/${this.$route.params.id}`)
+          this.$router.push(`/pengurus/detail-paroki/${this.$route.params.id}`)
         } else {
           snackbar.color = 'error',
           snackbar.text = 'Harap periksa kembali inputan anda'
