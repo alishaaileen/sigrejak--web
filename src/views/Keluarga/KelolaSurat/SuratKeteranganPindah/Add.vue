@@ -3,7 +3,7 @@
     <h1>Tambah Surat Keterangan Pindah</h1>
 
     <div class="form mt-5" @submit.prevent="submit">
-      <!-- <v-card class="pa-3 mx-auto" outlined> -->
+      <v-card class="pa-3 mx-auto">
         <v-form>
           <h3 class="mb-5">Informasi Umat</h3>
 
@@ -47,7 +47,7 @@
             <v-col>
               <label>Paroki lama</label>
               <v-text-field
-                v-model="formData.id_paroki_lama"
+                v-model="formData.paroki_lama"
                 required
                 outlined
                 dense
@@ -115,8 +115,7 @@
             </v-btn>
           </div>
         </v-form>
-        {{ anggotaKeluarga }}      
-        {{ keluargaNameList }}      
+      </v-card>     
     </div>
   </div>
 </template>
@@ -135,6 +134,7 @@ export default {
       id_lingkungan: null,
       ketua_lingkungan: null,
       id_umat: null,
+      paroki_lama: 'Kumetiran',
       nama: null,
       tempat_lahir: null,
       tgl_lahir: null,
@@ -178,14 +178,6 @@ export default {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
   },
   methods: {
-    changeIdParoki(e) {
-      this.parokiList.map((_) => {
-        if (_.nama_paroki == e) {
-          this.formData.id_paroki_baru = _.id;
-          return
-        }
-      })
-    },
     changeIdLingkungan(e) {
       this.lingkunganList.map((_) => {
         if (_.nama_lingkungan == e) {

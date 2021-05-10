@@ -113,7 +113,7 @@
         </div>
       </template> -->
     </v-navigation-drawer>
-    <div class="app-container px-7">
+    <div class="app-container pa-10 grey lighten-5">
       <router-view />
     </div>
 

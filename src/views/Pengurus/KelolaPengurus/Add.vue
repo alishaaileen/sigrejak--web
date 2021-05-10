@@ -3,7 +3,7 @@
     <h1>Tambah Pengurus</h1>
 
     <div class="form mt-5" @submit.prevent="submit">
-      <v-card class="pa-3 mx-auto" outlined>
+      <v-card class="pa-6 mx-auto" flat>
         <v-form>
           <label>Nama*</label>
           <v-text-field
@@ -77,13 +77,13 @@ export default {
       else if (this.formData.role === "Romo") this.formData.role = 3;
 
       try {
-        let response = await postData('/pengurus/register', this.formData)
+        let response = await postData('/admin/register', this.formData)
         
         if(response.status >= 200 && response.status < 300) {
           snackbar.color = 'success'
           snackbar.text = 'Data berhasil ditambahkan!'
 
-          this.$router.push('pengurus')
+          this.$router.push('/pengurus/pengurus')
         } else {
           snackbar.color = 'error'
           snackbar.text = 'Harap periksa kembali inputan anda!'

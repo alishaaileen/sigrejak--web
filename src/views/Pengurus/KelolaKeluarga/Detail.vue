@@ -5,9 +5,9 @@
     <v-divider></v-divider>
 
     <div class="form mt-5">
-      <h2>Informasi Keluarga</h2>
-      <div class="my-3">
-        <v-form>
+      <v-card class="pa-6 mx-auto" flat>
+        <h2>Informasi Keluarga</h2>
+        <v-form class="my-3">
           <label>Nama keluarga*</label>
           <v-text-field
             v-model="keluarga.nama_keluarga"
@@ -44,14 +44,14 @@
             </v-btn>
           </div>
         </v-form>
-      </div>
+      </v-card>
     </div>
 
     <div class="mt-10">
       <h2 class="mb-5">Anggota Keluarga</h2>
 
       <div class="data-table">
-        <v-card flat outlined>
+        <v-card flat>
           <div class="my-3">
             <v-data-table
               :headers="headers"
@@ -158,7 +158,7 @@
                 <v-divider></v-divider>
                 <div class="d-flex justify-start text-center py-2">
                   <v-pagination
-                    class="table-pagination"
+                    class="table-pagination ml-2 mb-3"
                     v-model="page"
                     :length="pageCount"
                     :total-visible="6"
@@ -241,7 +241,6 @@ export default {
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
           snackbar.text = 'Data berhasil tersimpan!'
-          this.$router.push('keluarga')
         } else {
           snackbar.color = 'error'
           snackbar.text = 'Harap periksa kembali inputan anda'

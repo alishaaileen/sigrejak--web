@@ -3,51 +3,53 @@
     <h1>Detail Pengurus</h1>
 
     <div class="form mt-5">
-      <v-form>
-        <label>Nama*</label>
-        <v-text-field
-          v-model="pengurus.nama"
-          required
-          outlined
-          dense
-        ></v-text-field>
+      <v-card class="pa-6 mx-auto" flat>
+        <v-form>
+          <label>Nama*</label>
+          <v-text-field
+            v-model="pengurus.nama"
+            required
+            outlined
+            dense
+          ></v-text-field>
 
-        <label>Email*</label>
-        <v-text-field
-          v-model="pengurus.email"
-          required
-          outlined
-          dense
-        ></v-text-field>
+          <label>Email*</label>
+          <v-text-field
+            v-model="pengurus.email"
+            required
+            outlined
+            dense
+          ></v-text-field>
 
-        <label>Jabatan*</label>
-        <v-select
-          :items="[ 'Sekretariat', 'Romo', 'Super Pengurus' ]"
-          v-model="pengurus.role"
-          outlined
-          dense
-        ></v-select>
+          <label>Jabatan*</label>
+          <v-select
+            :items="[ 'Sekretariat', 'Romo', 'Super Pengurus' ]"
+            v-model="pengurus.role"
+            outlined
+            dense
+          ></v-select>
 
-        <label>Nomor telepon</label>
-        <v-text-field
-          v-model="pengurus.no_telp"
-          required
-          outlined
-          dense
-        ></v-text-field>
+          <label>Nomor telepon</label>
+          <v-text-field
+            v-model="pengurus.no_telp"
+            required
+            outlined
+            dense
+          ></v-text-field>
 
-        <div class="d-flex justify-end">
-          <v-btn
-            class="btn text-none"
-            @click="save"
-            color="blue accent-4"
-            dark
-            depressed
-          >
-            Simpan
-          </v-btn>
-        </div>
-      </v-form>
+          <div class="d-flex justify-end">
+            <v-btn
+              class="btn text-none"
+              @click="save"
+              color="blue accent-4"
+              dark
+              depressed
+            >
+              Simpan
+            </v-btn>
+          </div>
+        </v-form>
+      </v-card>
     </div>
 
     <snackbar></snackbar>
@@ -67,7 +69,7 @@ export default {
     }
   }),
   async mounted() {
-    this.pengurus = await getData(`/pengurus/${this.$route.params.id}`)
+    this.pengurus = await getData(`/admin/${this.$route.params.id}`)
     this.pengurus = this.pengurus[0]
 
     if (this.pengurus.role === 1) this.pengurus.role = "Super Pengurus";
@@ -84,7 +86,7 @@ export default {
       else if (this.pengurus.role === "Romo") this.pengurus.role = 3;
 
       try {
-        let response = await editData('/pengurus', this.$route.params.id, this.pengurus)
+        let response = await editData('/admin', this.$route.params.id, this.pengurus)
 
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',

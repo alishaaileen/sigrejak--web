@@ -3,7 +3,7 @@
     <h1>Surat Keterangan Pindah</h1>
 
     <div class="data-table mt-5">
-      <!-- <v-card flat outlined> -->
+      <v-card flat>
         <v-data-table
           :headers="headers"
           :items="surat"
@@ -17,7 +17,7 @@
         >
           <!-- TABLE TOP -->
           <template v-slot:top>
-            <!-- <v-card-title> -->
+            <v-card-title>
               <v-row>
                 <v-col>
                   <v-text-field
@@ -44,7 +44,7 @@
                   </v-btn>
                 </v-col>
               </v-row>
-            <!-- </v-card-title> -->
+            </v-card-title>
           </template>
 
           <!-- TABLE CONTENT -->
@@ -76,7 +76,7 @@
             <v-divider></v-divider>
             <div class="d-flex justify-start text-center py-2">
               <v-pagination
-                class="table-pagination"
+                class="table-pagination ml-2 mb-3"
                 v-model="page"
                 :length="pageCount"
                 :total-visible="6"
@@ -85,7 +85,7 @@
             </div>
           </template>
         </v-data-table>
-      <!-- </v-card> -->
+      </v-card>
     </div>
 
     <snackbar></snackbar>

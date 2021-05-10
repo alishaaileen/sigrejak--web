@@ -3,7 +3,7 @@
     <h1>Daftar Keluarga</h1>
 
     <div class="data-table mt-5">
-      <v-card flat outlined>
+      <v-card flat>
         <v-data-table
           :headers="headers"
           :items="families"
@@ -79,7 +79,7 @@
             <v-divider></v-divider>
             <div class="d-flex justify-start text-center py-2">
               <v-pagination
-                class="table-pagination"
+                class="table-pagination ml-2 mb-3"
                 v-model="page"
                 :length="pageCount"
                 :total-visible="6"

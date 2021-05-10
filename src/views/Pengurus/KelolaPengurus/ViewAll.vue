@@ -3,7 +3,7 @@
     <h1>Daftar Pengurus</h1>
 
     <div class="data-table mt-5">
-      <v-card flat outlined>
+      <v-card class="" flat>
         <v-data-table
           :headers="headers"
           :items="pengurus"
@@ -36,7 +36,7 @@
                     class="btn text-none mt-2"
                     color="blue accent-4"
                     tag="router-link"
-                    to="tambah"
+                    to="pengurus/tambah"
                     dark
                     depressed
                   >
@@ -49,9 +49,9 @@
 
           <!-- TABLE CONTENT -->
           <template v-slot:[`item.role`]="{ item }">
-            <p v-if="item.role === 1">Super Pengurus</p>
-            <p v-else-if="item.role === 2">Sekretariat</p>
-            <p v-else>Romo</p>
+            <span v-if="item.role === 1">Super Pengurus</span>
+            <span v-else-if="item.role === 2">Sekretariat</span>
+            <span v-else>Romo</span>
           </template>
           <template v-slot:[`item.action`]="{ item }">
             <div>
@@ -77,7 +77,7 @@
             <v-divider></v-divider>
             <div class="d-flex justify-start text-center py-2">
               <v-pagination
-                class="table-pagination"
+                class="table-pagination ml-2 mb-3"
                 v-model="page"
                 :length="pageCount"
                 :total-visible="6"

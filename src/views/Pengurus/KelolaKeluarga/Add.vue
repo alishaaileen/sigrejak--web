@@ -3,7 +3,7 @@
     <h1>Tambah Keluarga</h1>
 
     <div class="form mt-5" @submit.prevent="submit">
-      <v-card class="pa-3 mx-auto" outlined>
+      <v-card class="pa-6 mx-auto" flat>
         <v-form>
           <label>Nama keluarga*</label>
           <v-text-field
@@ -73,7 +73,7 @@ export default {
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
           snackbar.text = 'Data berhasil ditambahkan!'
-          this.$router.push('keluarga')
+          this.$router.push('/pengurus/keluarga')
         } else {
           snackbar.color = 'error',
           snackbar.text = 'Harap periksa kembali inputan anda'

@@ -3,21 +3,12 @@
     <h1>Tambah Lingkungan</h1>
 
     <div class="form mt-5" @submit.prevent="submit">
-      <v-card class="pa-3 mx-auto" outlined>
+      <v-card class="pa-6 mx-auto" flat>
         <v-form>
           <label>Nama lingkungan*</label>
           <v-text-field
             v-model="formData.nama_lingkungan"
             required
-            outlined
-            dense
-          ></v-text-field>
-
-          <label>Nama paroki*</label>
-          <v-text-field
-            :value="paroki.nama_paroki"
-            readonly
-            disabled
             outlined
             dense
           ></v-text-field>
@@ -30,7 +21,7 @@
           ></autocomplete> -->
 
           <autocomplete
-            label="Keluarga ketua lingkungan*"
+            label="Ketua lingkungan*"
             :suggestionList="keluargaNameList"
             @changeData="changeIdKeluarga"
           ></autocomplete>
@@ -72,28 +63,28 @@ export default {
     keluargaList: [],
   }),
   computed: {
-    parokiNameList: function () {
-      return this.parokiList.map(e => e.nama_paroki)
-    },
+    // parokiNameList: function () {
+    //   return this.parokiList.map(e => e.nama_paroki)
+    // },
     keluargaNameList: function () {
       return this.keluargaList.map(e => e.nama_keluarga)
     },
   },
   async mounted() {
-    this.paroki = await getData(`/paroki/${this.$route.params.id}`)
-    this.paroki = this.paroki[0]
-    this.formData.paroki_id = this.paroki.id
-    this.keluargaList = await getData('/keluarga')
+    // this.paroki = await getData(`/paroki/${this.$route.params.id}`)
+    // this.paroki = this.paroki[0]
+    // this.formData.paroki_id = this.paroki.id
+    this.keluargaList = await getData(`/keluarga`)
   },
   methods: {
-    changeIdParoki(e) {
-      this.parokiList.map((_) => {
-        if (_.nama_paroki == e) {
-          this.formData.paroki_id = _.id;
-          return
-        }
-      })
-    },
+    // changeIdParoki(e) {
+    //   this.parokiList.map((_) => {
+    //     if (_.nama_paroki == e) {
+    //       this.formData.paroki_id = _.id;
+    //       return
+    //     }
+    //   })
+    // },
     changeIdKeluarga(e) {
       this.keluargaList.map((_) => {
         if (_.nama_keluarga == e) {
@@ -114,7 +105,7 @@ export default {
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
           snackbar.text = 'Data berhasil ditambahkan!'
-          this.$router.push(`/pengurus/detail-paroki/${this.$route.params.id}`)
+          this.$router.push(`/pengurus/lingkungan`)
         } else {
           snackbar.color = 'error',
           snackbar.text = 'Harap periksa kembali inputan anda'

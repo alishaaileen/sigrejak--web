@@ -17,6 +17,15 @@ const keluargaRouteGuard = (to,from, next) => {
   next()
 }
 
+const pengurusRouteGuard = (to,from, next) => {
+  if(!localStorage.getItem('token')) {
+    next('/')
+    return
+  }
+
+  next()
+}
+
 // const pengurusRouteGuard = (to,from, next) => {
 //   if(!store.getters.isAuthenticated) {
 //     next('/pengurus-login')
@@ -47,7 +56,7 @@ const routes = [
     name: 'Keluarga',
     component: importView("Keluarga/Keluarga"),
     beforeEnter: keluargaRouteGuard,
-    redirect: '/keluarga/dashboard',
+    // redirect: '/keluarga/dashboard',
     children: [
       // Dashboard Keluarga =========================
       {
@@ -124,8 +133,8 @@ const routes = [
     path: '/pengurus',
     name: 'Pengurus',
     component: importView("Pengurus/Pengurus"),
-    // beforeEnter: pengurusRouteGuard,
-    redirect: '/pengurus/dashboard',
+    beforeEnter: pengurusRouteGuard,
+    // redirect: '/pengurus/dashboard',
     children: [
       // Dashboard Pengurus =========================
       {

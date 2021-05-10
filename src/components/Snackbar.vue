@@ -2,6 +2,9 @@
   <div class="text-center ma-2">
     <v-snackbar
       app
+      top
+      right
+      :color="snackbar.color"
       v-model="snackbar.active"
       :timeout="snackbar.timeout"
     >
@@ -9,7 +12,6 @@
 
       <template v-slot:action="{ attrs }">
         <v-btn
-          :color="snackbar.color"
           text
           v-bind="attrs"
           @click="close"

@@ -1,32 +1,41 @@
 <template>
   <v-container>
-    <div class="d-flex flex-wrap">
-      <div v-for="(card, i) in cards" :key="i">
+    <v-card class="pa-6" flat>
+      <v-autocomplete
+        v-model="search"
+        :items="cards"
+        clearable
+        item-text="title"
+        prepend-inner-icon="mdi-magnify"
+        outlined
+        @change="filterCards"
+        @click:clear="filterCards"
+      ></v-autocomplete>
+      <div v-for="(card, i) in filteredCards" :key="i">
         <router-link :to="card.to" class="text-decoration-none">
           <v-card
-            class="sm mb-5 mr-4 align-stretch"
-            outlined
-            width="700"
+            class="mb-5 pa-2"
             hover
+            outlined
           >
             <div>
-              <v-card-title
-                class="headline text-decoration-none"
-                v-text="card.title"
-              ></v-card-title>
+              <v-card-title class="headline">
+                <h4>{{ card.title }}</h4>
+              </v-card-title>
 
               <v-card-subtitle v-text="card.desc"></v-card-subtitle>
             </div>
           </v-card>
         </router-link>
       </div>
-    </div>
+    </v-card>
   </v-container>
 </template>
 
 <script>
 export default {
-data: () => ({
+  data: () => ({
+    search: '',
     cards: [
       {
         title: 'Surat Keterangan Pindah',
@@ -78,8 +87,27 @@ data: () => ({
         desc: 'lorem ipsum',
         to: 'surat/surat-izin-pelayanan-ekaristi',
       },
-    ]
-  })
+    ],
+    filteredCards: []
+  }),
+  mounted() {
+    this.filteredCards = this.cards
+  },
+  methods: {
+    changeSearchText(e) {
+      console.log(e)
+      this.search = e
+    },
+    filterCards() {
+      if (this.search === '' || this.search === null) {
+        this.filteredCards = this.cards
+      } else {
+        this.filteredCards = this.cards.filter(e => {
+          if(e.title === this.search) return e
+        })
+      }
+    }
+  }
 }
 </script>
 

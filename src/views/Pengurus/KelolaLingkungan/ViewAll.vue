@@ -3,7 +3,7 @@
     <h1>Daftar Lingkungan</h1>
 
     <div class="data-table mt-5">
-      <v-card flat outlined>
+      <v-card flat>
         <v-data-table
           :headers="headers"
           :items="data"
@@ -48,9 +48,9 @@
           </template>
 
           <!-- TABLE CONTENT -->
-          <template v-slot:[`item.ketua_lingkungan_id`]="{ item }">
+          <!-- <template v-slot:[`item.ketua_lingkungan_id`]="{ item }">
             <p>{{ getNamaKeluarga(item.ketua_lingkungan_id) }}</p>
-          </template>
+          </template> -->
           <template v-slot:[`item.action`]="{ item }">
             <div>
               <v-menu bottom offset-y>
@@ -75,7 +75,7 @@
             <v-divider></v-divider>
             <div class="d-flex justify-start text-center py-2">
               <v-pagination
-                class="table-pagination"
+                class="table-pagination ml-2 mb-3"
                 v-model="page"
                 :length="pageCount"
                 :total-visible="6"
@@ -107,7 +107,7 @@ export default {
         text: 'Nama lingkungan', value: 'nama_lingkungan',
       },
       {
-        text: 'Ketua lingkungan', value: 'ketua_lingkungan_id',
+        text: 'Ketua lingkungan', value: 'ketua_lingkungan',
       },
       {
         text: '', value: 'action',

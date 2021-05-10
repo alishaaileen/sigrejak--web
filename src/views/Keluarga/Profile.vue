@@ -2,105 +2,105 @@
   <div>
     <h1>Profile Keluarga</h1>
 
-    <div class="form mt-5">
+    <v-divider class="my-3"></v-divider>
+
+    <v-card class="pa-6 mx-auto" flat>
       <h2>Informasi Umum</h2>
-      <v-divider class="my-3"></v-divider>
-        <v-form>
-          <label>Nama keluarga</label>
-          <v-text-field
-            v-model="profile.nama_keluarga"
-            required
-            outlined
-            dense
-          ></v-text-field>
+      <v-form class="my-3">
+        <label>Nama keluarga</label>
+        <v-text-field
+          v-model="profile.nama_keluarga"
+          required
+          outlined
+          dense
+        ></v-text-field>
 
-          <label>Username</label>
-          <v-text-field
-            v-model="profile.username"
-            required
-            outlined
-            dense
-          ></v-text-field>
+        <label>Username</label>
+        <v-text-field
+          v-model="profile.username"
+          required
+          outlined
+          dense
+        ></v-text-field>
 
-          <label>Email</label>
-          <v-text-field
-            v-model="profile.email"
-            required
-            outlined
-            dense
-          ></v-text-field>
+        <label>Email</label>
+        <v-text-field
+          v-model="profile.email"
+          required
+          outlined
+          dense
+        ></v-text-field>
 
-          <div class="d-flex justify-end">
-            <v-btn
-              class="btn text-none mt-2"
-              color="blue accent-4"
-              @click="editProfile"
-              dark
-              depressed
-            >
-              Simpan
-            </v-btn>
-          </div>
-        </v-form>
-
-      <div class="mt-10">
-        <h2 class="my-3">Anggota Keluarga</h2>
-        <!-- <v-divider class="my-3"></v-divider> -->
-        <v-card class="mx-auto" outlined>
-          <v-data-table
-            :headers="headers"
-            :items="familyMembers"
-            :search="search"
-            :page.sync="page"
-            :items-per-page="selectedJumlahData"
-            :loading="tableLoading"
-            loading-text="Memuat data ..."
-            hide-default-footer
-            @page-count="pageCount = $event"
+        <div class="d-flex justify-end">
+          <v-btn
+            class="btn text-none mt-2"
+            color="blue accent-4"
+            @click="editProfile"
+            dark
+            depressed
           >
-            <!-- TABLE TOP -->
-            <template v-slot:top>
-              <v-card-title>
-                <v-row>
-                  <v-col>
-                    <v-text-field
-                      v-model="search"
-                      prepend-inner-icon="mdi-magnify"
-                      label="Cari"
-                      single-line
-                      hide-details
-                      outlined
-                      dense
-                      background-color="#FAFAFA"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-card-title>
-            </template>
+            Simpan
+          </v-btn>
+        </div>
+      </v-form>
+    </v-card>
 
-            <!-- TABLE CONTENT -->
-            <template v-slot:[`item.telepon`]="{ item }">
-              <p v-if="item === null">-</p>
-              <p>{{ item }}</p>
-            </template>
+    <div class="mt-10">
+      <h2 class="my-3">Anggota Keluarga</h2>
+      <v-card flat>
+        <v-data-table
+          :headers="headers"
+          :items="familyMembers"
+          :search="search"
+          :page.sync="page"
+          :items-per-page="selectedJumlahData"
+          :loading="tableLoading"
+          loading-text="Memuat data ..."
+          hide-default-footer
+          @page-count="pageCount = $event"
+        >
+          <!-- TABLE TOP -->
+          <template v-slot:top>
+            <v-card-title>
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    v-model="search"
+                    prepend-inner-icon="mdi-magnify"
+                    label="Cari"
+                    single-line
+                    hide-details
+                    outlined
+                    dense
+                    background-color="#FAFAFA"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-card-title>
+          </template>
 
-            <template v-slot:footer>
-              <v-divider></v-divider>
-              <div class="d-flex justify-start text-center py-2">
-                <v-pagination
-                  class="table-pagination"
-                  v-model="page"
-                  :length="pageCount"
-                  :total-visible="6"
-                  color="blue accent-4"
-                ></v-pagination>
-              </div>
-            </template>
-          </v-data-table>
-        </v-card>
-      </div>
+          <!-- TABLE CONTENT -->
+          <template v-slot:[`item.telepon`]="{ item }">
+            <p v-if="item === null">-</p>
+            <p>{{ item }}</p>
+          </template>
 
+          <template v-slot:footer>
+            <v-divider></v-divider>
+            <div class="d-flex justify-start text-center py-2">
+              <v-pagination
+                class="table-pagination ml-2 mb-3"
+                v-model="page"
+                :length="pageCount"
+                :total-visible="6"
+                color="blue accent-4"
+              ></v-pagination>
+            </div>
+          </template>
+        </v-data-table>
+      </v-card>
     </div>
+
     <snackbar></snackbar>
   </div>
 </template>
