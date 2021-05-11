@@ -5,6 +5,7 @@
         v-model="search"
         :items="cards"
         clearable
+        dense
         item-text="title"
         prepend-inner-icon="mdi-magnify"
         outlined
@@ -14,13 +15,14 @@
       <div v-for="(card, i) in filteredCards" :key="i">
         <router-link :to="card.to" class="text-decoration-none">
           <v-card
-            class="mb-5 pa-2"
+            class="mb-6 outline-grey"
             hover
             outlined
+            rounded="lg"
           >
             <div>
               <v-card-title class="headline">
-                <h4>{{ card.title }}</h4>
+                <h5>{{ card.title }}</h5>
               </v-card-title>
 
               <v-card-subtitle v-text="card.desc"></v-card-subtitle>

@@ -51,6 +51,10 @@ input {
   min-height: 100vh;
 }
 
+.outline-grey {
+  border-color: #ebebeb !important;
+}
+
 .side-login {
   padding: 50px;
   height: 100vh !important;

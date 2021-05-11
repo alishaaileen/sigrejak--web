@@ -75,14 +75,6 @@
             ></v-text-field>
 
             <autocomplete
-              :value="paroki.nama_paroki"
-              :disable="false"
-              label="Paroki tempat tinggal*"
-              :suggestionList="parokiNameList"
-              @changeData="changeIdParoki"
-            ></autocomplete>
-
-            <autocomplete
               :value="lingkungan.nama_lingkungan"
               label="Lingkungan tempat tinggal*"
               :suggestionList.sync="lingkunganNameList"
@@ -223,16 +215,12 @@ export default {
     Autocomplete
   },
   data: () => ({
-    parokiList: [],
     lingkunganList: [],
     umat: {},
     detailUmat: {},
     anggotaKeluarga: [],
   }),
   computed: {
-    parokiNameList() {
-      return this.parokiList.map(e => e.nama_paroki)
-    },
     lingkunganNameList() {
       // return this.lingkunganList.filter(e => {
       //   if (e.paroki_id === this.paroki.id)
@@ -249,11 +237,6 @@ export default {
     keluargaNameList() {
       return this.anggotaKeluarga.map(e => e.nama)
     },
-    paroki() {
-      var tempLingkungan = this.lingkunganList.find(e => e.id === this.umat.lingkungan_id)
-      var tempParoki = this.parokiList.find(e => e.id === tempLingkungan.paroki_id)
-      return tempParoki
-    },
     lingkungan() {
       var temp = this.lingkunganList.find(e => e.id === this.umat.lingkungan_id)
       return temp
@@ -261,7 +244,6 @@ export default {
   },
   async mounted() {
     this.lingkunganList = await getData(`/lingkungan`)
-    this.parokiList = await getData(`/paroki`)
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
 
     this.umat = await getData(`/umat/${this.$route.params.id}`)
@@ -270,14 +252,6 @@ export default {
     this.detailUmat = this.detailUmat[0]
   },
   methods: {
-    changeIdParoki(e) {
-      this.parokiList.map((_) => {
-        if (_.nama_paroki == e) {
-          this.umat.paroki_id = _.id;
-          return
-        }
-      })
-    },
     changeIdLingkungan(e) {
       this.lingkunganList.map((_) => {
         if (_.nama_lingkungan == e) {

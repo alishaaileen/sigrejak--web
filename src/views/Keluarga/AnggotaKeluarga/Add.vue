@@ -91,7 +91,8 @@
 
           <autocomplete
             label="Lingkungan tempat tinggal*"
-            :suggestionList.sync="lingkunganNameList"
+            :suggestionList="lingkunganList"
+            itemText="nama_lingkungan"
             @changeData="changeIdLingkungan"
           ></autocomplete>
 
@@ -194,7 +195,7 @@ export default {
           snackbar.color = 'success',
           snackbar.text = 'Data berhasil ditambahkan!'
         }
-        this.$router.push('anggota-keluarga')
+        this.$router.push('anggota')
       } catch (error) {
         snackbar.color = 'error',
         snackbar.text = error

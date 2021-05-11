@@ -4,6 +4,7 @@
     <v-autocomplete
       :value="value"
       :items="suggestionList"
+      :item-text="itemText"
       @change="changeData"
       outlined
       :disabled="disable"
@@ -20,6 +21,7 @@ export default {
     label: String,
     suggestionList: Array,
     disable: Boolean,
+    itemText: String,
   },
   methods: {
     changeData(e) {
