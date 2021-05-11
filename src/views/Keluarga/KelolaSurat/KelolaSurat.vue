@@ -9,6 +9,7 @@
         item-text="title"
         prepend-inner-icon="mdi-magnify"
         outlined
+        append-icon=""
         @change="filterCards"
         @click:clear="filterCards"
       ></v-autocomplete>

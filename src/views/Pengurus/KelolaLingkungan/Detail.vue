@@ -2,11 +2,8 @@
   <div>
     <h1>Detail Lingkungan</h1>
 
-    <v-divider></v-divider>
-
     <div class="form mt-5">
       <v-card class="pa-6 mx-auto" flat>
-        <h2>Informasi Lingkungan</h2>
         <div class="my-3">
           <v-form>
             <label>Nama lingkungan*</label>
@@ -20,7 +17,8 @@
             <autocomplete
               :value="lingkungan.ketua_lingkungan"
               label="Keluarga ketua lingkungan*"
-              :suggestionList="keluargaNameList"
+              :suggestionList="keluargaList"
+              itemText="nama_keluarga"
               @changeData="changeIdKeluarga"
             ></autocomplete>
 
@@ -65,11 +63,6 @@ export default {
     this.keluargaList = await getData(`/keluarga`)
     
     this.tableLoading = false
-  },
-  computed: {
-    keluargaNameList: function () {
-      return this.keluargaList.map(e => e.nama_keluarga)
-    },
   },
   methods: {
     changeIdKeluarga(e) {

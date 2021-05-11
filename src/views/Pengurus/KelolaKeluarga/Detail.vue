@@ -2,8 +2,6 @@
   <div>
     <h1>Detail Keluarga</h1>
 
-    <v-divider></v-divider>
-
     <div class="form mt-5">
       <v-card class="pa-6 mx-auto" flat>
         <h2>Informasi Keluarga</h2>
@@ -48,10 +46,9 @@
     </div>
 
     <div class="mt-10">
-      <h2 class="mb-5">Anggota Keluarga</h2>
-
       <div class="data-table">
-        <v-card flat>
+        <v-card flat class="pt-5">
+          <h2 class="ml-5">Anggota Keluarga</h2>
           <div class="my-3">
             <v-data-table
               :headers="headers"

@@ -23,7 +23,7 @@
 
           <label>Jabatan*</label>
           <v-select
-            :items="[ 'Sekretariat', 'Romo', 'Super Pengurus' ]"
+            :items="[ 'Sekretariat', 'Romo' ]"
             v-model="pengurus.role"
             outlined
             dense
@@ -81,7 +81,7 @@ export default {
       this.$store.dispatch('loading/openLoading')
       let snackbar = {}
 
-      if (this.pengurus.role === "Super Pengurus") this.pengurus.role = 1;
+      if (this.pengurus.role === "Super Admin") this.pengurus.role = 1;
       else if (this.pengurus.role === "Sekretariat") this.pengurus.role = 2;
       else if (this.pengurus.role === "Romo") this.pengurus.role = 3;
 

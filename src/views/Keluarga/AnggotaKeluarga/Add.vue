@@ -149,18 +149,6 @@ export default {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
     },
   },
-  computed: {
-    lingkunganNameList() {
-      return this.lingkunganList.map(e => e.nama_lingkungan)
-      // return this.lingkunganList.map(e => {
-      //   if (e.paroki_id === this.formData.paroki_id) {
-      //     return e.nama_lingkungan
-      //   } else {
-      //     return null
-      //   }
-      // }).filter(e => e !== null)
-    },
-  },
   async mounted() {
     this.lingkunganList = await getData('/lingkungan')
   },

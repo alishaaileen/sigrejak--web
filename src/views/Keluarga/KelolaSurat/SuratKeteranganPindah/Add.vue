@@ -3,13 +3,14 @@
     <h1>Tambah Surat Keterangan Pindah</h1>
 
     <div class="form mt-5" @submit.prevent="submit">
-      <v-card class="pa-3 mx-auto">
+      <v-card class="pa-6 mx-auto" flat>
         <v-form>
           <h3 class="mb-5">Informasi Umat</h3>
 
           <autocomplete
             label="Nama*"
-            :suggestionList="anggotaNameList"
+            :suggestionList="anggotaKeluarga"
+            itemText="nama"
             @changeData="changeIdUmat"
           ></autocomplete>
 
@@ -71,17 +72,20 @@
           <h3 class="mb-5">Tempat Tinggal Baru</h3>
           <v-row>
             <v-col>
-              <autocomplete
-                :disable="false"
-                label="Paroki baru*"
-                :suggestionList="parokiNameList"
-                @changeData="changeIdParoki"
-              ></autocomplete>
+              <label>Paroki baru</label>
+              <v-text-field
+                v-model="formData.paroki_baru"
+                required
+                outlined
+                dense
+                readonly
+              ></v-text-field>
             </v-col>
             <v-col>
               <autocomplete
                 label="Lingkungan baru*"
-                :suggestionList.sync="lingkunganNameList"
+                :suggestionList="lingkunganList"
+                itemText="nama_lingkungan"
                 @changeData="changeIdLingkungan"
               ></autocomplete>
             </v-col>
@@ -135,46 +139,24 @@ export default {
       ketua_lingkungan: null,
       id_umat: null,
       paroki_lama: 'Kumetiran',
-      nama: null,
-      tempat_lahir: null,
+      nama: '',
+      tempat_lahir: '',
       tgl_lahir: null,
-      alamat_lama: null,
-      no_telp_lama: null,
+      alamat_lama: '',
+      no_telp_lama: '',
       tgl_mulai_domisili: null,
-      alamat_baru: null,
-      no_telp_baru: null,
+      alamat_baru: '',
+      no_telp_baru: '',
       id_lingkungan_baru: null,
-      id_paroki_baru: null,
+      paroki_baru: '',
     },
     anggotaKeluarga: [],
     parokiList: [],
     lingkunganList: [],
     umat: {},
   }),
-  computed: {
-    parokiNameList() {
-      return this.parokiList.map(e => e.nama_paroki)
-    },
-    lingkunganNameList() {
-      // return this.lingkunganList.filter(e => {
-      //   if (e.paroki_id === this.paroki.id)
-      //     return e.nama_lingkungan
-      // })
-      return this.lingkunganList.map(e => {
-        if (e.paroki_id === this.formData.paroki.id) {
-          return e.nama_lingkungan
-        } else {
-          return null
-        }
-      }).filter(e => e !== null)
-    },
-    anggotaNameList() {
-      return this.anggotaKeluarga.map(e => e.nama)
-    },
-  },
   async mounted() {
     this.lingkunganList = await getData(`/lingkungan`)
-    this.parokiList = await getData(`/paroki`)
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
   },
   methods: {
@@ -190,6 +172,9 @@ export default {
       this.anggotaKeluarga.map((_) => {
         if (_.nama == e) {
           this.formData.id_umat = _.id;
+          this.formData.tempat_lahir = _.tempat_lahir
+          this.formData.tgl_lahir = _.tgl_lahir
+          this.formData.alamat_lama = _.alamat
           return
         }
       })

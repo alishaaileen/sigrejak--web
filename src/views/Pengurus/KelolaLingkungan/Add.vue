@@ -22,7 +22,8 @@
 
           <autocomplete
             label="Ketua lingkungan*"
-            :suggestionList="keluargaNameList"
+            :suggestionList="keluargaList"
+            itemText="nama_keluarga"
             @changeData="changeIdKeluarga"
           ></autocomplete>
 
@@ -62,14 +63,6 @@ export default {
     paroki: {},
     keluargaList: [],
   }),
-  computed: {
-    // parokiNameList: function () {
-    //   return this.parokiList.map(e => e.nama_paroki)
-    // },
-    keluargaNameList: function () {
-      return this.keluargaList.map(e => e.nama_keluarga)
-    },
-  },
   async mounted() {
     // this.paroki = await getData(`/paroki/${this.$route.params.id}`)
     // this.paroki = this.paroki[0]
