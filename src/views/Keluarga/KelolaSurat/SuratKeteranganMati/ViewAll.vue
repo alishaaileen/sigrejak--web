@@ -162,12 +162,12 @@ export default {
       // Close confirmation modal
       this.$store.commit('deleteData/resetModal')
       
+      if (decision) {
       let snackbar = {}
 
       // Activate loading overlay
       this.$store.dispatch('loading/openLoading')
 
-      if (decision) {
         try {
           let response = await deleteData('/umat', this.deleteId)
           
@@ -181,8 +181,8 @@ export default {
         } catch (error) {
           snackbar.color = 'error'
           snackbar.text = error
+          this.$store.dispatch('snackbar/openSnackbar', snackbar)
         }
-        this.$store.dispatch('snackbar/openSnackbar', snackbar)
       }
       this.$store.dispatch('loading/closeLoading')
     }

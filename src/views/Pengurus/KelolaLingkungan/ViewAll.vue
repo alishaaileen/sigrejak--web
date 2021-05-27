@@ -137,12 +137,12 @@ export default {
       // Close confirmation modal
       this.$store.commit('deleteData/resetModal')
       
-      let snackbar = {}
-
-      // Activate loading overlay
-      this.$store.dispatch('loading/openLoading')
-
       if (decision) {
+        let snackbar = {}
+
+        // Activate loading overlay
+        this.$store.dispatch('loading/openLoading')
+
         try {
           let response = await deleteData('/lingkungan', this.deleteId)
           
@@ -170,8 +170,8 @@ export default {
           console.error(error)
         }
         this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        this.$store.dispatch('loading/closeLoading')
       }
-      this.$store.dispatch('loading/closeLoading')
     }
   }
 }
