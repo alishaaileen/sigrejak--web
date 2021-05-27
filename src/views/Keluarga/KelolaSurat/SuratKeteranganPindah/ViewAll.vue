@@ -43,7 +43,7 @@
 
           <!-- TABLE CONTENT -->
           <template v-slot:[`item.status_ketua_lingkungan`]="{ item }">
-            <span v-if="item.ketua_lingkungan_approval">
+            <span v-if="item.ketua_lingkungan_approval === 1">
               <v-icon color="green darken-2">mdi-checkbox-marked-circle</v-icon>
             </span>
             <span v-else>
@@ -51,7 +51,7 @@
             </span>
           </template>
           <template v-slot:[`item.status_sekretariat`]="{ item }">
-            <span v-if="item.sekretariat_approval">
+            <span v-if="item.sekretariat_approval === 1">
               <v-icon color="green darken-2">mdi-checkbox-marked-circle</v-icon>
             </span>
             <span v-else>
@@ -59,7 +59,7 @@
             </span>
           </template>
           <template v-slot:[`item.status_romo`]="{ item }">
-            <span v-if="item.romo_approval">
+            <span v-if="item.romo_approval === 1">
               <v-icon color="green darken-2">mdi-checkbox-marked-circle</v-icon>
             </span>
             <span v-else>
@@ -186,18 +186,19 @@ export default {
       // Close confirmation modal
       this.$store.commit('deleteData/resetModal')
       
-      let snackbar = {}
-
-      // Activate loading overlay
-      this.$store.dispatch('loading/openLoading')
-
       if (decision) {
+        let snackbar = {}
+
+        // Activate loading overlay
+        this.$store.dispatch('loading/openLoading')
+
         try {
-          let response = await deleteData('/umat', this.deleteId)
+          let response = await deleteData('/surat-keterangan-pindah', this.deleteId)
           
           if (response.status === 200) {
             snackbar.color = 'success'
             snackbar.text = 'Data berhasil dihapus'
+            this.surat = await getData(`/surat-keterangan-pindah/keluarga/${this.$store.state.keluarga.id}`)
           } else {
             snackbar.color = 'error'
             snackbar.text = 'Terjadi kesalahan. Silahkan refresh dan coba lagi'
@@ -207,8 +208,8 @@ export default {
           snackbar.text = error
         }
         this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        this.$store.dispatch('loading/closeLoading')
       }
-      this.$store.dispatch('loading/closeLoading')
     }
   }
 }
