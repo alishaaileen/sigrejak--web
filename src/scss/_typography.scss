@@ -5,14 +5,17 @@ h1, h2, h3, h4, h5 {
 h2, h3, h4, h5 {
     font-weight: 600;
 }
-p, span, a, label {
+p, span, a, label, tr {
     font-size: 14px;
     font-family: 'Open Sans', sans-serif !important;
 }
-p, span, label {
+span, label {
     color: $black;
     font-weight: 600;
 }
 .font-semi-bold {
     font-weight: 600 !important;
+}
+.color-white {
+    color: $white !important;
 }

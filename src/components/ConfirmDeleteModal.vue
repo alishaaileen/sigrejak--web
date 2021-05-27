@@ -5,23 +5,27 @@
       max-width="500px"
       @click:outside="action(false)"
     >
-      <v-card>
-        <v-card-title class="text-h4">
-          Apakah anda yakin?
+      <v-card class="pa-3">
+        <v-card-title class="mb-5">
+          <h2>Hapus data?</h2>
         </v-card-title>
         <v-card-text>
-          Apakah anda yakin akan menghapus data?
+          <p>
+            Data anda akan terhapus
+          </p>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            color="primary"
+            class="text-none"
+            color="grey darken-1"
             text
             @click="action(false)"
           >
             Batal
           </v-btn>
           <v-btn
+            class="text-none"
             color="error"
             depressed
             @click="action(true)"

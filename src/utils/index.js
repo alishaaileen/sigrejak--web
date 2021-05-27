@@ -5,7 +5,7 @@ import { API_URL } from '../constants'
 export function setAxiosBearerToken() {
     axios.defaults.headers.common[
         "Authorization"
-    ] = `Bearer ${localStorage.getItem("token")}`;
+    ] = `Bearer ${localStorage.getItem("appKey")}`;
 }
 
 export async function getData(endpoint) {

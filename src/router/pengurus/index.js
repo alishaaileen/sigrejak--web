@@ -1,5 +1,5 @@
 const pengurusRouteGuard = (to,from, next) => {
-  if(!localStorage.getItem('token')) {
+  if(!localStorage.getItem('appKey')) {
     next('/')
     return
   }
@@ -23,6 +23,24 @@ const pengurus = {
       path: '/pengurus/dashboard',
       name: 'DashboardPengurus',
       component: importView("Pengurus/Dashboard")
+    },
+    // Profile pengurus =========================
+    {
+      path: 'profile',
+      name: 'ProfilePengurus',
+      component: importView("Pengurus/Profile/ProfileView"),
+      children: [
+        {
+          path: 'informasi-akun',
+          name: 'InfoAkunPengurus',
+          component: importView("Pengurus/Profile/EditProfile")
+        },
+        {
+          path: 'ubah-password',
+          name: 'UbahPassPengurus',
+          component: importView("Pengurus/Profile/UbahPassword")
+        }
+      ]
     },
     // Kelola Pengurus =========================
     {

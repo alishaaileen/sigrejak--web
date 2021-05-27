@@ -1,5 +1,7 @@
 <template>
   <div>
+    <btn-kembali path="/keluarga/anggota" />
+    
     <h1>Tambah Anggota Keluarga</h1>
     
     <div class="form mt-5" @submit.prevent="submit">

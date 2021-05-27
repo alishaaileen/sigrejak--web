@@ -18,7 +18,7 @@ const routes = [
     name: 'KeluargaLogin',
     component: importView("Login/loginKeluarga"),
     beforeEnter: (to,from, next) => {
-      if(localStorage.getItem('token')) {
+      if(localStorage.getItem('appKey')) {
         next('/keluarga/dashboard')
         return
       }
@@ -33,7 +33,7 @@ const routes = [
     name: 'loginPengurus',
     component: importView("Login/loginPengurus"),
     beforeEnter: (to,from, next) => {
-      if(localStorage.getItem('token')) {
+      if(localStorage.getItem('appKey')) {
         next('/pengurus/dashboard')
         return
       }

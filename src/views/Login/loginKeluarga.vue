@@ -1,17 +1,16 @@
 <template>
-  <div id="login" class="login-keluarga">
-    <div class="d-flex align-stretch justify-end">
+  <div id="login" class="grey lighten-4">
+    <div class="d-flex justify-center">
       <v-card
-        class="side-login"
-        width="500"
+        class="py-15 mr-10"
+        min-width="450"
         outlined
         elevation="5"
         tile
-        height="100%"
       >
-        <div class="d-flex align-center">
+        <div class="d-flex align-center align-content-center">
           <div class="mx-auto">
-            <h1 class="mb-10">Masuk Akun Keluarga</h1>
+            <h2 class="mb-5">Masuk Akun Keluarga</h2>
 
             <v-form @submit.prevent="login">
               <v-text-field
@@ -28,12 +27,13 @@
                 :type="showPassword ? 'text' : 'password'"
                 @click:append="showPassword = !showPassword"
                 @input="resetErrorMsg"
+                :error-messages="errorMsg"
                 outlined
               ></v-text-field>
 
-              <small v-show="errorMsg" class="error--text font-weight-medium">
-                {{ errorMsg }}
-              </small>
+              <!-- <small v-show="errorMsg" class="error--text font-weight-medium">
+                
+              </small> -->
 
               <v-card-actions>
                 <v-btn
@@ -81,7 +81,7 @@ export default {
       try {
         let response = await axios.post(`${API_URL}/keluarga/login`, this.user)
 
-        this.$store.dispatch('keluarga/login', response.data)
+        await this.$store.dispatch('keluarga/login', response.data)
         this.$router.push("/keluarga/dashboard");
       } catch (error) {
         if(error.response.status >= 400 && error.response.status < 500 ) {

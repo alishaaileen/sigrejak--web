@@ -1,18 +1,15 @@
 <template>
-  <v-container>
-    <v-card class="pa-6" flat>
-      <v-autocomplete
+  <div>
+    <h1>Surat-surat</h1>
+
+    <v-card class="mt-5 pa-6" flat>
+      <v-text-field
         v-model="search"
-        :items="cards"
-        clearable
-        dense
-        item-text="title"
-        prepend-inner-icon="mdi-magnify"
         outlined
-        append-icon=""
-        @change="filterCards"
-        @click:clear="filterCards"
-      ></v-autocomplete>
+        prepend-inner-icon="mdi-magnify"
+        dense
+      ></v-text-field>
+
       <div v-for="(card, i) in filteredCards" :key="i">
         <router-link :to="card.to" class="text-decoration-none">
           <v-card
@@ -32,7 +29,7 @@
         </router-link>
       </div>
     </v-card>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -91,25 +88,15 @@ export default {
         to: 'surat/surat-izin-pelayanan-ekaristi',
       },
     ],
-    filteredCards: []
   }),
-  mounted() {
-    this.filteredCards = this.cards
+  computed: {
+    filteredCards() {
+      return this.cards.filter((card) => {
+        return card.title.toLowerCase().match(this.search.toLowerCase())
+      })
+    },
   },
   methods: {
-    changeSearchText(e) {
-      console.log(e)
-      this.search = e
-    },
-    filterCards() {
-      if (this.search === '' || this.search === null) {
-        this.filteredCards = this.cards
-      } else {
-        this.filteredCards = this.cards.filter(e => {
-          if(e.title === this.search) return e
-        })
-      }
-    }
   }
 }
 </script>

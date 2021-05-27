@@ -2,7 +2,6 @@
   <div>
     <h1>Dashboard</h1>
     Ini Dashboard Pengurus
-    {{ pengurus }}
   </div>
 </template>
 

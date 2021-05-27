@@ -49,6 +49,9 @@ export default {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
     },
   },
+  mounted() {
+    if(this.tgl) this.birthDate = this.tgl
+  },
   methods: {
     saveDate (date) {
       console.log(date)

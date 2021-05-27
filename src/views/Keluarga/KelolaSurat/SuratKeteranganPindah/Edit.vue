@@ -2,7 +2,7 @@
   <div>
     <btn-kembali path="/keluarga/surat/surat-keterangan-pindah" />
     
-    <h1>Tambah Surat Keterangan Pindah</h1>
+    <h1>Edit Surat Keterangan Pindah</h1>
 
     <div class="form mt-5">
       <v-card class="pa-6 mx-auto" flat>
@@ -11,6 +11,7 @@
 
           <autocomplete
             label="Nama*"
+            :value="formData.nama"
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdUmat"
@@ -65,7 +66,7 @@
             <v-col>
               <label>Lingkungan lama</label>
               <v-text-field
-                v-model="formData.lingkungan_lama"
+                v-model="formData.nama_lingkungan_lama"
                 required
                 outlined
                 dense
@@ -137,6 +138,7 @@
               <autocomplete
                 v-if="!isNotKumetiran"
                 label="Lingkungan baru*"
+                :value="formData.nama_lingkungan_baru"
                 :suggestionList="lingkunganList"
                 itemText="nama_lingkungan"
                 @changeData="changeIdLingkungan"
@@ -177,7 +179,7 @@
               dark
               depressed
             >
-              Ajukan surat
+              Simpan
             </v-btn>
           </div>
         </v-form>
@@ -188,7 +190,7 @@
 </template>
 
 <script>
-import { getData, postData } from '../../../../utils'
+import { getData, editData } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 
 export default {
@@ -229,11 +231,13 @@ export default {
   async mounted() {
     this.lingkunganList = await getData(`/lingkungan`)
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
-    this.formData.id_keluarga = this.$store.state.keluarga.id
-    if (this.$store.state.keluarga.lingkunganId) {
-      this.formData.ketua_lingkungan_approval = 1
-      this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_keluarga
-    }
+    
+    // Get data surat
+    this.formData = await getData(`/surat-keterangan-pindah/${this.$route.params.id}`)
+    this.formData = this.formData[0]
+
+    // Mengaktifkan switch jika umat pindah ke paroki baru
+    this.isNotKumetiran = this.formData.paroki_baru != 'Kumetiran' ? true : false
   },
   methods: {
     saveDate (date) {
@@ -270,17 +274,18 @@ export default {
       }
     },
     async submit() {
+      console.log(this.formData)
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
       let snackbar = {}
 
       try {
-        let response = await postData('/surat-keterangan-pindah/add', this.formData)
+        let response = await editData('/surat-keterangan-pindah', this.formData.id, this.formData)
 
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
-          snackbar.text = 'Surat berhasil dibuat!'
+          snackbar.text = 'Surat berhasil diubah!'
           this.$router.push('/keluarga/surat/surat-keterangan-pindah')
         } else {
           snackbar.color = 'error',

@@ -3,9 +3,11 @@
     <!------------- NAVBAR ----------->
     <v-app-bar color="white" light flat>
       <v-spacer></v-spacer>
-      <v-btn icon class="btn text-none ma-2">
+      <!-- <v-btn icon class="btn text-none ma-2">
         <v-icon>mdi-bell-outline</v-icon>
-      </v-btn>
+      </v-btn> -->
+
+      <chip-account color="" icon="" text="" />
 
       <v-menu
         offset-y
@@ -19,12 +21,12 @@
             v-on="on"
           >
             <v-icon>mdi-account-circle</v-icon>
-            {{ pengurus.nama }}
+            {{ $store.state.pengurus.nama }}
           </v-btn>
         </template>
 
         <v-list>
-          <v-list-item @click="() => {}">
+          <v-list-item @click="() => {this.$router.push('/pengurus/profile/informasi-akun')}">
             <v-list-item-title>
               <v-icon>mdi-account</v-icon>
               Profile
@@ -40,9 +42,10 @@
         </v-list>
       </v-menu>
     </v-app-bar>
+
     <!-- SIDEBAR -->
-    <v-navigation-drawer color="blue-grey darken-4" dark permanent fixed width="240" app>
-      <v-list dense nav class="my-1">
+    <v-navigation-drawer color="blue darken-3" dark permanent fixed width="240" app>
+      <v-list dense nav class="my-7 px-4">
         <!-- <v-list-item two-line>
           <v-avatar size="24" tile>
             <img src="" />
@@ -62,7 +65,7 @@
         <div v-for="(menu, i) in menus" :key="i">
           <v-list-item v-if="!menu.hasOption" tag="router-link" :to="menu.to">
             <v-list-item-icon>
-              <v-icon color="blue accent-3">{{ menu.icon }}</v-icon>
+              <v-icon color="white">{{ menu.icon }}</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
@@ -113,7 +116,7 @@
         </div>
       </template> -->
     </v-navigation-drawer>
-    <div class="app-container pa-10 grey lighten-5">
+    <div class="app-container pa-10 grey lighten-4">
       <router-view />
     </div>
 
@@ -125,7 +128,12 @@
 import { mapState } from 'vuex'
 import { setAxiosBearerToken } from '../../utils'
 
+import ChipAccount from '../../components/ChipJenisAkun'
+
 export default {
+  components: {
+    ChipAccount,
+  },
   computed: mapState({
     pengurus: 'pengurus'
   }),
@@ -138,22 +146,22 @@ export default {
           to: "/pengurus/dashboard",
         },
         {
-          title: "Kelola Pengurus",
+          title: "Pengurus",
           icon: "mdi-account-tie-outline",
           to: "/pengurus/pengurus",
         },
         {
-          title: "Kelola Keluarga",
+          title: "Keluarga",
           icon: "mdi-account-group-outline",
           to: "/pengurus/keluarga",
         },
         {
-          title: "Kelola Lingkungan",
+          title: "Lingkungan",
           icon: "mdi-home-group",
           to: "/pengurus/lingkungan",
         },
         {
-          title: "Kelola Surat",
+          title: "Surat",
           icon: "mdi-book-outline",
           to: "/pengurus/surat"
           // hasOption: true,
@@ -170,7 +178,8 @@ export default {
   created() {
     setAxiosBearerToken()
 
-    this.$store.dispatch('pengurus/getProfilePengurus')
+    this.$store.dispatch('pengurus/checkUserToken')
+    this.$store.dispatch('pengurus/getPengurusProfile')
   },
   methods: {
     logout() {

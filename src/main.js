@@ -16,6 +16,7 @@ import store from './store'
 Vue.component('snackbar', () => import('./components/Snackbar'))
 Vue.component('confirm-delete-modal', () => import('./components/ConfirmDeleteModal'))
 Vue.component('loading-overlay', () => import('./components/LoadingOverlay'))
+Vue.component('btn-kembali', () => import('./components/ButtonKembali'))
 
 Vue.use(vuetify)
 Vue.use(Vuelidate)

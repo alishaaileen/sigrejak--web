@@ -28,12 +28,13 @@
                 :type="showPassword ? 'text' : 'password'"
                 @click:append="showPassword = !showPassword"
                 @input="resetErrorMsg"
+                :error-messages="errorMsg"
                 outlined
               ></v-text-field>
 
-              <small v-show="errorMsg" class="error--text font-weight-medium">
+              <!-- <small v-show="errorMsg" class="error--text font-weight-medium">
                 {{ errorMsg }}
-              </small>
+              </small> -->
 
               <v-card-actions>
                 <v-btn

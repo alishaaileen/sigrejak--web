@@ -1,5 +1,5 @@
 const keluargaRouteGuard = (to,from, next) => {
-  if(!localStorage.getItem('token')) {
+  if(!localStorage.getItem('appKey')) {
     next('/')
     return
   }
@@ -28,7 +28,19 @@ const keluarga = {
     {
       path: 'profile',
       name: 'ProfileKeluarga',
-      component: importView("Keluarga/Profile")
+      component: importView("Keluarga/Profile"),
+      children: [
+        {
+          path: 'informasi-akun',
+          name: 'InfoAkunKeluarga',
+          component: importView("Keluarga/Profile/EditProfile")
+        },
+        {
+          path: 'ubah-password',
+          name: 'UbahPassKeluarga',
+          component: importView("Keluarga/Profile/UbahPassword")
+        }
+      ]
     },
     // Anggota Keluarga =========================
     {
@@ -46,7 +58,9 @@ const keluarga = {
       name: 'DetailAnggotaKeluarga',
       component: importView("Keluarga/AnggotaKeluarga/Detail")
     },
+    // ==========================================
     // Kelola Surat =========================
+    // ==========================================
     {
       path: 'surat',
       name: 'KelolaSuratMenu',
@@ -74,17 +88,71 @@ const keluarga = {
       name: 'AddSuratKeteranganMati',
       component: importView("Keluarga/KelolaSurat/SuratKeteranganMati/Add")
     },
-    // Ketua Lingkungan =========================
     {
-      path: 'ketua-lingkungan',
-      name: 'KetuaLingkunganDashboard',
+      path: 'surat/surat-keterangan-pindah/edit/:id',
+      name: 'UpdateSuratKeteranganPindah',
+      component: importView("Keluarga/KelolaSurat/SuratKeteranganPindah/Edit")
+    },
+    // ===== Surat Keterangan =====
+    {
+      path: 'surat/surat-keterangan',
+      name: 'ViewSuratKeterangan',
+      component: importView("Keluarga/KelolaSurat/SuratKeterangan/ViewAll")
+    },
+    {
+      path: 'surat/surat-keterangan/tambah',
+      name: 'AddSuratKeterangan',
+      component: importView("Keluarga/KelolaSurat/SuratKeterangan/Add")
+    },
+    {
+      path: 'surat/surat-keterangan/edit/:id',
+      name: 'UpdateSuratKeterangan',
+      component: importView("Keluarga/KelolaSurat/SuratKeterangan/Edit")
+    },
+    // ===== Surat Keterangan Beasiswa =====
+    {
+      path: 'surat/surat-keterangan-beasiswa',
+      name: 'ViewSuratKeteranganBeasiswa',
+      component: importView("Keluarga/KelolaSurat/SuratKeteranganBeasiswa/ViewAll")
+    },
+    {
+      path: 'surat/surat-keterangan-beasiswa/tambah',
+      name: 'AddSuratKeteranganBeasiswa',
+      component: importView("Keluarga/KelolaSurat/SuratKeteranganBeasiswa/Add")
+    },
+    {
+      path: 'surat/surat-keterangan-beasiswa/edit/:id',
+      name: 'UpdateSuratKeteranganBeasiswa',
+      component: importView("Keluarga/KelolaSurat/SuratKeteranganBeasiswa/Edit")
+    },
+    // ==========================================
+    //                      =====================
+    // Ketua Lingkungan     =====================
+    //                      =====================
+    // ==========================================
+    {
+      path: 'ketua/surat',
+      name: 'KetuaLingkunganSurat',
       component: importView("Keluarga/KetuaLingkungan/Dashboard")
     },
-    // {
-    //   path: '/keluarga/ketua-lingkungan',
-    //   name: 'KetuaLingkunganDashboard',
-    //   component: importView("Keluarga/KetuaLingkungan/Dashboard")
-    // },
+    // ===== Surat Keterangan Pindah =====
+    {
+      path: 'surat/surat-keterangan-pindah',
+      name: 'KetuaViewSuratKeteranganPindah',
+      component: importView("Keluarga/KetuaLingkungan/SuratKeteranganPindah/ViewAll")
+    },
+    // ===== Surat Keterangan Mati =====
+    {
+      path: 'surat/surat-keterangan-mati',
+      name: 'KetuaViewSuratKeteranganMati',
+      component: importView("Keluarga/KetuaLingkungan/SuratKeteranganMati/ViewAll")
+    },
+    // ===== Surat Keterangan =====
+    {
+      path: 'surat/surat-keterangan',
+      name: 'KetuaViewSuratKeterangan',
+      component: importView("Keluarga/KetuaLingkungan/SuratKeterangan/ViewAll")
+    },
   ]
 }
 

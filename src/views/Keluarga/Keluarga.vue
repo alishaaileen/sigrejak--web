@@ -3,9 +3,35 @@
     <!------------- NAVBAR ----------->
     <v-app-bar color="white" light flat>
       <v-spacer></v-spacer>
-      <v-btn icon class="btn text-none ma-2">
+
+      <v-chip
+        class="ma-2"
+        :color="menus[3].show ? `indigo accent-2` : `blue lighten-2`"
+        text-color="white"
+      >
+        <v-avatar left>
+          <v-icon
+            v-if="menus[3].show"
+            color="white"
+            small
+          >
+            fas fa-users-cog
+          </v-icon>
+          <v-icon
+            v-else
+            color="white"
+            small
+          >
+            fas fa-users
+          </v-icon>
+        </v-avatar>
+        <span v-if="menus[3].show" class="color-white">Ketua Lingkungan</span>
+        <span v-else class="color-white">Keluarga</span>
+      </v-chip>
+
+      <!-- <v-btn icon class="btn text-none ma-2">
         <v-icon>mdi-bell-outline</v-icon>
-      </v-btn>
+      </v-btn> -->
 
       <v-menu
         offset-y
@@ -19,12 +45,13 @@
             v-on="on"
           >
             <v-icon>mdi-account-circle</v-icon>
-            {{ keluarga.nama_keluarga }}
+            <!-- {{ keluarga.nama_keluarga }} -->
+            {{ $store.state.keluarga.nama_keluarga }}
           </v-btn>
         </template>
 
         <v-list>
-          <v-list-item @click="() => {this.$router.push('/keluarga/profile')}">
+          <v-list-item @click="() => {this.$router.push('/keluarga/profile/informasi-akun')}">
             <v-list-item-title>
               <v-icon>mdi-account</v-icon>
               Profile Keluarga
@@ -40,9 +67,10 @@
         </v-list>
       </v-menu>
     </v-app-bar>
+    
     <!-- SIDEBAR -->
-    <v-navigation-drawer color="blue-grey darken-4" dark permanent fixed width="240" app>
-      <v-list dense nav class="my-1">
+    <v-navigation-drawer color="blue darken-3" dark permanent fixed width="240" app>
+      <v-list dense nav class="my-7 px-4">
         <!-- <v-list-item two-line>
           <v-avatar size="24" tile>
             <img src="" />
@@ -60,15 +88,15 @@
         <!-- MENU-MENU -->
 
         <div v-for="(menu, i) in menus" :key="i">
-          <v-list-item v-if="!menu.hasOption" tag="router-link" :to="menu.to">
+          <v-list-item v-if="!menu.hasOption" v-show="menu.show" tag="router-link" :to="menu.to">
             <v-list-item-icon>
-              <v-icon color="blue accent-3">{{ menu.icon }}</v-icon>
+              <v-icon color="white">{{ menu.icon }}</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title class="sidebar-menu-option">{{
-                menu.title
-              }}</v-list-item-title>
+              <v-list-item-title class="sidebar-menu-option">
+                {{ menu.title }}
+              </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -76,13 +104,13 @@
             v-else
             :prepend-icon="menu.icon"
             no-action
-            value="true"
+            :value="false"
             color="blue accent-3"
           >
             <template v-slot:activator>
-              <v-list-item-title class="sidebar-menu-option">{{
-                menu.title
-              }}</v-list-item-title>
+              <v-list-item-title class="sidebar-menu-option">
+                {{ menu.title }}
+              </v-list-item-title>
             </template>
 
             <v-list-item
@@ -114,7 +142,7 @@
       </template> -->
     </v-navigation-drawer>
 
-    <div class="app-container pa-10 grey lighten-5">
+    <div class="app-container pa-10 grey lighten-4">
       <router-view />
     </div>
 
@@ -137,36 +165,45 @@ export default {
           title: "Dashboard",
           icon: "mdi-view-dashboard-outline",
           to: "/keluarga/dashboard",
+          show: true,
         },
         {
           title: "Anggota Keluarga",
           icon: "mdi-account-group-outline",
           to: "/keluarga/anggota",
+          show: true,
         },
         {
-          title: "Kelola Surat",
-          icon: "mdi-book-outline",
-          to: "/keluarga/surat"
-          // hasOption: true,
-          // options: [
-          //   {
-          //     optionTitle: "Surat Pindah",
-          //     to: "/spesies",
-          //   },
-          // ],
+          title: "Surat",
+          icon: "mdi-file-document-multiple-outline",
+          to: "/keluarga/surat",
+          show: true,
         },
-        // {
-        //   title: "Kelola Data Lingkungan",
-        //   icon: "mdi-book-account-outline",
-        //   to: "/keluarga/ketua-lingkungan",
-        // },
+        {
+          title: "Ketua Lingkungan",
+          icon: "mdi-book-outline",
+          show: false,
+          hasOption: true,
+          options: [
+            {
+              optionTitle: "Umat lingkungan",
+              to: "/keluarga/ketua/umat-lingkungan",
+            },
+            {
+              optionTitle: "Surat",
+              to: "/keluarga/ketua/surat",
+            },
+          ],
+        },
       ],
     }
   },
-  created() {
-    setAxiosBearerToken()
-
-    this.$store.dispatch('keluarga/getProfileKeluarga')
+  async created() {
+    await setAxiosBearerToken()
+    await this.$store.dispatch('keluarga/checkUserToken')
+    await this.$store.dispatch('keluarga/getUserProfile')
+    await this.$store.dispatch('keluarga/checkKetuaLingkungan')
+    this.menus[3].show = this.$store.state.keluarga.lingkunganId ? true : false 
   },
   methods: {
     logout() {

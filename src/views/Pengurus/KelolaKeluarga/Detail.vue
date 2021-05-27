@@ -116,7 +116,7 @@
                 <span v-if="item.is_dead === 0"></span>
                 <span v-else>
                   <v-icon color="grey darken-2">
-                    mdi-hospital
+                    fas fa-cross
                   </v-icon>
                 </span>
               </template>

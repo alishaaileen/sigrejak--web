@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Surat Keterangan Pindah</h1>
+    <h1>Surat Keterangan Mati</h1>
 
     <div class="data-table mt-5">
       <v-card flat>
@@ -18,53 +18,39 @@
           <!-- TABLE TOP -->
           <template v-slot:top>
             <v-card-title>
-              <v-text-field
-                v-model="search"
-                prepend-inner-icon="mdi-magnify"
-                label="Cari"
-                single-line
-                hide-details
-                outlined
-                dense
-                background-color="#FAFAFA"
-              ></v-text-field>
-              <v-btn
-                class="btn text-none mt-2 ml-4"
-                color="blue accent-4"
-                tag="router-link"
-                to="surat-keterangan-pindah/tambah"
-                dark
-                depressed
-              >
-                Buat surat
-              </v-btn>
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    v-model="search"
+                    prepend-inner-icon="mdi-magnify"
+                    label="Cari"
+                    single-line
+                    hide-details
+                    outlined
+                    dense
+                    background-color="#FAFAFA"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="3">
+                  <v-btn
+                    class="btn text-none mt-2"
+                    color="blue accent-4"
+                    tag="router-link"
+                    to="surat-keterangan-mati/tambah"
+                    dark
+                    depressed
+                  >
+                    Buat surat
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-card-title>
           </template>
 
           <!-- TABLE CONTENT -->
-          <template v-slot:[`item.status_ketua_lingkungan`]="{ item }">
-            <span v-if="item.ketua_lingkungan_approval">
-              <v-icon color="green darken-2">mdi-checkbox-marked-circle</v-icon>
-            </span>
-            <span v-else>
-              <v-icon color="grey darken-2">mdi-checkbox-blank-circle</v-icon>
-            </span>
-          </template>
-          <template v-slot:[`item.status_sekretariat`]="{ item }">
-            <span v-if="item.sekretariat_approval">
-              <v-icon color="green darken-2">mdi-checkbox-marked-circle</v-icon>
-            </span>
-            <span v-else>
-              <v-icon color="grey darken-2">mdi-checkbox-blank-circle</v-icon>
-            </span>
-          </template>
-          <template v-slot:[`item.status_romo`]="{ item }">
-            <span v-if="item.romo_approval">
-              <v-icon color="green darken-2">mdi-checkbox-marked-circle</v-icon>
-            </span>
-            <span v-else>
-              <v-icon color="grey darken-2">mdi-checkbox-blank-circle</v-icon>
-            </span>
+          <template v-slot:[`item.telepon`]="{ item }">
+            <p v-if="item === null">-</p>
+            <p>{{ item }}</p>
           </template>
           <template v-slot:[`item.action`]="{ item }">
             <div>
@@ -78,7 +64,7 @@
                   <v-list-item @click="openModalDetail(item)">
                     <v-list-item-title>Detil</v-list-item-title>
                   </v-list-item>
-                  <v-list-item :disabled="item.ketua_lingkungan_approval" @click="openConfirmDelete(item.id)">
+                  <v-list-item @click="openConfirmDelete(item.id)">
                     <v-list-item-title>Hapus</v-list-item-title>
                   </v-list-item>
                 </v-list>
@@ -133,22 +119,16 @@ export default {
         text: 'No. surat', value: 'no_surat',
       },
       {
-        text: 'Umat', value: 'nama',
+        text: 'Tempat lahir', value: 'tempat_lahir',
       },
       {
-        text: 'Tempat lama', value: 'alamat_lama',
+        text: 'Tgl Lahir', value: 'tgl_lahir',
       },
       {
-        text: 'Tempat baru', value: 'alamat_baru',
+        text: 'Jenis kelamin', value: 'jenis_kelamin',
       },
       {
-        text: 'K. Lingkungan', value: 'status_ketua_lingkungan',
-      },
-      {
-        text: 'Sekretariat', value: 'status_sekretariat',
-      },
-      {
-        text: 'Romo', value: 'status_romo',
+        text: 'Telepon', value: 'no_telp',
       },
       {
         text: '', value: 'action',
@@ -161,7 +141,7 @@ export default {
     jumlahData: [10, 30, 50],
     deleteId: null,
     isModalDetailActive: false,
-    selectedDetail: {},
+    selectedDetail: null,
   }),
   async mounted() {
     this.tableLoading = true
@@ -173,10 +153,6 @@ export default {
       this.selectedDetail = data
       this.selectedDetail.isEditable = data.ketua_lingkungan_approval === 1 ? false : true
       this.isModalDetailActive = true
-    },
-    goToEdit(id) {
-      this.$store.commit('keluarga/setTempIdForDetail', id)
-      this.$router.push('/keluarga/anggota')
     },
     openConfirmDelete(id) {
       this.deleteId = id

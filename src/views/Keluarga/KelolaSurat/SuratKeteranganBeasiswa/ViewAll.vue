@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1>Surat Keterangan Pindah</h1>
+    <h1>Surat Keterangan Beasiswa</h1>
 
     <div class="data-table mt-5">
       <v-card flat>
         <v-data-table
           :headers="headers"
-          :items="surat"
+          :items="suratNotDeleted"
           :search="search"
           :page.sync="page"
           :items-per-page="selectedJumlahData"
@@ -32,7 +32,7 @@
                 class="btn text-none mt-2 ml-4"
                 color="blue accent-4"
                 tag="router-link"
-                to="surat-keterangan-pindah/tambah"
+                to="surat-keterangan-beasiswa/tambah"
                 dark
                 depressed
               >
@@ -43,27 +43,27 @@
 
           <!-- TABLE CONTENT -->
           <template v-slot:[`item.status_ketua_lingkungan`]="{ item }">
-            <span v-if="item.ketua_lingkungan_approval">
-              <v-icon color="green darken-2">mdi-checkbox-marked-circle</v-icon>
+            <span v-if="item.ketua_lingkungan_approval === 1" class="d-flex justify-center">
+              <v-icon color="green darken-2">far fa-check-circle</v-icon>
             </span>
             <span v-else>
-              <v-icon color="grey darken-2">mdi-checkbox-blank-circle</v-icon>
+              <v-icon color="grey darken-2">fas fa-history</v-icon>
             </span>
           </template>
           <template v-slot:[`item.status_sekretariat`]="{ item }">
-            <span v-if="item.sekretariat_approval">
-              <v-icon color="green darken-2">mdi-checkbox-marked-circle</v-icon>
+            <span v-if="item.sekretariat_approval === 1" class="d-flex justify-center">
+              <v-icon color="green darken-2">far fa-check-circle</v-icon>
             </span>
             <span v-else>
-              <v-icon color="grey darken-2">mdi-checkbox-blank-circle</v-icon>
+              <v-icon color="grey darken-2">fas fa-history</v-icon>
             </span>
           </template>
           <template v-slot:[`item.status_romo`]="{ item }">
-            <span v-if="item.romo_approval">
-              <v-icon color="green darken-2">mdi-checkbox-marked-circle</v-icon>
+            <span v-if="item.romo_approval === 1" class="d-flex justify-center">
+              <v-icon color="green darken-2">far fa-check-circle</v-icon>
             </span>
             <span v-else>
-              <v-icon color="grey darken-2">mdi-checkbox-blank-circle</v-icon>
+              <v-icon color="grey darken-2">fas fa-history</v-icon>
             </span>
           </template>
           <template v-slot:[`item.action`]="{ item }">
@@ -133,25 +133,22 @@ export default {
         text: 'No. surat', value: 'no_surat',
       },
       {
-        text: 'Umat', value: 'nama',
+        text: 'Nama siswa', value: 'nama',
       },
       {
-        text: 'Tempat lama', value: 'alamat_lama',
+        text: 'Orang tua', value: 'nama_ortu',
       },
       {
-        text: 'Tempat baru', value: 'alamat_baru',
+        text: 'K. Lingkungan', value: 'status_ketua_lingkungan', align: 'center', sortable: false
       },
       {
-        text: 'K. Lingkungan', value: 'status_ketua_lingkungan',
+        text: 'Sekretariat', value: 'status_sekretariat', align: 'center', sortable: false
       },
       {
-        text: 'Sekretariat', value: 'status_sekretariat',
+        text: 'Romo', value: 'status_romo', align: 'center', sortable: false
       },
       {
-        text: 'Romo', value: 'status_romo',
-      },
-      {
-        text: '', value: 'action',
+        text: '', value: 'action', sortable: false
       },
     ],
     surat: [],
@@ -163,9 +160,14 @@ export default {
     isModalDetailActive: false,
     selectedDetail: {},
   }),
+  computed: {
+    suratNotDeleted() {
+      return this.surat.filter(e => e.deleted_at === null)
+    }
+  },
   async mounted() {
     this.tableLoading = true
-    this.surat = await getData(`/surat-keterangan-pindah/keluarga/${this.$store.state.keluarga.id}`)
+    this.surat = await getData(`/surat-keterangan-beasiswa/keluarga/${this.$store.state.keluarga.id}`)
     this.tableLoading = false
   },
   methods: {
@@ -173,10 +175,6 @@ export default {
       this.selectedDetail = data
       this.selectedDetail.isEditable = data.ketua_lingkungan_approval === 1 ? false : true
       this.isModalDetailActive = true
-    },
-    goToEdit(id) {
-      this.$store.commit('keluarga/setTempIdForDetail', id)
-      this.$router.push('/keluarga/anggota')
     },
     openConfirmDelete(id) {
       this.deleteId = id
@@ -186,18 +184,19 @@ export default {
       // Close confirmation modal
       this.$store.commit('deleteData/resetModal')
       
-      let snackbar = {}
-
-      // Activate loading overlay
-      this.$store.dispatch('loading/openLoading')
-
       if (decision) {
+        let snackbar = {}
+
+        // Activate loading overlay
+        this.$store.dispatch('loading/openLoading')
+
         try {
-          let response = await deleteData('/umat', this.deleteId)
+          let response = await deleteData('/surat-keterangan-beasiswa', this.deleteId)
           
           if (response.status === 200) {
             snackbar.color = 'success'
             snackbar.text = 'Data berhasil dihapus'
+            this.surat = await getData(`/surat-keterangan-beasiswa/keluarga/${this.$store.state.keluarga.id}`)
           } else {
             snackbar.color = 'error'
             snackbar.text = 'Terjadi kesalahan. Silahkan refresh dan coba lagi'
@@ -207,8 +206,8 @@ export default {
           snackbar.text = error
         }
         this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        this.$store.dispatch('loading/closeLoading')
       }
-      this.$store.dispatch('loading/closeLoading')
     }
   }
 }

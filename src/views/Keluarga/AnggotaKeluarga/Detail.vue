@@ -1,11 +1,11 @@
 <template>
   <div>
+    <btn-kembali path="/keluarga/anggota" />
+    
     <h1>Detail Anggota Keluarga</h1>
     
-    <div class="form mt-5">
+    <v-card class="form mt-5 pa-6" light flat>
       <h2>Informasi Umum</h2>
-
-      <v-divider class="mt-4"></v-divider>
       
       <v-form class="mt-4">
         <v-row>
@@ -77,7 +77,8 @@
             <autocomplete
               :value="lingkungan.nama_lingkungan"
               label="Lingkungan tempat tinggal*"
-              :suggestionList.sync="lingkunganNameList"
+              :suggestionList="lingkunganList"
+              itemText="nama_lingkungan"
               @changeData="changeIdLingkungan"
             ></autocomplete>
           </v-col>
@@ -95,9 +96,7 @@
           </v-btn>
         </div>
       </v-form>
-    </div>
 
-    <div class="mt-7">
       <h2>Informasi lain</h2>
 
       <v-divider class="mt-4"></v-divider>
@@ -130,6 +129,7 @@
               :disable="false"
               label="Ayah"
               :suggestionList="keluargaNameList"
+              itemText="nama"
               @changeData="changeIdAyah"
             ></autocomplete>
             <autocomplete
@@ -137,6 +137,7 @@
               :disable="false"
               label="Ibu"
               :suggestionList="keluargaNameList"
+              itemText="nama"
               @changeData="changeIdIbu"
             ></autocomplete>
             <label>Pasangan</label>
@@ -198,7 +199,7 @@
           </v-btn>
         </div>
       </form>
-    </div>
+    </v-card>
     <snackbar></snackbar>
   </div>
 </template>
@@ -221,21 +222,12 @@ export default {
     anggotaKeluarga: [],
   }),
   computed: {
-    lingkunganNameList() {
-      // return this.lingkunganList.filter(e => {
-      //   if (e.paroki_id === this.paroki.id)
-      //     return e.nama_lingkungan
-      // })
-      return this.lingkunganList.map(e => {
-        if (e.paroki_id === this.paroki.id) {
-          return e.nama_lingkungan
-        } else {
-          return null
-        }
-      }).filter(e => e !== null)
-    },
     keluargaNameList() {
-      return this.anggotaKeluarga.map(e => e.nama)
+      return this.anggotaKeluarga.filter(e => {
+        if(e.id != this.umat.id && e.id != this.detailUmat.id_ayah && e.id != this.detailUmat.id_ibu) {
+          return e.nama
+        }
+      })
     },
     lingkungan() {
       var temp = this.lingkunganList.find(e => e.id === this.umat.lingkungan_id)
@@ -317,6 +309,7 @@ export default {
       this.$store.dispatch('loading/closeLoading')
     },
     async saveDetailUmat() {
+      console.log(this.detailUmat.id_ayah)
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 

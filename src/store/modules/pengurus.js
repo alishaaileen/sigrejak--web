@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { API_URL } from '../../constants'
-// import { getProfileKeluarga } from '../../utils'
+// import { checkUserToken } from '../../utils'
 
 const state = () => {
     return {
@@ -9,13 +9,13 @@ const state = () => {
         email: null,
         role: null,
         no_telp: null,
-        token: localStorage.getItem('token') || null,
+        appKey: localStorage.getItem('appKey') || null,
         status: null,
     }
 }
 
 const getters = {
-    isAuthenticated: state => !!state.token,
+    isAuthenticated: state => !!state.appKey,
     authStatus: state => state.status,
 }
 
@@ -30,8 +30,8 @@ const mutations = {
     setStatus(state, status) {
         state.status = status
     },
-    setToken(state, token) {
-        state.token = token
+    setToken(state, appKey) {
+        state.appKey = appKey
     },
     resetData() {
         state.id = null
@@ -43,23 +43,33 @@ const mutations = {
 
 const actions = {
     async login({ commit }, login) {
-        localStorage.setItem('token', login.token)
+        localStorage.setItem('appKey', login.token)
         commit('setToken', login.token);
         commit('setStatus', 'success');
     },
-    async getProfilePengurus({ commit, state }) {
-        const config = {
-            headers: { Authorization: `Bearer ${state.token}` }
-        };
-        
-        const bodyParameters = {
-           key: "value"
-        };
+    async checkUserToken({ commit, state }) {
+        const config = { headers: { Authorization: `Bearer ${state.appKey}` } };
+        const bodyParameters = { key: "value" };
 
         try {
             let response = await axios.get(`${API_URL}/check-user`,bodyParameters, config)
+            commit('setData', response.data);
 
-            commit('setData', response.data.admin[0]);
+            return true
+        } catch (e) {
+            console.error(e)
+            commit('setStatus', 'error');
+
+            return false
+        }
+    },
+    async getPengurusProfile({ commit, state }) {
+        const config = { headers: { Authorization: `Bearer ${state.appKey}` } };
+        const bodyParameters = { key: "value" };
+
+        try {
+            let response = await axios.get(`${API_URL}/admin/${state.id}`,bodyParameters, config)
+            commit('setData', response.data.result[0]);
 
             return true
         } catch (e) {
@@ -73,7 +83,7 @@ const actions = {
         let headers = {
             'cache-control': 'no-cache'
         };
-        let accessToken = localStorage.getItem('jwt-token');
+        let accessToken = localStorage.getItem('jwt-appKey');
     
         if (accessToken && accessToken !== '') {
             headers.Authorization = accessToken;
@@ -100,9 +110,9 @@ const actions = {
         return instance;
     },
     logout({ commit }) {
-        localStorage.removeItem('token')
+        localStorage.removeItem('appKey')
         commit('resetData')
-        console.log(localStorage.getItem('token'))
+        console.log(localStorage.getItem('appKey'))
     }
 }
 

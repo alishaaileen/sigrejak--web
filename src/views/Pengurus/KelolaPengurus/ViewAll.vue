@@ -49,7 +49,7 @@
 
           <!-- TABLE CONTENT -->
           <template v-slot:[`item.role`]="{ item }">
-            <span v-if="item.role === 1">Super Pengurus</span>
+            <span v-if="item.role === 1">Super Admin</span>
             <span v-else-if="item.role === 2">Sekretariat</span>
             <span v-else>Romo</span>
           </template>

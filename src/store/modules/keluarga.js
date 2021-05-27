@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { API_URL } from '../../constants'
-// import { getProfileKeluarga } from '../../utils'
+// import { checkUserToken } from '../../utils'
 
 const state = () => {
     return {
@@ -8,15 +8,14 @@ const state = () => {
         nama_keluarga: null,
         username: null,
         email: null,
-        nama_lingkungan_diketuai: null,
-        token: localStorage.getItem('token') || null,
+        lingkunganId: null,
+        appKey: localStorage.getItem('appKey') || null,
         status: null,
-        tempIdForDetail: null,
     }
 }
 
 const getters = {
-    isAuthenticated: state => !!state.token,
+    isAuthenticated: state => !!state.appKey,
     authStatus: state => state.status,
 }
 
@@ -28,11 +27,14 @@ const mutations = {
         state.email = keluarga.email
         state.nama_lingkungan_diketuai = keluarga.nama_lingkungan_diketuai
     },
+    setLingkunganId(state, id) {
+        state.lingkunganId = id
+    },
     setStatus(state, status) {
         state.status = status
     },
-    setToken(state, token) {
-        state.token = token
+    setToken(state, appKey) {
+        state.appKey = appKey
     },
     resetData() {
         state.id = null
@@ -40,31 +42,23 @@ const mutations = {
         state.username = null
         state.email = null
         state.nama_lingkungan_diketuai = null
+        state.lingkunganId = null
     },
-    setTempIdForDetail(state, id) {
-        state.tempIdForDetail = id
-    }
 }
 
 const actions = {
     async login({ commit }, login) {
-        localStorage.setItem('token', login.token)
+        localStorage.setItem('appKey', login.token)
         commit('setToken', login.token);
         commit('setStatus', 'success');
     },
-    async getProfileKeluarga({ commit, state }) {
-        const config = {
-            headers: { Authorization: `Bearer ${state.token}` }
-        };
-        
-        const bodyParameters = {
-           key: "value"
-        };
+    async checkUserToken({ commit }) {
+        // const config = { headers: { Authorization: `Bearer ${state.appKey}` } };
+        // const bodyParameters = { key: "value" };
 
         try {
-            let response = await axios.get(`${API_URL}/check-user`,bodyParameters, config)
-
-            commit('setData', response.data.family[0]);
+            let response = await axios.get(`${API_URL}/check-user`)
+            commit('setData', response.data);
 
             return true
         } catch (e) {
@@ -74,11 +68,43 @@ const actions = {
             return false
         }
     },
+    async getUserProfile({commit, state}) {
+        // const config = { headers: { Authorization: `Bearer ${state.appKey}` } };
+        // const bodyParameters = { key: "value" };
+
+        try {
+            let response = await axios.get(`${API_URL}/keluarga/${state.id}`)
+            commit('setData', response.data.result[0]);
+
+            return true
+        } catch (e) {
+            console.error(e)
+            commit('setStatus', 'error');
+
+            return false
+        }
+    },
+    async checkKetuaLingkungan({ commit, state }) {
+        try {
+            let response = await axios.get(`${API_URL}/lingkungan/ketua/${state.id}`)
+            
+            if(response.status >= 200 && response.status < 400) {
+                // set ID dari lingkungan yg diketuai
+                commit('setLingkunganId', response.data.result.id);
+            }
+
+            return true
+        } catch (e) {
+            if (e.response.status == 404) {
+                console.log("not ketua lingkungan")
+            }
+        }
+    },
     checkIfTokenExpired() {
         let headers = {
             'cache-control': 'no-cache'
         };
-        let accessToken = localStorage.getItem('jwt-token');
+        let accessToken = localStorage.getItem('appKey');
     
         if (accessToken && accessToken !== '') {
             headers.Authorization = accessToken;
@@ -90,14 +116,14 @@ const actions = {
     
         instance.interceptors.response.use((response) => {
             if(response.status === 401) {
-                 //add your code
-                 alert("You are not authorized");
+                //add your code
+                alert("You are not authorized");
             }
             return response;
         }, (error) => {
             if (error.response && error.response.data) {
-                 //add your code
-                 return Promise.reject(error.response.data);
+                //add your code
+                return Promise.reject(error.response.data);
             }
             return Promise.reject(error.message);
         });
@@ -105,7 +131,7 @@ const actions = {
         return instance;
     },
     logout({ commit }) {
-        localStorage.removeItem('token')
+        localStorage.removeItem('appKey')
         commit('resetData')
     }
 }
