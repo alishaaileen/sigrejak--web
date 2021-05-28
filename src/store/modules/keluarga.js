@@ -6,6 +6,8 @@ const state = () => {
     return {
         id: null,
         nama_keluarga: null,
+        nama_kepala_keluarga: null,
+        no_telp_kepala_keluarga: null,
         username: null,
         email: null,
         lingkunganId: null,
@@ -23,9 +25,10 @@ const mutations = {
     setData(state, keluarga) {
         state.id = keluarga.id
         state.nama_keluarga = keluarga.nama_keluarga
+        state.nama_kepala_keluarga = keluarga.nama_kepala_keluarga
+        state.no_telp_kepala_keluarga = keluarga.no_telp_kepala_keluarga
         state.username = keluarga.username
         state.email = keluarga.email
-        state.nama_lingkungan_diketuai = keluarga.nama_lingkungan_diketuai
     },
     setLingkunganId(state, id) {
         state.lingkunganId = id
@@ -90,7 +93,7 @@ const actions = {
             
             if(response.status >= 200 && response.status < 400) {
                 // set ID dari lingkungan yg diketuai
-                commit('setLingkunganId', response.data.result.id);
+                commit('setLingkunganId', response.data.result[0].id);
             }
 
             return true

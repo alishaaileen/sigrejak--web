@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1>Surat Keterangan Pindah</h1>
+    <h1>Surat Izin Pelayanan Ekaristi</h1>
 
     <div class="data-table mt-5">
       <v-card flat>
         <v-data-table
           :headers="headers"
-          :items="surat"
+          :items="suratNotDeleted"
           :search="search"
           :page.sync="page"
           :items-per-page="selectedJumlahData"
@@ -32,7 +32,7 @@
                 class="btn text-none mt-2 ml-4"
                 color="blue accent-4"
                 tag="router-link"
-                to="surat-keterangan-pindah/tambah"
+                to="surat-izin-ekaristi/tambah"
                 dark
                 depressed
               >
@@ -42,28 +42,31 @@
           </template>
 
           <!-- TABLE CONTENT -->
+          <template v-slot:[`item.waktu`]="{ item }">
+            {{ `${item.waktu_mulai}-${item.waktu_selesai}` }}
+          </template>
           <template v-slot:[`item.status_ketua_lingkungan`]="{ item }">
             <span v-if="item.ketua_lingkungan_approval === 1">
-              <v-icon color="green darken-2">mdi-checkbox-marked-circle</v-icon>
+              <v-icon color="green darken-1">far fa-check-circle</v-icon>
             </span>
             <span v-else>
-              <v-icon color="grey darken-2">mdi-checkbox-blank-circle</v-icon>
+              <v-icon color="grey">fas fa-history</v-icon>
             </span>
           </template>
           <template v-slot:[`item.status_sekretariat`]="{ item }">
             <span v-if="item.sekretariat_approval === 1">
-              <v-icon color="green darken-2">mdi-checkbox-marked-circle</v-icon>
+              <v-icon color="green darken-1">far fa-check-circle</v-icon>
             </span>
             <span v-else>
-              <v-icon color="grey darken-2">mdi-checkbox-blank-circle</v-icon>
+              <v-icon color="grey">fas fa-history</v-icon>
             </span>
           </template>
           <template v-slot:[`item.status_romo`]="{ item }">
             <span v-if="item.romo_approval === 1">
-              <v-icon color="green darken-2">mdi-checkbox-marked-circle</v-icon>
+              <v-icon color="green darken-1">far fa-check-circle</v-icon>
             </span>
             <span v-else>
-              <v-icon color="grey darken-2">mdi-checkbox-blank-circle</v-icon>
+              <v-icon color="grey">fas fa-history</v-icon>
             </span>
           </template>
           <template v-slot:[`item.action`]="{ item }">
@@ -126,6 +129,7 @@ export default {
     ModalDetail,
   },
   data: () => ({
+    url: '/surat-izin-pelayanan-ekaristi',
     tableLoading: true,
     search: '',
     headers: [
@@ -133,13 +137,13 @@ export default {
         text: 'No. surat', value: 'no_surat',
       },
       {
-        text: 'Umat', value: 'nama',
+        text: 'Tanggal', value: 'tgl_pelaksanaan',
       },
       {
-        text: 'Tempat lama', value: 'alamat_lama',
+        text: 'Waktu', value: 'waktu',
       },
       {
-        text: 'Tempat baru', value: 'alamat_baru',
+        text: 'Lokasi', value: 'lokasi_rumah',
       },
       {
         text: 'K. Lingkungan', value: 'status_ketua_lingkungan',
@@ -163,9 +167,14 @@ export default {
     isModalDetailActive: false,
     selectedDetail: {},
   }),
+  computed: {
+    suratNotDeleted() {
+      return this.surat.filter(e => e.deleted_at === null)
+    }
+  },
   async mounted() {
     this.tableLoading = true
-    this.surat = await getData(`/surat-keterangan-pindah/keluarga/${this.$store.state.keluarga.id}`)
+    this.surat = await getData(`${this.url}/keluarga/${this.$store.state.keluarga.id}`)
     this.tableLoading = false
   },
   methods: {
@@ -189,12 +198,12 @@ export default {
         this.$store.dispatch('loading/openLoading')
 
         try {
-          let response = await deleteData('/surat-keterangan-pindah', this.deleteId)
+          let response = await deleteData(this.url, this.deleteId)
           
           if (response.status === 200) {
             snackbar.color = 'success'
             snackbar.text = 'Data berhasil dihapus'
-            this.surat = await getData(`/surat-keterangan-pindah/keluarga/${this.$store.state.keluarga.id}`)
+            this.surat = await getData(`${this.url}/keluarga/${this.$store.state.keluarga.id}`)
           } else {
             snackbar.color = 'error'
             snackbar.text = 'Terjadi kesalahan. Silahkan refresh dan coba lagi'

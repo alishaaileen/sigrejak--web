@@ -23,6 +23,22 @@
         dense
       ></v-text-field>
 
+      <label>Nama kepala keluarga</label>
+      <v-text-field
+        v-model="profile.nama_kepala_keluarga"
+        required
+        outlined
+        dense
+      ></v-text-field>
+
+      <label>Nomor telepon/HP kepala keluarga</label>
+      <v-text-field
+        v-model="profile.no_telp_kepala_keluarga"
+        required
+        outlined
+        dense
+      ></v-text-field>
+
       <label>Username</label>
       <v-text-field
         v-model="profile.username"
@@ -62,6 +78,8 @@ export default {
   data: () => ({
     profile: {
       nama_keluarga: '',
+      nama_kepala_keluarga: '',
+      no_telp_kepala_keluarga: '',
       lingkunganId: null,
       username: '',
       email: '',

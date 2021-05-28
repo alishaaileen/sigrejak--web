@@ -125,6 +125,22 @@ const keluarga = {
       name: 'UpdateSuratKeteranganBeasiswa',
       component: importView("Keluarga/KelolaSurat/SuratKeteranganBeasiswa/Edit")
     },
+    // ===== Surat Izin Pelayanan Ekaristi =====
+    {
+      path: 'surat/surat-izin-ekaristi',
+      name: 'ViewSuratIzinEkaristi',
+      component: importView("Keluarga/KelolaSurat/SuratIzinPelayananEkaristi/ViewAll")
+    },
+    {
+      path: 'surat/surat-izin-ekaristi/tambah',
+      name: 'AddSuratIzinEkaristi',
+      component: importView("Keluarga/KelolaSurat/SuratIzinPelayananEkaristi/Add")
+    },
+    {
+      path: 'surat/surat-izin-ekaristi/edit/:id',
+      name: 'UpdateSuratIzinEkaristi',
+      component: importView("Keluarga/KelolaSurat/SuratIzinPelayananEkaristi/Edit")
+    },
     // ==========================================
     //                      =====================
     // Ketua Lingkungan     =====================
