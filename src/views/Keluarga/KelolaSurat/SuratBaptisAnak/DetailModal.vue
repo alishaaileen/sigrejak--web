@@ -43,22 +43,12 @@
                     </div>
                   </div>
                 </v-col>
-                <v-col>
-                  <div class="py-2">
-                    <v-icon v-if="data.romo_approval === 1" color="green darken-1" large>far fa-check-circle</v-icon>
-                    <v-icon v-else color="grey" large>fas fa-history</v-icon>
-                    <div class="mt-2">
-                      <label>Romo Paroki</label>
-                      <p class="ma-0">{{ data.romo_approval === 1 ? romo_paroki.nama : '-' }}</p>
-                    </div>
-                  </div>
-                </v-col>
               </v-row>
             </v-card>
 
             <!-- <h2 class="mt-7 mb-3">Informasi Surat</h2> -->
             
-            <h2 class="mt-7 mb-3">Informasi Surat Izin</h2>
+            <h2 class="mt-7 mb-3">Informasi Surat Baptis Anak</h2>
 
             <label>No. surat</label>
             <p>{{ data.no_surat }}</p>
@@ -66,30 +56,50 @@
             <label>Tanggal surat</label>
             <p>{{ data.created_at }}</p>
 
-            <label>Tanggal pelaksanaan • Waktu</label>
-            <p>{{ `${data.tgl_pelaksanaan} • ${data.waktu_mulai.substring(0, 5)} - ${data.waktu_selesai.substring(0, 5)}` }}</p>
+            <label>Nama anak</label>
+            <p>{{ data.nama }}</p>
 
-            <label>Ujud/intensi</label>
-            <p>{{ data.intensi }}</p>
+            <label>Tempat/tanggal lahir</label>
+            <p>{{ `${data.tempat_lahir}/${data.tgl_lahir}` }}</p>
 
-            <label>Lingkungan pelaksanaan ekaristi</label>
-            <p>{{ data.nama_lingkungan }}</p>
+            <label>Nama baptis</label>
+            <p>{{ data.nama_baptis }}</p>
 
-            <label>Alamat lokasi/tempat/rumah</label>
-            <p>{{ data.lokasi_rumah }}</p>
+            <h2 class="mt-7 mb-3">Informasi Orang Tua</h2>
+            
+            <label>Nama ayah</label>
+            <p>{{ data.nama_ayah }}</p>
 
-            <label>Nomor telepon rumah/HP</label>
-            <p>{{ data.no_telp_lokasi }}</p>
+            <label>Nama ibu</label>
+            <p>{{ data.nama_ibu }}</p>
 
-            <label>Dipimpin oleh</label>
-            <p>Romo {{ data.romo_pemimpin }}</p>
+            <label>Alamat orang tua</label>
+            <p>Romo {{ data.alamat_ortu }}</p>
 
-            <label>Alamat komunitas</label>
-            <p>{{ data.alamat_komunitas }}</p>
+            <label>Nomor telepon orang tua</label>
+            <p>{{ data.no_telp_ortu }}</p>
 
-            <label>Nomor telepon komunitas</label>
-            <p>{{ data.no_telp_komunitas }}</p>
+            <label>Cara menikah orang tua</label>
+            <p>{{ data.cara_ortu_menikah }}</p>
 
+            <label>Tanggal menikah orang tua</label>
+            <p>{{ data.tgl_ortu_menikah }}</p>
+
+            <h2 class="mt-7 mb-3">Informasi Orang Tua</h2>
+            
+            <label>Nama wali baptis</label>
+            <p>{{ data.nama_wali_baptis }}</p>
+
+            <label>Tanggal krisma wali baptis</label>
+            <p>{{ data.tgl_krisma_wali_baptis }}</p>
+
+            <h2 class="mt-7 mb-3">Jadwal Baptis</h2>
+
+            <label>Tanggal baptis</label>
+            <p>{{ data.tgl_baptis ? data.tgl_baptis : 'Menunggu proses verifikasi' }}</p>
+
+            <label>Yang membaptis</label>
+            <p>{{ data.romo_pembaptis ? `Romo ${data.romo_pembaptis}` : 'Menunggu proses verifikasi' }}</p>
           </div>
         </v-card-text>
         <v-card-actions>
@@ -119,19 +129,15 @@ export default {
     isModalDetailActive: Boolean,
     data: Object,
     sekretariat: {},
-    romo_paroki: {},
   },
   async mounted() {
     if(this.data.id_sekretariat != null) {
       this.sekretariat = await getData(`/admin/${this.data.id_sekretariat}`)
     }
-    if(this.data.id_romo != null) {
-      this.romo_paroki = await getData(`/admin/${this.data.id_romo}`)
-    }
   },
   methods: {
     goToEdit(id) {
-      this.$router.push(`/keluarga/surat/surat-izin-ekaristi/edit/${id}`)
+      this.$router.push(`/keluarga/surat/surat-baptis-anak/edit/${id}`)
     },
     close() {
       this.$emit('closeModal', false)

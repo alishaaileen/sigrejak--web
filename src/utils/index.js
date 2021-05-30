@@ -55,3 +55,16 @@ export async function editData(endpoint, id, data) {
         return error
     }
 }
+
+export function countAge(tglLahir) {
+    let today = new Date(),
+    birthDate = new Date(tglLahir),
+
+    age = today.getFullYear() - birthDate.getFullYear(),
+    m = today.getMonth() - birthDate.getMonth()
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) 
+    {
+        age--;
+    }
+    return age;
+}

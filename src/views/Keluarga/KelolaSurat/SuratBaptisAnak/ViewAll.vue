@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1>Surat Izin Pelayanan Ekaristi</h1>
+    <h1>Surat Baptis Anak</h1>
 
     <div class="data-table mt-5">
-      <v-card flat class="px-4">
+      <v-card flat>
         <v-data-table
           :headers="headers"
           :items="suratNotDeleted"
@@ -32,7 +32,7 @@
                 class="btn text-none mt-2 ml-4"
                 color="blue accent-4"
                 tag="router-link"
-                to="surat-izin-ekaristi/tambah"
+                to="surat-baptis-anak/tambah"
                 dark
                 depressed
               >
@@ -42,31 +42,20 @@
           </template>
 
           <!-- TABLE CONTENT -->
-          <template v-slot:[`item.waktu`]="{ item }">
-            {{ `${item.waktu_mulai}-${item.waktu_selesai}` }}
-          </template>
           <template v-slot:[`item.status_ketua_lingkungan`]="{ item }">
-            <span v-if="item.ketua_lingkungan_approval === 1">
-              <v-icon color="green darken-1">far fa-check-circle</v-icon>
+            <span v-if="item.ketua_lingkungan_approval === 1" class="d-flex justify-center">
+              <v-icon color="green darken-2">far fa-check-circle</v-icon>
             </span>
             <span v-else>
-              <v-icon color="grey">fas fa-history</v-icon>
+              <v-icon color="grey darken-2">fas fa-history</v-icon>
             </span>
           </template>
           <template v-slot:[`item.status_sekretariat`]="{ item }">
-            <span v-if="item.sekretariat_approval === 1">
-              <v-icon color="green darken-1">far fa-check-circle</v-icon>
+            <span v-if="item.sekretariat_approval === 1" class="d-flex justify-center">
+              <v-icon color="green darken-2">far fa-check-circle</v-icon>
             </span>
             <span v-else>
-              <v-icon color="grey">fas fa-history</v-icon>
-            </span>
-          </template>
-          <template v-slot:[`item.status_romo`]="{ item }">
-            <span v-if="item.romo_approval === 1">
-              <v-icon color="green darken-1">far fa-check-circle</v-icon>
-            </span>
-            <span v-else>
-              <v-icon color="grey">fas fa-history</v-icon>
+              <v-icon color="grey darken-2">fas fa-history</v-icon>
             </span>
           </template>
           <template v-slot:[`item.action`]="{ item }">
@@ -129,7 +118,7 @@ export default {
     ModalDetail,
   },
   data: () => ({
-    url: '/surat-izin-pelayanan-ekaristi',
+    url: '/surat-baptis-anak',
     tableLoading: true,
     search: '',
     headers: [
@@ -137,25 +126,22 @@ export default {
         text: 'No. surat', value: 'no_surat',
       },
       {
-        text: 'Tanggal', value: 'tgl_pelaksanaan',
+        text: 'Nama anak', value: 'nama',
       },
       {
-        text: 'Waktu', value: 'waktu',
+        text: 'Ayah', value: 'nama_ayah',
       },
       {
-        text: 'Lokasi', value: 'lokasi_rumah',
+        text: 'Ibu', value: 'nama_ibu',
       },
       {
-        text: 'K. Lingkungan', value: 'status_ketua_lingkungan',
+        text: 'K. Lingkungan', value: 'status_ketua_lingkungan', align: 'center', sortable: false
       },
       {
-        text: 'Sekretariat', value: 'status_sekretariat',
+        text: 'Sekretariat', value: 'status_sekretariat', align: 'center', sortable: false
       },
       {
-        text: 'Romo', value: 'status_romo',
-      },
-      {
-        text: '', value: 'action',
+        text: '', value: 'action', sortable: false
       },
     ],
     surat: [],

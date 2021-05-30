@@ -12,7 +12,7 @@
         <v-text-field
           v-model="birthDate"
           prepend-inner-icon="mdi-calendar"
-          :value="tgl"
+          :value="birthDate"
           dense
           readonly
           outlined
@@ -22,8 +22,7 @@
       </template>
       <v-date-picker
         ref="picker"
-        show-current
-        :value="tgl"
+        :value="birthDate"
         :readonly="editable"
         :disabled="editable"
         v-model="birthDate"
@@ -50,12 +49,10 @@ export default {
     },
   },
   mounted() {
-    if(this.tgl) this.birthDate = this.tgl
+    if(this.tgl != null) this.birthDate = new Date(this.tgl).toISOString().substr(0, 10)
   },
   methods: {
     saveDate (date) {
-      console.log(date)
-      console.log("hai")
       this.$refs.dateMenu.save(date)
       this.$emit('saveDate', date)
     },

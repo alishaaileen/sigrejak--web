@@ -75,7 +75,7 @@
             ></v-text-field>
 
             <autocomplete
-              :value="lingkungan.nama_lingkungan"
+              :value="umat.nama_lingkungan"
               label="Lingkungan tempat tinggal*"
               :suggestionList="lingkunganList"
               itemText="nama_lingkungan"
@@ -97,7 +97,7 @@
         </div>
       </v-form>
 
-      <h2>Informasi lain</h2>
+      <h2>Informasi Lain</h2>
 
       <v-divider class="mt-4"></v-divider>
 
@@ -105,13 +105,14 @@
         <v-avatar
           slot="icon"
           color="yellow darken-3"
-          size="40"
+          size="35"
         >
           <v-icon
             icon="mdi-exclamation-thick"
             color="white"
+            small
           >
-            mdi-exclamation-thick
+            fas fa-exclamation
           </v-icon>
         </v-avatar>
           <span>
@@ -125,7 +126,7 @@
         <v-row>
           <v-col>
             <autocomplete
-              :value="namaAyah"
+              :value.sync="namaAyah"
               :disable="false"
               label="Ayah"
               :suggestionList="keluargaNameList"
@@ -220,6 +221,8 @@ export default {
     umat: {},
     detailUmat: {},
     anggotaKeluarga: [],
+    namaAyah: '',
+    namaIbu: '',
   }),
   computed: {
     keluargaNameList() {
@@ -228,10 +231,6 @@ export default {
           return e.nama
         }
       })
-    },
-    lingkungan() {
-      var temp = this.lingkunganList.find(e => e.id === this.umat.lingkungan_id)
-      return temp
     },
   },
   async mounted() {
@@ -242,43 +241,31 @@ export default {
     this.umat = this.umat[0]
     this.detailUmat = await getData(`/detail-umat/${this.$route.params.id}`)
     this.detailUmat = this.detailUmat[0]
+    if(this.detailUmat.id_ayah) this.setNamaAyah()
+    if(this.detailUmat.id_ibu) this.setNamaIbu()
   },
   methods: {
     changeIdLingkungan(e) {
-      this.lingkunganList.map((_) => {
-        if (_.nama_lingkungan == e) {
-          this.umat.lingkungan_id = _.id;
-          return
-        }
-      })
+      let temp = this.lingkunganList.find(_ => _.nama_lingkungan == e)
+      this.umat.lingkungan_id = temp.id
     },
     changeIdAyah(e) {
-      this.anggotaKeluarga.map((_) => {
-        if (_.nama == e) {
-          this.detailUmat.id_ayah = _.id;
-          return
-        }
-      })
+      let temp = this.anggotaKeluarga.find(_ => _.nama === e)
+      this.detailUmat.id_ayah = temp.id
     },
     changeIdIbu(e) {
-      this.anggotaKeluarga.map((_) => {
-        if (_.nama == e) {
-          this.detailUmat.id_ibu = _.id;
-          return
-        }
-      })
+      let temp = this.anggotaKeluarga.find(_ => _.nama === e)
+      this.detailUmat.id_ibu = temp.id
     },
-    namaAyah() {
-      this.anggotaKeluarga.map((_) => {
-        if (_.id == this.detailUmat.id_ayah) return _.nama
-      })
-      return ""
+    setNamaAyah() {
+      let temp = this.anggotaKeluarga.find(_ => _.id === this.detailUmat.id_ayah)
+      
+      this.namaAyah = temp ? temp.nama : ''
     },
-    namaIbu() {
-      this.anggotaKeluarga.map((_) => {
-        if (_.id == this.detailUmat.id_ibu) return _.nama
-      })
-      return ""
+    setNamaIbu() {
+      let temp = this.anggotaKeluarga.find(_ => _.id === this.detailUmat.id_ibu)
+      
+      this.namaIbu = temp ? temp.nama : ''
     },
     saveDate(newDate) {
       this.umat.tgl_lahir = newDate
@@ -296,6 +283,7 @@ export default {
           snackbar.color = 'success',
           snackbar.text = 'Data berhasil tersimpan!'
           this.umat = await getData(`/umat/${this.$route.params.id}`)
+          this.umat = this.umat[0]
         } else {
           snackbar.color = 'error'
           snackbar.text = 'Harap periksa kembali inputan anda'

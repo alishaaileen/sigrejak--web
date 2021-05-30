@@ -7,6 +7,7 @@
         v-model="search"
         outlined
         prepend-inner-icon="mdi-magnify"
+        placeholder="Cari surat"
         dense
       ></v-text-field>
 
