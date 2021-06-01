@@ -7,7 +7,6 @@
       <v-chip
         class="ma-2"
         :color="menus[3].show ? `indigo accent-2` : `blue lighten-2`"
-        text-color="white"
       >
         <v-avatar left>
           <v-icon

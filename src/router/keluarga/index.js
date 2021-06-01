@@ -157,6 +157,22 @@ const keluarga = {
       name: 'UpdateSuratBaptisAnak',
       component: importView("Keluarga/KelolaSurat/SuratBaptisAnak/Edit")
     },
+    // ===== Surat Pelayanan Minyak Suci =====
+    {
+      path: 'surat/surat-minyak-suci',
+      name: 'ViewSuratMinyakSuci',
+      component: importView("Keluarga/KelolaSurat/SuratPelayananMinyakSuci/ViewAll")
+    },
+    {
+      path: 'surat/surat-minyak-suci/tambah',
+      name: 'AddSuratMinyakSuci',
+      component: importView("Keluarga/KelolaSurat/SuratPelayananMinyakSuci/Add")
+    },
+    {
+      path: 'surat/surat-minyak-suci/edit/:id',
+      name: 'UpdateSuratMinyakSuci',
+      component: importView("Keluarga/KelolaSurat/SuratPelayananMinyakSuci/Edit")
+    },
     // ==========================================
     //                      =====================
     // Ketua Lingkungan     =====================

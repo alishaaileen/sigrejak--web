@@ -76,7 +76,7 @@ export default {
       {
         title: 'Surat Pelayanan Minyak Suci',
         desc: 'Surat yang menampung informasi pelayanan minyak suci yang ada di wilayah Paroki Kumetiran',
-        to: 'surat/surat-pelayanan-minyak-suci',
+        to: 'surat/surat-minyak-suci',
       },
       {
         title: 'Surat Keterangan Mati',

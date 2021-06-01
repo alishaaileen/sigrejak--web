@@ -80,12 +80,11 @@
           <h3 class="mb-5">Tempat Tinggal Baru</h3>
 
           <small>Aktifkan tombol di bawah ini jika ingin pindah ke paroki selain Kumetiran</small>
-
           <v-row>
             <v-col cols="6">
               <v-switch
                 v-model="isNotKumetiran"
-                label="Pindah ke paroki lain"
+                :label="isNotKumetiran ? 'Pindah ke paroki lain' : 'Pindah lingkungan saja (tetap di Kumetiran)'"
                 color="primary"
                 background-color="white"
                 @change="switchParoki"
