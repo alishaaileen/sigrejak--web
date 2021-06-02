@@ -1,52 +1,76 @@
 <template>
   <div>
-    <btn-kembali path="/keluarga/surat/surat-keterangan-beasiswa/" />
-
-    <h1>Tambah Surat Keterangan Beasiswa</h1>
+    <btn-kembali path="/keluarga/surat/surat-keterangan" />
+    
+    <h1>Edit Surat Keterangan</h1>
 
     <div class="form mt-5">
-      <v-card class="pa-6" width="100%" flat>
+      <v-card class="pa-6 mx-auto" flat>
         <v-form @submit.prevent="submit">
-          <h3 class="mb-5">Informasi Siswa</h3>
+          <h3 class="mb-5">Informasi Umat</h3>
 
           <autocomplete
             label="Nama*"
+            :value="formData.nama"
             :suggestionList="anggotaKeluarga"
             itemText="nama"
-            @changeData="changeIdSiswa"
+            @changeData="changeIdUmat"
           ></autocomplete>
 
-          <label>Tempat lahir</label>
-          <p>{{ formData.tempat_lahir }}</p>
-
-          <label>Tanggal lahir</label>
-          <p>{{ formData.tgl_lahir }}</p>
+          <v-row>
+            <v-col>
+              <label>Tempat lahir</label>
+              <v-text-field
+                v-model="formData.tempat_lahir"
+                required
+                outlined
+                dense
+                readonly
+                disabled
+              ></v-text-field>
+            </v-col>
+            <v-col>
+              <label>Tanggal lahir</label>
+              <v-text-field
+                v-model="formData.tgl_lahir"
+                required
+                outlined
+                dense
+                readonly
+                disabled
+              ></v-text-field>
+            </v-col>
+          </v-row>
 
           <label>Alamat</label>
-          <p>{{ formData.alamat }}</p>
-
-          <label>No. telepon</label>
-          <p>{{ formData.no_telp }}</p>
-
-          <label>Sekolah</label>
           <v-text-field
-            v-model="formData.sekolah"
+            v-model="formData.alamat"
             required
             outlined
             dense
+            readonly
+            disabled
           ></v-text-field>
 
-          <label>Kelas</label>
+          <label>Pekerjaan</label>
           <v-text-field
-            v-model="formData.kelas"
+            v-model="formData.pekerjaan"
+            required
+            outlined
+            dense
+            readonly
+            disabled
+          ></v-text-field>
+
+          <label>Pendidikan</label>
+          <v-text-field
+            v-model="formData.pendidikan"
             required
             outlined
             dense
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
-
-          <h3 class="mb-5">Informasi Orang Tua</h3>
 
           <v-alert
             v-show="isAlertOrtuActive"
@@ -61,53 +85,39 @@
             </span>
           </v-alert>
 
-          <label>Nama orang tua*</label>
-          <p>{{ formData.nama_ortu }}</p>
+          <h3 class="mb-5">Informasi Orang Tua</h3>
 
-          <label>No. telepon orang tua*</label>
-          <p>{{ formData.no_telp_ortu }}</p>
+          <label>Nama orang tua*</label>
+          <v-text-field
+            v-model="formData.nama_ortu"
+            required
+            outlined
+            dense
+            disabled
+            readonly
+          ></v-text-field>
 
           <label>Alamat orang tua*</label>
-          <p>{{ formData.alamat_ortu }}</p>
+          <v-text-field
+            v-model="formData.alamat_ortu"
+            required
+            outlined
+            dense
+            disabled
+            readonly
+          ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
 
-          <!-- <h3 class="mb-5">Tempat Tinggal Baru</h3> -->
+          <h3 class="mb-5">Keperluan</h3>
 
-          <label>Status beasiswa*</label>
-          <v-select
-            :items="[ 'Belum', 'Tidak pernah' ]"
-            v-model="formData.status_beasiswa"
-            outlined
-            dense
-          ></v-select>
-
-          <label>Lampirkan permohonan untuk keterangan beasiswa*</label>
-          <!-- <div>
-            <p class="subtitle-3 mb-1">
-              Tulis lampiran permohonan dari surat keterangan ini
-            </p>
-          </div> -->
+          <label>Keperluan*</label>
           <v-textarea
-            v-model="formData.permohonan"
+            v-model="formData.keperluan"
             required
             outlined
             dense
           ></v-textarea>
-
-          <v-alert
-            text
-            rounded="4"
-            color="orange"
-          >
-            <!-- <div class="title">
-              Lorem Ipsum
-            </div> -->
-            <h4>Catatan</h4>
-            <p class="subtitle-5 ma-0">
-              1. Dengan mengajukan surat, anak dianggap belum/tidak pernah menerima bantuan beasiswa dari lembaga/instansi lain
-            </p>
-          </v-alert>
 
           <div class="d-flex justify-end">
             <v-btn
@@ -118,18 +128,18 @@
               depressed
               :disabled="isSubmitDisabled"
             >
-              Ajukan surat
+              Simpan
             </v-btn>
           </div>
         </v-form>
-      </v-card>
+      </v-card>     
     </div>
     <snackbar />
   </div>
 </template>
 
 <script>
-import { getData, postData } from '../../../../utils'
+import { getData, editData } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 
 export default {
@@ -137,56 +147,31 @@ export default {
     Autocomplete,
   },
   data: () => ({
-    formData: {
-      id_keluarga: null,
-      id_lingkungan: null,
-      ketua_lingkungan: null,
-      
-      id_siswa: null,
-      tempat_lahir: '-',
-      tgl_lahir: '-',
-      alamat: '-',
-      no_telp: '-',
-      sekolah: null,
-      kelas: null,
-
-      id_ortu: null,
-      nama_ortu: '-',
-      no_telp_ortu: '-',
-      alamat_ortu: '-',
-
-      status_beasiswa: 'Belum pernah',
-      permohonan: '',
-      
-      isKetuaLingkungan: 0,
-    },
+    formData: {},
     anggotaKeluarga: [],
     isAlertOrtuActive: false,
   }),
+  async mounted() {
+    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.formData = await getData(`/surat-keterangan/${this.$route.params.id}`)
+    this.formData = this.formData[0]
+  },
   computed: {
     isSubmitDisabled() {
       return this.isAlertOrtuActive ? true : false
     }
   },
-  async mounted() {
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
-    this.formData.id_keluarga = this.$store.state.keluarga.id
-    if (this.$store.state.keluarga.lingkunganId) {
-      this.formData.isKetuaLingkungan = true
-      this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_keluarga
-    }
-  },
   methods: {
-    async changeIdSiswa(e) {
+    async changeIdUmat(e) {
       let temp = this.anggotaKeluarga.find(_ => {
         return _.nama === e
       })
-      this.formData.id_siswa = temp.id
-      this.formData.id_lingkungan = temp.lingkungan_id
+      this.formData.id_umat = temp.id;
+      this.formData.id_lingkungan = temp.lingkungan_id;
       this.formData.tempat_lahir = temp.tempat_lahir
       this.formData.tgl_lahir = temp.tgl_lahir
       this.formData.alamat = temp.alamat
-      this.formData.no_telp = temp.no_telp
+      this.formData.pekerjaan = temp.pekerjaan
 
       let detailTemp = await getData(`/detail-umat/${temp.id}`)
       detailTemp = detailTemp[0]
@@ -200,9 +185,8 @@ export default {
         if (idIbu === null) {
           this.isAlertOrtuActive = true
           this.formData.id_ortu = null
-          this.formData.nama_ortu = '-'
-          this.formData.no_telp_ortu = '-'
-          this.formData.alamat_ortu = '-'
+          this.formData.nama_ortu = null
+          this.formData.alamat_ortu = null
 
           return
         } else {
@@ -215,7 +199,6 @@ export default {
       tempOrangTua = tempOrangTua[0]
       this.formData.id_ortu = tempOrangTua.id
       this.formData.nama_ortu = tempOrangTua.nama
-      this.formData.no_telp_ortu = tempOrangTua.no_telp
       this.formData.alamat_ortu = tempOrangTua.alamat
     },
     async submit() {
@@ -225,12 +208,12 @@ export default {
       let snackbar = {}
 
       try {
-        let response = await postData('/surat-keterangan-beasiswa/add', this.formData)
+        let response = await editData('/surat-keterangan', this.formData.id, this.formData)
 
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
-          snackbar.text = 'Surat berhasil dibuat!'
-          this.$router.push('/keluarga/surat/surat-keterangan-beasiswa')
+          snackbar.text = 'Surat berhasil diubah!'
+          this.$router.push('/keluarga/surat/surat-keterangan')
         } else {
           snackbar.color = 'error',
           snackbar.text = 'Harap periksa kembali inputan anda'

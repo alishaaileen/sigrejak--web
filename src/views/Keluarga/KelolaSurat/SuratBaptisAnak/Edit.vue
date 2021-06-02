@@ -30,29 +30,11 @@
             </span>
           </v-alert>
 
-          <!-- <v-card flat outlined class="mb-5" v-show="formData.id_anak != null"> -->
-              <label>Tempat lahir</label>
-              <p>{{ formData.tempat_lahir }}</p>
-              <!-- <v-text-field
-                v-model="formData.tempat_lahir"
-                required
-                outlined
-                dense
-                readonly
-                disabled
-              ></v-text-field> -->
+          <label>Tempat lahir</label>
+          <p>{{ formData.tempat_lahir }}</p>
 
-              <label>Tanggal lahir</label>
-              <p>{{ formData.tgl_lahir }}</p>
-              <!-- <v-text-field
-                v-model="formData.tgl_lahir"
-                required
-                outlined
-                dense
-                readonly
-                disabled
-              ></v-text-field> -->
-          <!-- </v-card> -->
+          <label>Tanggal lahir</label>
+          <p>{{ formData.tgl_lahir }}</p>
 
           <label>Nama Baptis*</label>
           <v-text-field

@@ -190,19 +190,19 @@ const keluarga = {
     },
     // ===== Surat Keterangan Pindah =====
     {
-      path: 'surat/surat-keterangan-pindah',
+      path: 'ketua/surat/surat-keterangan-pindah',
       name: 'KetuaViewSuratKeteranganPindah',
       component: importView("Keluarga/KetuaLingkungan/SuratKeteranganPindah/ViewAll")
     },
     // ===== Surat Keterangan Mati =====
     {
-      path: 'surat/surat-keterangan-mati',
+      path: 'ketua/surat/surat-keterangan-mati',
       name: 'KetuaViewSuratKeteranganMati',
       component: importView("Keluarga/KetuaLingkungan/SuratKeteranganMati/ViewAll")
     },
     // ===== Surat Keterangan =====
     {
-      path: 'surat/surat-keterangan',
+      path: 'ketua/surat/surat-keterangan',
       name: 'KetuaViewSuratKeterangan',
       component: importView("Keluarga/KetuaLingkungan/SuratKeterangan/ViewAll")
     },

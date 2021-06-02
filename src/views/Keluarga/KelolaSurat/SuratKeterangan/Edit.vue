@@ -17,50 +17,17 @@
             @changeData="changeIdUmat"
           ></autocomplete>
 
-          <v-row>
-            <v-col>
-              <label>Tempat lahir</label>
-              <v-text-field
-                v-model="formData.tempat_lahir"
-                required
-                outlined
-                dense
-                readonly
-                disabled
-              ></v-text-field>
-            </v-col>
-            <v-col>
-              <label>Tanggal lahir</label>
-              <v-text-field
-                v-model="formData.tgl_lahir"
-                required
-                outlined
-                dense
-                readonly
-                disabled
-              ></v-text-field>
-            </v-col>
-          </v-row>
+          <label>Tempat lahir</label>
+          <p>{{ formData.tempat_lahir }}</p>
+
+          <label>Tanggal lahir</label>
+          <p>{{ formData.tgl_lahir }}</p>
 
           <label>Alamat</label>
-          <v-text-field
-            v-model="formData.alamat"
-            required
-            outlined
-            dense
-            readonly
-            disabled
-          ></v-text-field>
+          <p>{{ formData.alamat }}</p>
 
           <label>Pekerjaan</label>
-          <v-text-field
-            v-model="formData.pekerjaan"
-            required
-            outlined
-            dense
-            readonly
-            disabled
-          ></v-text-field>
+          <p>{{ formData.pekerjaan }}</p>
 
           <label>Pendidikan</label>
           <v-text-field
@@ -88,24 +55,10 @@
           <h3 class="mb-5">Informasi Orang Tua</h3>
 
           <label>Nama orang tua*</label>
-          <v-text-field
-            v-model="formData.nama_ortu"
-            required
-            outlined
-            dense
-            disabled
-            readonly
-          ></v-text-field>
+          <p>{{ formData.nama_ortu }}</p>
 
           <label>Alamat orang tua*</label>
-          <v-text-field
-            v-model="formData.alamat_ortu"
-            required
-            outlined
-            dense
-            disabled
-            readonly
-          ></v-text-field>
+          <p>{{ formData.alamat_ortu }}</p>
 
           <v-divider class="mb-5"></v-divider>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Dashboard Ketua Lingkungan</h1>
+    <h1>Surat-surat Ketua Lingkungan</h1>
     
     <v-card class="mt-5 pa-6" flat>
       <v-text-field
@@ -40,52 +40,52 @@ export default {
       {
         title: 'Surat Keterangan Pindah',
         desc: 'lorem ipsum',
-        to: 'ketua/surat-keterangan-pindah',
+        to: 'ketua/surat/surat-keterangan-pindah',
       },
       {
         title: 'Surat Keterangan Mati',
         desc: 'lorem ipsum',
-        to: 'ketua/surat-keterangan-mati',
+        to: 'ketua/surat/surat-keterangan-mati',
       },
       {
         title: 'Surat Pelayanan Minyak Suci',
         desc: 'lorem ipsum',
-        to: 'ketua/surat-pelayanan-minyak-suci',
+        to: 'ketua/surat/surat-pelayanan-minyak-suci',
       },
       {
         title: 'Surat Keterangan Calon Pengantin',
         desc: 'lorem ipsum',
-        to: 'ketua/surat-keterangan-calon-pengantin',
+        to: 'ketua/surat/surat-keterangan-calon-pengantin',
       },
       {
         title: 'Surat Keterangan',
         desc: 'lorem ipsum',
-        to: 'ketua/surat-keterangan',
+        to: 'surat/surat-keterangan',
       },
       {
         title: 'Surat Baptis Anak',
         desc: 'lorem ipsum',
-        to: 'ketua/surat-baptis-anak',
+        to: 'ketua/surat/surat-baptis-anak',
       },
       {
         title: 'Surat Baptis Dewasa',
         desc: 'lorem ipsum',
-        to: 'ketua/surat-baptis-dewasa',
+        to: 'ketua/surat/surat-baptis-dewasa',
       },
       {
         title: 'Surat Komuni',
         desc: 'lorem ipsum',
-        to: 'ketua/surat-komuni',
+        to: 'ketua/surat/surat-komuni',
       },
       {
         title: 'Surat Keterangan Beasiswa', 
         desc: 'lorem ipsum',
-        to: 'ketua/surat-keterangan-beasiswa',
+        to: 'ketua/surat/surat-keterangan-beasiswa',
       },
       {
         title: 'Surat Izin Pelayanan Ekaristi', 
         desc: 'lorem ipsum',
-        to: 'ketua/surat-izin-pelayanan-ekaristi',
+        to: 'ketua/surat/surat-izin-pelayanan-ekaristi',
       },
     ],
   }),

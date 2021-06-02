@@ -16,44 +16,16 @@
           ></autocomplete>
 
           <label>Tempat lahir</label>
-          <v-text-field
-            v-model="formData.tempat_lahir"
-            required
-            outlined
-            dense
-            readonly
-            disabled
-          ></v-text-field>
+          <p>{{ formData.tempat_lahir }}</p>
 
           <label>Tanggal lahir</label>
-          <v-text-field
-            v-model="formData.tgl_lahir"
-            required
-            outlined
-            dense
-            readonly
-            disabled
-          ></v-text-field>
+          <p>{{ formData.tgl_lahir }}</p>
 
           <label>Alamat</label>
-          <v-text-field
-            v-model="formData.alamat"
-            required
-            outlined
-            dense
-            readonly
-            disabled
-          ></v-text-field>
+          <p>{{ formData.alamat }}</p>
 
           <label>No. telepon</label>
-          <v-text-field
-            v-model="formData.no_telp"
-            required
-            outlined
-            dense
-            readonly
-            disabled
-          ></v-text-field>
+          <p>{{ formData.no_telp }}</p>
 
           <label>Sekolah</label>
           <v-text-field
@@ -89,34 +61,13 @@
           </v-alert>
 
           <label>Nama orang tua*</label>
-          <v-text-field
-            v-model="formData.nama_ortu"
-            required
-            outlined
-            dense
-            disabled
-            readonly
-          ></v-text-field>
+          <p>{{ formData.nama_ortu }}</p>
 
           <label>No. telepon orang tua*</label>
-          <v-text-field
-            v-model="formData.no_telp_ortu"
-            required
-            outlined
-            dense
-            disabled
-            readonly
-          ></v-text-field>
+          <p>{{ formData.no_telp_ortu }}</p>
 
           <label>Alamat orang tua*</label>
-          <v-text-field
-            v-model="formData.alamat_ortu"
-            required
-            outlined
-            dense
-            disabled
-            readonly
-          ></v-text-field>
+          <p>{{ formData.alamat_ortu }}</p>
 
           <v-divider class="mb-5"></v-divider>
 
@@ -224,9 +175,9 @@ export default {
         if (idIbu === null) {
           this.isAlertOrtuActive = true
           this.formData.id_ortu = null
-          this.formData.nama_ortu = null
-          this.formData.no_telp_ortu = null
-          this.formData.alamat_ortu = null
+          this.formData.nama_ortu = '-'
+          this.formData.no_telp_ortu = '-'
+          this.formData.alamat_ortu = '-'
 
           return
         } else {
