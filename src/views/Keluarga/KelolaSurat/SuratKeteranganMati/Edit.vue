@@ -1,16 +1,17 @@
 <template>
   <div>
     <btn-kembali path="/keluarga/surat/surat-keterangan-mati" />
-    
-    <h1>Tambah Surat Keterangan Mati</h1>
 
-    <div class="form mt-5" @submit.prevent="submit">
+    <h1>Edit Surat Keterangan Mati</h1>
+
+    <div class="form mt-5">
       <v-card class="pa-6 mx-auto" flat>
-        <v-form>
+        <v-form @submit.prevent="submit">
           <h3 class="mb-5">Informasi Umat</h3>
 
           <autocomplete
             label="Nama*"
+            :value="formData.nama"
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdUmat"
@@ -296,6 +297,7 @@
 
           <autocomplete
             label="Imam yang memberkati*"
+            :value="formData.nama_imam"
             :suggestionList="imamList"
             itemText="nama"
             @changeData="changeIdImam"
@@ -334,18 +336,18 @@
               depressed
               :disabled="isSubmitDisabled"
             >
-              Ajukan surat
+              Simpan
             </v-btn>
           </div>
         </v-form>
       </v-card>     
     </div>
-    <snackbar></snackbar>
+    <snackbar />
   </div>
 </template>
 
 <script>
-import { getData, postData } from '../../../../utils'
+import { getData, editData } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 
 export default {
@@ -361,26 +363,7 @@ export default {
     isDatePickerPerminyakanActive: false,
     isDatePickerBaptisDaruratActive: false,
     isAlertOrtuActive: false,
-    formData: {
-      id_keluarga: null,
-      id_lingkungan: null,
-      ketua_lingkungan: null,
-      
-      id_umat: null,
-      nama_baptis: '-',
-      tempat_lahir: '-',
-      tgl_lahir: '-',
-      alamat: '-',
-
-      nama_orang_tua: '-',
-      nama_pasangan: '',
-
-      nama_keluarga_penanggung_jawab: '',
-      alamat_keluarga_penanggung_jawab: '',
-      no_telp_keluarga_penanggung_jawab: '',
-      
-      isKetuaLingkungan: 0,
-    },
+    formData: {},
     anggotaKeluarga: [],
     imamList: [],
   }),
@@ -392,11 +375,10 @@ export default {
   async mounted() {
     this.imamList = await getData(`/admin/role/3`)
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
-    this.formData.id_keluarga = this.$store.state.keluarga.id
-    if (this.$store.state.keluarga.lingkunganId) {
-      this.formData.isKetuaLingkungan = true
-      this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_keluarga
-    }
+    this.formData = await getData(`${this.url}/${this.$route.params.id}`)
+    this.formData = this.formData[0]
+
+    this.setOrtu(this.formData.id_ayah, this.formData.id_ibu)
   },
   methods: {
     saveDate(date) {
@@ -427,33 +409,44 @@ export default {
       this.setOrtu(detailTemp.id_ayah, detailTemp.id_ibu)
     },
     async setOrtu(idAyah, idIbu) {
+      this.formData.nama_orang_tua = '-'
       this.isAlertOrtuActive = false
-      let temp
 
       if (idAyah == null && idIbu == null) {
         this.isAlertOrtuActive = true
         return
       }
-      else if (idAyah != null)
+
+      let temp
+      
+      if (idAyah != null)
         temp = await getData(`/umat/${idAyah}`)
       else if (idIbu != null)
         temp = await getData(`/umat/${idIbu}`)
       
       temp = temp[0]
       this.formData.nama_orang_tua = temp.nama
+      console.log(this.formData.nama_orang_tua)
     },
     async submit() {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
+      if(this.formData.status_terima_minyak === 'Belum pernah') {
+        this.fotmData.tgl_terima_minyak = null
+      }
+
       let snackbar = {}
+      if(this.formData.cara_ortu_menikah === 'Cara lain') {
+        this.formData.cara_ortu_menikah = this.temp_cara_ortu_menikah
+      }
 
       try {
-        let response = await postData(`${this.url}/add`, this.formData)
+        let response = await editData(this.url, this.formData.id, this.formData)
 
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
-          snackbar.text = 'Surat berhasil dibuat!'
+          snackbar.text = 'Surat berhasil diubah!'
           this.$router.push('/keluarga/surat/surat-keterangan-mati')
         } else {
           snackbar.color = 'error',

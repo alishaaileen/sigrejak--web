@@ -6,7 +6,7 @@
       <v-card flat>
         <v-data-table
           :headers="headers"
-          :items="surat"
+          :items="suratNotDeleted"
           :search="search"
           :page.sync="page"
           :items-per-page="selectedJumlahData"
@@ -18,39 +18,53 @@
           <!-- TABLE TOP -->
           <template v-slot:top>
             <v-card-title>
-              <v-row>
-                <v-col>
-                  <v-text-field
-                    v-model="search"
-                    prepend-inner-icon="mdi-magnify"
-                    label="Cari"
-                    single-line
-                    hide-details
-                    outlined
-                    dense
-                    background-color="#FAFAFA"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="3">
-                  <v-btn
-                    class="btn text-none mt-2"
-                    color="blue accent-4"
-                    tag="router-link"
-                    to="surat-keterangan-mati/tambah"
-                    dark
-                    depressed
-                  >
-                    Buat surat
-                  </v-btn>
-                </v-col>
-              </v-row>
+              <v-text-field
+                v-model="search"
+                prepend-inner-icon="mdi-magnify"
+                label="Cari"
+                single-line
+                hide-details
+                outlined
+                dense
+                background-color="#FAFAFA"
+              ></v-text-field>
+              <v-btn
+                class="btn text-none mt-2 ml-4"
+                color="blue accent-4"
+                tag="router-link"
+                to="surat-keterangan-mati/tambah"
+                dark
+                depressed
+              >
+                Buat surat
+              </v-btn>
             </v-card-title>
           </template>
 
           <!-- TABLE CONTENT -->
-          <template v-slot:[`item.telepon`]="{ item }">
-            <p v-if="item === null">-</p>
-            <p>{{ item }}</p>
+          <template v-slot:[`item.status_ketua_lingkungan`]="{ item }">
+            <span v-if="item.ketua_lingkungan_approval === 1" class="d-flex justify-center">
+              <v-icon color="green darken-2">far fa-check-circle</v-icon>
+            </span>
+            <span v-else>
+              <v-icon color="grey darken-2">fas fa-history</v-icon>
+            </span>
+          </template>
+          <template v-slot:[`item.status_imam`]="{ item }">
+            <span v-if="item.imam_pemberkat_approval === 1" class="d-flex justify-center">
+              <v-icon color="green darken-2">far fa-check-circle</v-icon>
+            </span>
+            <span v-else>
+              <v-icon color="grey darken-2">fas fa-history</v-icon>
+            </span>
+          </template>
+          <template v-slot:[`item.status_sekretariat`]="{ item }">
+            <span v-if="item.sekretariat_approval === 1" class="d-flex justify-center">
+              <v-icon color="green darken-2">far fa-check-circle</v-icon>
+            </span>
+            <span v-else>
+              <v-icon color="grey darken-2">fas fa-history</v-icon>
+            </span>
           </template>
           <template v-slot:[`item.action`]="{ item }">
             <div>
@@ -93,6 +107,8 @@
     <modal-detail
       :isModalDetailActive="isModalDetailActive"
       :data="selectedDetail"
+      :ortu="ortu"
+      :sekretariat="sekretariat"
       @closeModal="(_) => { isModalDetailActive = _ }"
     ></modal-detail>
 
@@ -112,6 +128,7 @@ export default {
     ModalDetail,
   },
   data: () => ({
+    url: '/surat-keterangan-mati',
     tableLoading: true,
     search: '',
     headers: [
@@ -119,16 +136,25 @@ export default {
         text: 'No. surat', value: 'no_surat',
       },
       {
-        text: 'Tempat lahir', value: 'tempat_lahir',
+        text: 'Nama', value: 'nama',
       },
       {
-        text: 'Tgl Lahir', value: 'tgl_lahir',
+        text: 'Tanggal meninggal', value: 'tgl_meninggal',
       },
       {
-        text: 'Jenis kelamin', value: 'jenis_kelamin',
+        text: 'Tanggal makam/kremasi', value: 'tgl_makam_kremasi',
       },
       {
-        text: 'Telepon', value: 'no_telp',
+        text: 'Tempat makam/kremasi', value: 'tempat_makam_kremasi',
+      },
+      {
+        text: 'K. Lingkungan', value: 'status_ketua_lingkungan', align: 'center', sortable: false
+      },
+      {
+        text: 'Imam', value: 'status_imam', align: 'center', sortable: false
+      },
+      {
+        text: 'Sekretariat', value: 'status_sekretariat', align: 'center', sortable: false
       },
       {
         text: '', value: 'action',
@@ -141,17 +167,33 @@ export default {
     jumlahData: [10, 30, 50],
     deleteId: null,
     isModalDetailActive: false,
-    selectedDetail: null,
+    selectedDetail: {},
+    ortu: {},
+    sekretariat: {},
   }),
+  computed: {
+    suratNotDeleted() {
+      return this.surat.filter(_ => _.deleted_at === null)
+    }
+  },
   async mounted() {
     this.tableLoading = true
-    this.surat = await getData(`/surat-keterangan-pindah/keluarga/${this.$store.state.keluarga.id}`)
+    this.surat = await getData(`${this.url}/keluarga/${this.$store.state.keluarga.id}`)
     this.tableLoading = false
   },
   methods: {
-    openModalDetail(data) {
+    async openModalDetail(data) {
       this.selectedDetail = data
       this.selectedDetail.isEditable = data.ketua_lingkungan_approval === 1 ? false : true
+      
+      this.ortu = await getData(`/umat/${data.id_ayah != null ? data.id_ayah : data.id_ibu}`)
+      this.ortu = this.ortu[0]
+
+      if(data.id_sekretariat != null) {
+        this.sekretariat = await getData(`/admin/${data.id_sekretariat}`)
+        this.sekretariat = this.sekretariat[0]
+      }
+
       this.isModalDetailActive = true
     },
     openConfirmDelete(id) {
@@ -169,14 +211,12 @@ export default {
       this.$store.dispatch('loading/openLoading')
 
         try {
-          let response = await deleteData('/umat', this.deleteId)
+          let response = await deleteData(this.url, this.deleteId)
           
           if (response.status === 200) {
             snackbar.color = 'success'
             snackbar.text = 'Data berhasil dihapus'
-          } else {
-            snackbar.color = 'error'
-            snackbar.text = 'Terjadi kesalahan. Silahkan refresh dan coba lagi'
+            this.surat = await getData(`${this.url}/keluarga/${this.$store.state.keluarga.id}`)
           }
         } catch (error) {
           snackbar.color = 'error'

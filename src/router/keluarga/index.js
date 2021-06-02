@@ -77,17 +77,6 @@ const keluarga = {
       name: 'AddSuratKeteranganPindah',
       component: importView("Keluarga/KelolaSurat/SuratKeteranganPindah/Add")
     },
-    // ===== Surat Keterangan Mati =====
-    {
-      path: 'surat/surat-keterangan-mati',
-      name: 'ViewSuratKeteranganMati',
-      component: importView("Keluarga/KelolaSurat/SuratKeteranganMati/ViewAll")
-    },
-    {
-      path: 'surat/surat-keterangan-mati/tambah',
-      name: 'AddSuratKeteranganMati',
-      component: importView("Keluarga/KelolaSurat/SuratKeteranganMati/Add")
-    },
     {
       path: 'surat/surat-keterangan-pindah/edit/:id',
       name: 'UpdateSuratKeteranganPindah',
@@ -172,6 +161,22 @@ const keluarga = {
       path: 'surat/surat-minyak-suci/edit/:id',
       name: 'UpdateSuratMinyakSuci',
       component: importView("Keluarga/KelolaSurat/SuratPelayananMinyakSuci/Edit")
+    },
+    // ===== Surat Keterangan Mati =====
+    {
+      path: 'surat/surat-keterangan-mati',
+      name: 'ViewSuratKeteranganMati',
+      component: importView("Keluarga/KelolaSurat/SuratKeteranganMati/ViewAll")
+    },
+    {
+      path: 'surat/surat-keterangan-mati/tambah',
+      name: 'AddSuratKeteranganMati',
+      component: importView("Keluarga/KelolaSurat/SuratKeteranganMati/Add")
+    },
+    {
+      path: 'surat/surat-keterangan-mati/edit/:id',
+      name: 'UpdateSuratKeteranganMati',
+      component: importView("Keluarga/KelolaSurat/SuratKeteranganMati/Edit")
     },
     // ==========================================
     //                      =====================

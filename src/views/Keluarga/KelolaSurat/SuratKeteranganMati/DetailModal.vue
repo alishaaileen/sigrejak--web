@@ -21,6 +21,43 @@
         </v-toolbar>
         <v-card-text>
           <div>
+            <v-card flat outlined class="pa-2 mt-5">
+              <v-row class="text-center">
+                <v-col>
+                  <div class="py-2">
+                    <v-icon v-if="data.ketua_lingkungan_approval === 1" color="green darken-1" large>far fa-check-circle</v-icon>
+                    <v-icon v-else color="grey" large>fas fa-history</v-icon>
+                    <div class="mt-2">
+                      <label>Ketua lingkungan</label>
+                      <p class="ma-0">{{ data.ketua_lingkungan_approval === 1 ? data.ketua_lingkungan : '-' }}</p>
+                    </div>
+                  </div>
+                </v-col>
+                <v-col>
+                  <div class="py-2">
+                    <v-icon v-if="data.imam_pemberkat_approval === 1" color="green darken-1" large>far fa-check-circle</v-icon>
+                    <v-icon v-else color="grey" large>fas fa-history</v-icon>
+                    <div class="mt-2">
+                      <label>Pastor pelayan</label>
+                      <p class="ma-0">{{ data.nama_imam }}</p>
+                    </div>
+                  </div>
+                </v-col>
+                <v-col>
+                  <div class="py-2">
+                    <v-icon v-if="data.sekretariat_approval === 1" color="green darken-1" large>far fa-check-circle</v-icon>
+                    <v-icon v-else color="grey" large>fas fa-history</v-icon>
+                    <div class="mt-2">
+                      <label>Sekretariat</label>
+                      <p class="ma-0">{{ data.sekretariat_approval === 1 ? sekretariat.nama : '-' }}</p>
+                    </div>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-card>
+
+            <!-- <h2 class="mt-7 mb-3">Informasi Surat</h2> -->
+            
             <h2 class="mt-7 mb-3">Informasi Surat</h2>
 
             <label>No. surat</label>
@@ -29,31 +66,67 @@
             <label>Tanggal surat</label>
             <p>{{ data.created_at }}</p>
 
-            <h2 class="mt-7 mb-3">Informasi Umat</h2>
-
             <label>Nama</label>
             <p>{{ data.nama }}</p>
 
             <label>Nama baptis</label>
             <p>{{ data.nama_baptis }}</p>
 
-            <label>Tempat, tanggal lahir</label>
-            <p>{{ `${data.tempat_lahir}, ${data.tgl_lahir}` }}</p>
+            <label>Tempat/tanggal lahir</label>
+            <p>{{ `${data.tempat_lahir}/${data.tgl_lahir}` }}</p>
 
             <label>Alamat</label>
             <p>{{ data.alamat }}</p>
 
-            <label>Tanggal komuni</label>
-            <p>{{ data.tgl_komuni }}</p>
+            <label>Tempat meninggal</label>
+            <p>{{ data.tempat_meninggal }}</p>
 
-            <!-- <h2 class="mt-7 mb-3">Tempat Tinggal Baru</h2>
+            <label>Tanggal meninggal</label>
+            <p>{{ data.tgl_meninggal }}</p>
 
-            <label>Tanggal mulai domisili</label>
-            <p>{{ data.tgl_mulai_domisili }}</p>
+            <label>Tempat pemakaman/kremasi</label>
+            <p>{{ data.tempat_makam_kremasi }}</p>
 
-            <label>Alamat baru</label>
-            <p>{{ data.alamat_ortu }}</p> -->
+            <label>Tanggal makam/kremasi</label>
+            <p>{{ data.tgl_makam_kremasi }}</p>
+            
+            <h2 class="mt-7 mb-3">Informasi Keluarga</h2>
+            
+            <label>Nama orang tua</label>
+            <p>{{ ortu.nama }}</p>
 
+            <div v-show="data.nama_pasangan">
+              <label>Nama pasangan</label>
+              <p>{{ data.nama_pasangan }}</p>
+            </div>
+
+            <h2 class="mt-7 mb-3">Sakramen yang diterima sebelum meninggal</h2>
+
+            <label>a. Viaticum (Komuni)</label>
+            <p>{{ data.tgl_komuni }} oleh {{ data.pelayan_komuni }}</p>
+
+            <label>b. Pengampunan Dosa</label>
+            <p>{{ data.tgl_pengampunan_dosa }} oleh {{ data.pelayan_pengampunan_dosa }}</p>
+
+            <label>c. Perminyakan Orang Sakit</label>
+            <p>{{ data.tgl_perminyakan }} oleh {{ data.pelayan_perminyakan }}</p>
+
+            <label>d. Baptis Darurat</label>
+            <p>{{ data.tgl_baptis_darurat }} oleh {{ data.pelayan_baptis_darurat }}</p>
+
+            <h2 class="mt-7 mb-3">Informasi lain</h2>
+
+            <label>Imam yang memberkati</label>
+            <p>{{ data.nama_imam }}</p>
+            
+            <label>Nama pelapor</label>
+            <p>{{ data.nama_pelapor }}</p>
+
+            <label>Nomor HP pelapor</label>
+            <p>{{ data.no_hp_pelapor }}</p>
+
+            <label>Nomor HP keluarga/penanggung jawab yang bisa dihubungi</label>
+            <p>{{ data.no_hp_penanggungjawab }}</p>
           </div>
         </v-card-text>
         <v-card-actions>
@@ -80,10 +153,12 @@ export default {
   props:{
     isModalDetailActive: Boolean,
     data: Object,
+    ortu: Object,
+    sekretariat: Object,
   },
   methods: {
     goToEdit(id) {
-      this.$router.push(`/keluarga/surat/surat-keterangan/edit/${id}`)
+      this.$router.push(`/keluarga/surat/surat-keterangan-mati/edit/${id}`)
     },
     close() {
       this.$emit('closeModal', false)
