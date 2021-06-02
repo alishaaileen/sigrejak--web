@@ -87,7 +87,7 @@
         <!-- MENU-MENU -->
 
         <div v-for="(menu, i) in menus" :key="i">
-          <v-list-item v-if="!menu.hasOption" v-show="menu.show" tag="router-link" :to="menu.to">
+          <v-list-item v-if="!menu.hasOption && menu.show" tag="router-link" :to="menu.to">
             <v-list-item-icon>
               <v-icon color="white">{{ menu.icon }}</v-icon>
             </v-list-item-icon>
@@ -100,7 +100,7 @@
           </v-list-item>
 
           <v-list-group
-            v-else
+            v-else-if="menu.show"
             :prepend-icon="menu.icon"
             no-action
             :value="false"
