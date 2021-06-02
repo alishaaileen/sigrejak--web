@@ -94,11 +94,13 @@ const actions = {
             if(response.status >= 200 && response.status < 400) {
                 // set ID dari lingkungan yg diketuai
                 commit('setLingkunganId', response.data.result[0].id);
+                console.log("ketua lingkungan")
             }
 
             return true
         } catch (e) {
             if (e.response.status == 404) {
+                commit('setLingkunganId', null);
                 console.log("not ketua lingkungan")
             }
         }

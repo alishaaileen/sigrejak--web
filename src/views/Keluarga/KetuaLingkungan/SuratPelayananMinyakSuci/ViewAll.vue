@@ -2,7 +2,7 @@
   <div>
     <btn-kembali path="/keluarga/ketua/surat" />
     
-    <h1>Surat Keterangan</h1>
+    <h1>Surat Pelayanan Minyak Suci</h1>
 
     <div class="data-table mt-5">
       <v-card flat>
@@ -30,16 +30,23 @@
                 dense
                 background-color="#FAFAFA"
               ></v-text-field>
-              <!-- <v-btn
-                class="btn text-none ml-4 mt-2"
-                color="blue accent-4"
-                tag="router-link"
-                to="surat-keterangan/tambah"
-                dark
-                depressed
-              >
-                Buat surat
-              </v-btn> -->
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  v-bind="attrs"
+                  v-on="on"
+                  class="btn text-none ml-4 mt-2"
+                  color="blue accent-4"
+                  tag="router-link"
+                  to="surat-minyak-suci/tambah"
+                  dark
+                  depressed
+                >
+                  Buat surat
+                </v-btn>
+                </template>
+                <span class="text-none color-white">Khusus untuk umat non-Kumetiran</span>
+              </v-tooltip>
             </v-card-title>
           </template>
 
@@ -112,7 +119,7 @@ export default {
   //   ModalDetail,
   // },
   data: () => ({
-    url: '/surat-keterangan',
+    url: '/surat-pelayanan-minyak-suci',
     tableLoading: true,
     search: '',
     headers: [
@@ -123,10 +130,13 @@ export default {
         text: 'Tanggal pembuatan', value: 'created_at',
       },
       {
-        text: 'Umat', value: 'nama',
+        text: 'Nama', value: 'nama',
       },
       {
-        text: 'Keperluan', value: 'keperluan',
+        text: 'Keluarga', value: 'nama_keluarga_penanggung_jawab',
+      },
+      {
+        text: 'No. telp keluarga', value: 'no_telp_keluarga_penanggung_jawab',
       },
       {
         text: 'K. Lingkungan', value: 'status_ketua_lingkungan', align: 'center', sortable: false

@@ -103,15 +103,15 @@ export default {
       ketua_lingkungan: null,
       
       id_umat: null,
-      tempat_lahir: null,
-      tgl_lahir: null,
-      alamat: null,
-      pekerjaan: null,
+      tempat_lahir: '-',
+      tgl_lahir: '-',
+      alamat: '-',
+      pekerjaan: '-',
 
       pendidikan: null,
       id_ortu: null,
-      nama_ortu: null,
-      alamat_ortu: null,
+      nama_ortu: '-',
+      alamat_ortu: '-',
       isKetuaLingkungan: 0,
     },
     anggotaKeluarga: [],
@@ -155,8 +155,8 @@ export default {
         if (idIbu === null) {
           this.isAlertOrtuActive = true
           this.formData.id_ortu = null
-          this.formData.nama_ortu = null
-          this.formData.alamat_ortu = null
+          this.formData.nama_ortu = '-'
+          this.formData.alamat_ortu = '-'
 
           return
         } else {

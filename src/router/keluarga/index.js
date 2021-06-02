@@ -206,6 +206,17 @@ const keluarga = {
       name: 'KetuaViewSuratKeterangan',
       component: importView("Keluarga/KetuaLingkungan/SuratKeterangan/ViewAll")
     },
+    // ===== Surat Keterangan Minyak Suci =====
+    {
+      path: 'ketua/surat/surat-minyak-suci',
+      name: 'KetuaViewSuratMinyakSuci',
+      component: importView("Keluarga/KetuaLingkungan/SuratPelayananMinyakSuci/ViewAll")
+    },
+    {
+      path: 'ketua/surat/surat-minyak-suci/tambah',
+      name: 'KetuaAddSuratMinyakSuci',
+      component: importView("Keluarga/KetuaLingkungan/SuratPelayananMinyakSuci/Add")
+    },
   ]
 }
 

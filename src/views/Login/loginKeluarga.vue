@@ -1,8 +1,8 @@
 <template>
-  <div id="login" class="grey lighten-4">
+  <div id="login" class="login-keluarga grey lighten-4">
     <div class="d-flex justify-center">
       <v-card
-        class="py-15 mr-10"
+        class="py-15 mr-10 mt-15"
         min-width="450"
         outlined
         elevation="5"

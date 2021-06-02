@@ -202,7 +202,7 @@ export default {
     await this.$store.dispatch('keluarga/checkUserToken')
     await this.$store.dispatch('keluarga/getUserProfile')
     await this.$store.dispatch('keluarga/checkKetuaLingkungan')
-    this.menus[3].show = this.$store.state.keluarga.lingkunganId ? true : false 
+    this.menus[3].show = this.$store.state.keluarga.lingkunganId != null ? true : false 
   },
   methods: {
     logout() {

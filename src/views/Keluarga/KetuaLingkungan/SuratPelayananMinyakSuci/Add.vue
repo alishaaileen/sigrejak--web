@@ -9,24 +9,65 @@
         <v-form @submit.prevent="submit">
           <h3 class="mb-5">Informasi Umat</h3>
 
-          <autocomplete
-            label="Nama*"
-            :suggestionList="anggotaKeluarga"
-            itemText="nama"
-            @changeData="changeIdUmat"
-          ></autocomplete>
+          <label>Nama lengkap*</label>
+          <v-text-field
+            v-model="formData.nama"
+            required
+            outlined
+            dense
+          ></v-text-field>
 
-          <label>Nama baptis</label>
-          <p>{{ formData.nama_baptis }}</p>
+          <label>Nama baptis*</label>
+          <v-text-field
+            v-model="formData.nama_baptis"
+            required
+            outlined
+            dense
+          ></v-text-field>
 
-          <label>Tempat lahir</label>
-          <p>{{ formData.tempat_lahir }}</p>
+          <label>Tempat lahir*</label>
+          <v-text-field
+            v-model="formData.tempat_lahir"
+            required
+            outlined
+            dense
+          ></v-text-field>
 
-          <label>Tanggal lahir</label>
-          <p>{{ formData.tgl_lahir }}</p>
+          <label>Tanggal lahir*</label>
+          <v-menu
+            ref="dateMenu"
+            v-model="isDatePickerTglLahirActive"
+            :close-on-content-click="false"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="formData.tgl_lahir"
+                prepend-inner-icon="mdi-calendar"
+                dense
+                readonly
+                outlined
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              ref="picker"
+              v-model="formData.tgl_lahir"
+              :max="new Date().toISOString().substr(0, 10)"
+              @change="saveDate"
+            ></v-date-picker>
+          </v-menu>
 
-          <label>Alamat</label>
-          <p>{{ formData.alamat }}</p>
+          <label>Alamat*</label>
+          <v-textarea
+            v-model="formData.alamat"
+            required
+            outlined
+            dense
+          ></v-textarea>
 
           <v-divider class="mb-5"></v-divider>
 
@@ -155,6 +196,7 @@
               color="blue accent-4"
               dark
               depressed
+              :disabled="isSubmitDisabled"
             >
               Ajukan surat
             </v-btn>
@@ -178,6 +220,7 @@ export default {
   data: () => ({
     url: '/surat-pelayanan-minyak-suci',
     isDatePickerActive: false,
+    isDatePickerTglLahirActive: false,
     isPunyaPasangan: true,
     caraMenikahList,
     tahunList: [],
@@ -187,10 +230,10 @@ export default {
       ketua_lingkungan: null,
       
       id_umat: null,
-      nama_baptis: '-',
-      tempat_lahir: '-',
-      tgl_lahir: '-',
-      alamat: '-',
+      nama_baptis: '',
+      tempat_lahir: '',
+      tgl_lahir: '',
+      alamat: '',
 
       nama_pasangan: '',
       cara_menikah: '',
@@ -205,18 +248,16 @@ export default {
       
       isKetuaLingkungan: 0,
     },
-    anggotaKeluarga: [],
     pastorList: [],
   }),
   async mounted() {
     this.initTahun()
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.pastorList = await getData(`/admin/role/3`)
-    this.formData.id_keluarga = this.$store.state.keluarga.id
-    if (this.$store.state.keluarga.lingkunganId) {
-      this.formData.isKetuaLingkungan = true
-      this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_keluarga
-    }
+    
+    this.formData.id_keluarga = null
+    this.formData.isKetuaLingkungan = true
+    this.formData.id_lingkungan = this.$store.state.keluarga.lingkunganId
+    this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_keluarga
   },
   methods: {
     initTahun() {
@@ -231,13 +272,7 @@ export default {
     },
     saveDate (date) {
       this.$refs.menu.save(date)
-    },
-    changePasangan() {
-      if (!this.isPunyaPasangan) {
-        this.formData.nama_pasangan = null
-        this.formData.cara_menikah = null
-        this.formData.tahun_menikah = null
-      }
+      this.$refs.dateMenu.save(date)
     },
     async changeIdUmat(e) {
       let temp = this.anggotaKeluarga.find(_ => {
@@ -260,10 +295,11 @@ export default {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
-      let snackbar = {}
       if(this.formData.status_terima_minyak === 'Belum pernah') {
-        this.formData.tgl_terima_minyak = null
+        this.fotmData.tgl_terima_minyak = null
       }
+
+      let snackbar = {}
       if(this.formData.cara_ortu_menikah === 'Cara lain') {
         this.formData.cara_ortu_menikah = this.temp_cara_ortu_menikah
       }

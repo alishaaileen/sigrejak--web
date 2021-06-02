@@ -1,6 +1,13 @@
 <template>
   <div>
-    <h1>Surat-surat Ketua Lingkungan</h1>
+    <h1>Surat-surat Lingkungan {{ lingkungan.nama_lingkungan }}</h1>
+
+    <v-card flat class="mt-5 pa-6">
+      <h4 class="">Nama lingkungan: {{ lingkungan.nama_lingkungan }}</h4>
+      
+      <p>Paroki: Kumetiran</p>
+      <p>Ketua lingkungan: {{ lingkungan.ketua_lingkungan }}</p>
+    </v-card>
     
     <v-card class="mt-5 pa-6" flat>
       <v-text-field
@@ -33,29 +40,32 @@
 </template>
 
 <script>
+import { getData } from '../../../utils'
+
 export default {
   data: () => ({
+    lingkungan: {},
     search: '',
     cards: [
       {
         title: 'Surat Keterangan Pindah',
         desc: 'lorem ipsum',
-        to: 'ketua/surat/surat-keterangan-pindah',
+        to: 'surat/surat-keterangan-pindah',
       },
       {
         title: 'Surat Keterangan Mati',
         desc: 'lorem ipsum',
-        to: 'ketua/surat/surat-keterangan-mati',
+        to: 'surat/surat-keterangan-mati',
       },
       {
         title: 'Surat Pelayanan Minyak Suci',
         desc: 'lorem ipsum',
-        to: 'ketua/surat/surat-pelayanan-minyak-suci',
+        to: 'surat/surat-minyak-suci',
       },
       {
         title: 'Surat Keterangan Calon Pengantin',
         desc: 'lorem ipsum',
-        to: 'ketua/surat/surat-keterangan-calon-pengantin',
+        to: 'surat/surat-calon-pengantin',
       },
       {
         title: 'Surat Keterangan',
@@ -65,27 +75,27 @@ export default {
       {
         title: 'Surat Baptis Anak',
         desc: 'lorem ipsum',
-        to: 'ketua/surat/surat-baptis-anak',
+        to: 'surat/surat-baptis-anak',
       },
       {
         title: 'Surat Baptis Dewasa',
         desc: 'lorem ipsum',
-        to: 'ketua/surat/surat-baptis-dewasa',
+        to: 'surat/surat-baptis-dewasa',
       },
       {
         title: 'Surat Komuni',
         desc: 'lorem ipsum',
-        to: 'ketua/surat/surat-komuni',
+        to: 'surat/surat-komuni',
       },
       {
         title: 'Surat Keterangan Beasiswa', 
         desc: 'lorem ipsum',
-        to: 'ketua/surat/surat-keterangan-beasiswa',
+        to: 'surat/surat-keterangan-beasiswa',
       },
       {
         title: 'Surat Izin Pelayanan Ekaristi', 
         desc: 'lorem ipsum',
-        to: 'ketua/surat/surat-izin-pelayanan-ekaristi',
+        to: 'surat/surat-izin-pelayanan-ekaristi',
       },
     ],
   }),
@@ -96,7 +106,9 @@ export default {
       })
     },
   },
-  methods: {
+  async mounted() {
+    this.lingkungan = await getData(`/lingkungan/${this.$store.state.keluarga.lingkunganId}`)
+    this.lingkungan = this.lingkungan[0]
   }
 }
 </script>
