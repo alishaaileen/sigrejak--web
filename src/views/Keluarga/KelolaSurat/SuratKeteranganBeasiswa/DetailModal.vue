@@ -21,6 +21,41 @@
         </v-toolbar>
         <v-card-text>
           <div>
+            <v-card flat outlined class="pa-2 mt-5">
+              <v-row class="text-center">
+                <v-col>
+                  <div class="py-2">
+                    <v-icon v-if="data.ketua_lingkungan_approval === 1" color="green darken-1" large>far fa-check-circle</v-icon>
+                    <v-icon v-else color="grey" large>fas fa-history</v-icon>
+                    <div class="mt-2">
+                      <label>Ketua lingkungan</label>
+                      <p class="ma-0">{{ data.ketua_lingkungan_approval === 1 ? data.ketua_lingkungan : '-' }}</p>
+                    </div>
+                  </div>
+                </v-col>
+                <v-col>
+                  <div class="py-2">
+                    <v-icon v-if="data.sekretariat_approval === 1" color="green darken-1" large>far fa-check-circle</v-icon>
+                    <v-icon v-else color="grey" large>fas fa-history</v-icon>
+                    <div class="mt-2">
+                      <label>Sekretariat</label>
+                      <p class="ma-0">{{ data.sekretariat_approval === 1 ? sekretariat.nama : '-' }}</p>
+                    </div>
+                  </div>
+                </v-col>
+                <v-col>
+                  <div class="py-2">
+                    <v-icon v-if="data.romo_approval === 1" color="green darken-1" large>far fa-check-circle</v-icon>
+                    <v-icon v-else color="grey" large>fas fa-history</v-icon>
+                    <div class="mt-2">
+                      <label>Romo Paroki</label>
+                      <p class="ma-0">{{ data.romo_approval === 1 ? romoParoki.nama : '-' }}</p>
+                    </div>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-card>
+
             <h2 class="mt-7 mb-3">Informasi Surat</h2>
 
             <label>No. surat</label>
@@ -58,8 +93,6 @@
             <label>Alamat orang tua</label>
             <p>{{ data.alamat_ortu }}</p>
 
-            <!-- <h2 class="mt-7 mb-3">Keperluan</h2> -->
-
             <label>Status beasiswa</label>
             <p>{{ data.status_beasiswa }}</p>
             
@@ -92,6 +125,8 @@ export default {
   props:{
     isModalDetailActive: Boolean,
     data: Object,
+    sekretariat: Object,
+    romoParoki: Object,
   },
   methods: {
     goToEdit(id) {

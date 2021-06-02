@@ -1,6 +1,6 @@
 <template>
   <div>
-    <btn-kembali path="/keluarga/surat/surat-keterangan-beasiswa/" />
+    <btn-kembali path="/keluarga/surat/surat-keterangan-beasiswa" />
 
     <h1>Tambah Surat Keterangan Beasiswa</h1>
 

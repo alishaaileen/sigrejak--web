@@ -122,18 +122,11 @@
 </template>
 
 <script>
-import { getData } from '../../../../utils'
-
 export default {
   props:{
     isModalDetailActive: Boolean,
     data: Object,
-    sekretariat: {},
-  },
-  async mounted() {
-    if(this.data.id_sekretariat != null) {
-      this.sekretariat = await getData(`/admin/${this.data.id_sekretariat}`)
-    }
+    sekretariat: Object,
   },
   methods: {
     goToEdit(id) {

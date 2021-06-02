@@ -78,7 +78,7 @@
                   <v-list-item @click="openModalDetail(item)">
                     <v-list-item-title>Detil</v-list-item-title>
                   </v-list-item>
-                  <v-list-item :disabled="item.ketua_lingkungan_approval" @click="openConfirmDelete(item.id)">
+                  <v-list-item :disabled="item.ketua_lingkungan_approval === 1" @click="openConfirmDelete(item.id)">
                     <v-list-item-title>Hapus</v-list-item-title>
                   </v-list-item>
                 </v-list>
@@ -107,6 +107,8 @@
     <modal-detail
       :isModalDetailActive="isModalDetailActive"
       :data="selectedDetail"
+      :sekretariat="sekretariat"
+      :romoParoki="romoParoki"
       @closeModal="(_) => { isModalDetailActive = _ }"
     ></modal-detail>
 
@@ -136,7 +138,10 @@ export default {
         text: 'Nama siswa', value: 'nama',
       },
       {
-        text: 'Orang tua', value: 'nama_ortu',
+        text: 'Sekolah', value: 'sekolah',
+      },
+      {
+        text: 'Kelas', value: 'kelas',
       },
       {
         text: 'K. Lingkungan', value: 'status_ketua_lingkungan', align: 'center', sortable: false
@@ -159,6 +164,8 @@ export default {
     deleteId: null,
     isModalDetailActive: false,
     selectedDetail: {},
+    sekretariat: {},
+    romoParoki: {},
   }),
   computed: {
     suratNotDeleted() {
@@ -171,9 +178,17 @@ export default {
     this.tableLoading = false
   },
   methods: {
-    openModalDetail(data) {
+    async openModalDetail(data) {
       this.selectedDetail = data
       this.selectedDetail.isEditable = data.ketua_lingkungan_approval === 1 ? false : true
+      
+      if(data.id_sekretariat != null) {
+        this.sekretariat = await getData(`/admin/${data.id_sekretariat}`)
+      }
+      if(data.id_romo != null) {
+        this.romoParoki = await getData(`/admin/${data.id_romo}`)
+      }
+
       this.isModalDetailActive = true
     },
     openConfirmDelete(id) {

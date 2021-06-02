@@ -49,14 +49,12 @@
                     <v-icon v-else color="grey" large>fas fa-history</v-icon>
                     <div class="mt-2">
                       <label>Romo Paroki</label>
-                      <p class="ma-0">{{ data.romo_approval === 1 ? romo_paroki.nama : '-' }}</p>
+                      <p class="ma-0">{{ data.romo_approval === 1 ? romoParoki.nama : '-' }}</p>
                     </div>
                   </div>
                 </v-col>
               </v-row>
             </v-card>
-
-            <!-- <h2 class="mt-7 mb-3">Informasi Surat</h2> -->
             
             <h2 class="mt-7 mb-3">Informasi Surat Izin</h2>
 
@@ -112,22 +110,12 @@
 </template>
 
 <script>
-import { getData } from '../../../../utils'
-
 export default {
   props:{
     isModalDetailActive: Boolean,
     data: Object,
-    sekretariat: {},
-    romo_paroki: {},
-  },
-  async mounted() {
-    if(this.data.id_sekretariat != null) {
-      this.sekretariat = await getData(`/admin/${this.data.id_sekretariat}`)
-    }
-    if(this.data.id_romo != null) {
-      this.romo_paroki = await getData(`/admin/${this.data.id_romo}`)
-    }
+    sekretariat: Object,
+    romoParoki: Object,
   },
   methods: {
     goToEdit(id) {

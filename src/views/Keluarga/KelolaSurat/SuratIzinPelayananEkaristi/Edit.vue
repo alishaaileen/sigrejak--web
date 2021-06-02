@@ -115,7 +115,7 @@
           <v-text-field
             v-model="formData.romo_pemimpin"
             prefix="Romo"
-            placeholder="(nama romo)"
+            placeholder="nama romo"
             required
             outlined
             dense

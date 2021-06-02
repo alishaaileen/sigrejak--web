@@ -70,7 +70,7 @@
                   <v-list-item @click="openModalDetail(item)">
                     <v-list-item-title>Detil</v-list-item-title>
                   </v-list-item>
-                  <v-list-item :disabled="item.ketua_lingkungan_approval" @click="openConfirmDelete(item.id)">
+                  <v-list-item :disabled="item.ketua_lingkungan_approval === 1" @click="openConfirmDelete(item.id)">
                     <v-list-item-title>Hapus</v-list-item-title>
                   </v-list-item>
                 </v-list>
@@ -99,6 +99,7 @@
     <modal-detail
       :isModalDetailActive="isModalDetailActive"
       :data="selectedDetail"
+      :sekretariat="sekretariat"
       @closeModal="(_) => { isModalDetailActive = _ }"
     ></modal-detail>
 
@@ -152,6 +153,7 @@ export default {
     deleteId: null,
     isModalDetailActive: false,
     selectedDetail: {},
+    sekretariat: {},
   }),
   computed: {
     suratNotDeleted() {
@@ -164,9 +166,14 @@ export default {
     this.tableLoading = false
   },
   methods: {
-    openModalDetail(data) {
+    async openModalDetail(data) {
       this.selectedDetail = data
       this.selectedDetail.isEditable = data.ketua_lingkungan_approval === 1 ? false : true
+      
+      if(data.id_sekretariat != null) {
+        this.sekretariat = await getData(`/admin/${data.id_sekretariat}`)
+      }
+      
       this.isModalDetailActive = true
     },
     openConfirmDelete(id) {
