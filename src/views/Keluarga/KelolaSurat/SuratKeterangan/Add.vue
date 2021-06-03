@@ -1,5 +1,7 @@
 <template>
   <div>
+    <btn-kembali path="/keluarga/surat/surat-keterangan" />
+    
     <h1>Tambah Surat Keterangan</h1>
 
     <div class="form mt-5">

@@ -130,6 +130,9 @@ export default {
         text: 'Nama anak', value: 'nama',
       },
       {
+        text: 'Nama baptis', value: 'nama_baptis',
+      },
+      {
         text: 'Ayah', value: 'nama_ayah',
       },
       {
