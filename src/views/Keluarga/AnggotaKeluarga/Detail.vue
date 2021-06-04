@@ -122,7 +122,7 @@
           </span>
       </v-banner>
       
-      <form class="mt-4">
+      <form class="mt-4" enctype="multipart/form-data">
         <v-row>
           <v-col>
             <autocomplete
@@ -133,6 +133,8 @@
               itemText="nama"
               @changeData="changeIdAyah"
             ></autocomplete>
+          </v-col>
+          <v-col>
             <autocomplete
               :value="namaIbu"
               :disable="false"
@@ -141,53 +143,96 @@
               itemText="nama"
               @changeData="changeIdIbu"
             ></autocomplete>
-            <label>Pasangan</label>
-            <v-text-field
-              :value="detailUmat.id_pasangan"
-              outlined
-              readonly
-              disabled
-              dense
-            ></v-text-field>
-            <label>Cara menikah</label>
-            <v-text-field
-              :value="detailUmat.cara_menikah"
-              outlined
-              readonly
-              disabled
-              dense
-            ></v-text-field>
-          </v-col>
-          <v-col>
-            <label>Tanggal baptis</label>
-            <birth-date-picker
-              :tgl="detailUmat.tgl_baptis"
-              @saveDate="saveDate"
-              :editable="true"
-            ></birth-date-picker>
-
-            <label>Tanggal komuni</label>
-            <birth-date-picker
-              :tgl="detailUmat.tgl_komuni"
-              @saveDate="saveDate"
-              :editable="true"
-            ></birth-date-picker>
-
-            <label>Tanggal penguatan</label>
-            <birth-date-picker
-              :tgl="detailUmat.tgl_penguatan"
-              @saveDate="saveDate"
-              :editable="true"
-            ></birth-date-picker>
-
-            <label>Tanggal menikah</label>
-            <birth-date-picker
-              :tgl="detailUmat.tgl_menikah"
-              @saveDate="saveDate"
-              :editable="true"
-            ></birth-date-picker>
           </v-col>
         </v-row>
+
+        <div class="mb-5">
+          <label>File akta lahir</label>
+          <v-file-input
+            style="display: none"
+            ref="inputAktaLahir"
+            accept="application/pdf"
+            v-model="detailUmat.file_akta_lahir"
+          ></v-file-input>
+          <v-card
+            outlined
+            class="pa-6 my-1"
+            hover
+            @click="selectFile('akta')"
+          >
+            <p class="text-center ma-0">
+              <v-icon large color="blue darken-3" class="mb-3">fas fa-arrow-circle-up</v-icon>
+              <br>
+              {{ detailUmat.file_akta_lahir != null ? `Ubah file` : `Unggah file` }}
+            </p>
+          </v-card>
+          <div v-if="detailUmat.file_akta_lahir != null && detailUmat.file_akta_lahir != ''">
+            <v-chip
+              color="blue darken-2"
+              small
+              @click="openFile(detailUmat.file_akta_lahir)"
+            >
+              <span class="color-white">
+                Klik untuk melihat file
+              </span>
+            </v-chip>
+          </div>
+        </div>
+
+        <div class="mb-5">
+          <label>File KTP</label>
+          <v-file-input
+            style="display: none"
+            ref="inputKtp"
+            accept="application/pdf"
+            v-model="detailUmat.file_ktp"
+          ></v-file-input>
+          <v-card
+            outlined
+            class="pa-6 my-1"
+            hover
+            @click="selectFile('ktp')"
+          >
+            <p class="text-center ma-0">
+              <v-icon large color="blue darken-3" class="mb-3">fas fa-arrow-circle-up</v-icon>
+              <br>
+              {{ detailUmat.file_ktp != null ? `Ubah file` : `Unggah file` }}
+            </p>
+          </v-card>
+          <div v-if="detailUmat.file_ktp != null && detailUmat.file_ktp != ''">
+            <v-chip
+              color="blue darken-2"
+              small
+              @click="openFile(detailUmat.file_ktp)"
+            >
+              <span class="color-white">
+                Klik untuk melihat file
+              </span>
+            </v-chip>
+          </div>
+        </div>
+
+        <label>Tanggal baptis</label>
+        <birth-date-picker
+          :tgl="detailUmat.tgl_baptis"
+          @saveDate="saveDate"
+          :editable="true"
+        ></birth-date-picker>
+
+        <label>Tanggal komuni</label>
+        <birth-date-picker
+          :tgl="detailUmat.tgl_komuni"
+          @saveDate="saveDate"
+          :editable="true"
+        ></birth-date-picker>
+
+        <label>Tanggal penguatan</label>
+        <birth-date-picker
+          :tgl="detailUmat.tgl_penguatan"
+          @saveDate="saveDate"
+          :editable="true"
+        ></birth-date-picker>
+        
         <div class="d-flex justify-end">
           <v-btn
             class="btn text-none"
@@ -207,6 +252,7 @@
 
 <script>
 import { getData, editData } from '../../../utils'
+import { API_URL } from '../../../constants'
 
 import BirthDatePicker from '../../../components/BirthDatePicker'
 import Autocomplete from '../../../components/Autocomplete'
@@ -245,6 +291,9 @@ export default {
     if(this.detailUmat.id_ibu) this.setNamaIbu()
   },
   methods: {
+    openFile(fileName) {
+      window.open(`${API_URL}/${fileName}`, "blank")
+    },
     changeIdLingkungan(e) {
       let temp = this.lingkunganList.find(_ => _.nama_lingkungan == e)
       this.umat.lingkungan_id = temp.id
@@ -256,6 +305,12 @@ export default {
     changeIdIbu(e) {
       let temp = this.anggotaKeluarga.find(_ => _.nama === e)
       this.detailUmat.id_ibu = temp.id
+    },
+    selectFile(file) {
+      if (file === 'akta')
+        this.$refs.inputAktaLahir.$refs.input.click()
+      else if(file === 'ktp')
+        this.$refs.inputKtp.$refs.input.click()
     },
     setNamaAyah() {
       let temp = this.anggotaKeluarga.find(_ => _.id === this.detailUmat.id_ayah)
@@ -270,6 +325,8 @@ export default {
     saveDate(newDate) {
       this.umat.tgl_lahir = newDate
     },
+
+
     async saveUmat() {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
@@ -296,23 +353,32 @@ export default {
       this.$store.dispatch('snackbar/openSnackbar', snackbar)
       this.$store.dispatch('loading/closeLoading')
     },
+
+
     async saveDetailUmat() {
-      console.log(this.detailUmat.id_ayah)
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
+
+      let formData = new FormData()
+      if(this.detailUmat.id_ayah != null) {
+        formData.append('id_ayah', this.detailUmat.id_ayah)
+      }
+      if(this.detailUmat.id_ibu != null) {
+        formData.append('id_ibu', this.detailUmat.id_ibu)
+      }
+      formData.append('file_akta_lahir', this.detailUmat.file_akta_lahir)
+      formData.append('file_ktp', this.detailUmat.file_ktp)
 
       let snackbar = {}
 
       try {
-        let response = await editData('/detail-umat', this.$route.params.id, {
-          id_ayah: this.detailUmat.id_ayah,
-          id_ibu: this.detailUmat.id_ibu,
-        })
+        let response = await editData('/detail-umat', this.$route.params.id, formData)
 
         if (response.status >= 200 && response.status < 300) {          
           snackbar.color = 'success',
           snackbar.text = 'Data berhasil tersimpan!'
-          this.umat = await getData(`/detail-umat/${this.$route.params.id}`)
+          this.detailUmat = await getData(`/detail-umat/${this.$route.params.id}`)
+          this.detailUmat = this.detailUmat[0]
         } else {
           snackbar.color = 'error'
           snackbar.text = 'Harap periksa kembali inputan anda'
