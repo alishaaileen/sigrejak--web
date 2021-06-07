@@ -61,7 +61,7 @@
                   </v-btn>
                 </template>
                 <v-list>
-                  <v-list-item @click="openModalDetail(item)">
+                  <v-list-item @click="goToDetail(item.id)">
                     <v-list-item-title>Detil</v-list-item-title>
                   </v-list-item>
                   <v-list-item :disabled="item.ketua_lingkungan_approval" @click="openConfirmDelete(item.id)">
@@ -155,10 +155,8 @@ export default {
     this.tableLoading = false
   },
   methods: {
-    openModalDetail(data) {
-      this.selectedDetail = data
-      this.selectedDetail.isEditable = data.ketua_lingkungan_approval === 1 ? false : true
-      this.isModalDetailActive = true
+    goToDetail(id) {
+      this.$router.push(`surat-keterangan/detil/${id}`)
     },
     openConfirmDelete(id) {
       this.deleteId = id

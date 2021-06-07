@@ -20,6 +20,18 @@ export async function getData(endpoint) {
     }
 }
 
+export async function getOneData(endpoint) {
+    let url = `${API_URL}${endpoint}`
+    
+    try {
+        let response = await axios.get(url)
+
+        return response.data.result[0]
+    } catch (error) {
+        return error
+    }
+}
+
 export async function postData(endpoint, data) {
     let url = `${API_URL}${endpoint}`
     
