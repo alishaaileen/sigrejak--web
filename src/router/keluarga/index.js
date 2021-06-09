@@ -130,7 +130,7 @@ const keluarga = {
       name: 'UpdateSuratIzinEkaristi',
       component: importView("Keluarga/KelolaSurat/SuratIzinPelayananEkaristi/Edit")
     },
-    // ===== Surat Izin Pelayanan Ekaristi =====
+    // ===== Surat Baptis Anak =====
     {
       path: 'surat/surat-baptis-anak',
       name: 'ViewSuratBaptisAnak',
@@ -187,6 +187,17 @@ const keluarga = {
       path: 'ketua/surat',
       name: 'KetuaLingkunganSurat',
       component: importView("Keluarga/KetuaLingkungan/Dashboard")
+    },
+    // ===== Surat Izin Pelayanan Ekaristi =====
+    {
+      path: 'ketua/surat/surat-izin-ekaristi',
+      name: 'KetuaViewSuratIzinEkaristi',
+      component: importView("Keluarga/KetuaLingkungan/SuratIzinPelayananEkaristi/ViewAll")
+    },
+    {
+      path: 'ketua/surat/surat-izin-ekaristi/detil/:id',
+      name: 'KetuaViewSuratIzinEkaristiDetail',
+      component: importView("Keluarga/KetuaLingkungan/SuratIzinPelayananEkaristi/Detail")
     },
     // ===== Surat Keterangan Pindah =====
     {

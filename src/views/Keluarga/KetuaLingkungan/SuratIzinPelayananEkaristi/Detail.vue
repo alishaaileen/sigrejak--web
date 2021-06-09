@@ -1,8 +1,8 @@
 <template>
   <div>
-    <btn-kembali path="/keluarga/ketua/surat/surat-keterangan" />
+    <btn-kembali path="/keluarga/ketua/surat/surat-izin-ekaristi" />
     
-    <h1 class="mb-5">Detail Surat Keterangan</h1>
+    <h1 class="mb-5">Detail Surat Izin Pelayanan Ekaristi</h1>
 
     <v-row>
       <v-col>
@@ -46,7 +46,7 @@
           <v-divider></v-divider>
 
           <v-card-text class="pa-6">
-            <h3 class="mb-5">Informasi Surat</h3>
+            <h3 class="mb-5">Informasi Surat Izin</h3>
             <label>No. surat</label>
             <p>{{ data.no_surat }}</p>
 
@@ -55,39 +55,29 @@
 
             <v-divider class="mb-5"></v-divider>
 
-            <h3 class="mb-5">Informasi Umat</h3>
+            <label>Tanggal pelaksanaan • Waktu</label>
+            <p>{{ `${data.tgl_pelaksanaan} • ${data.waktu_mulai.substring(0, 5)} - ${data.waktu_selesai.substring(0, 5)}` }}</p>
 
-            <label>Nama</label>
-            <p>{{ data.nama }}</p>
+            <label>Ujud/intensi</label>
+            <p>{{ data.intensi }}</p>
 
-            <label>Tempat, tanggal lahir</label>
-            <p>{{ `${data.tempat_lahir}, ${data.tgl_lahir}` }}</p>
+            <label>Lingkungan pelaksanaan ekaristi</label>
+            <p>{{ data.nama_lingkungan }}</p>
 
-            <label>Alamat</label>
-            <p>{{ data.alamat }}</p>
+            <label>Alamat lokasi/tempat/rumah</label>
+            <p>{{ data.lokasi_rumah }}</p>
 
-            <label>Pendidikan</label>
-            <p>{{ data.pendidikan }}</p>
+            <label>Nomor telepon rumah/HP</label>
+            <p>{{ data.no_telp_lokasi }}</p>
 
-            <label>Pekerjaan</label>
-            <p>{{ data.pekerjaan }}</p>
+            <label>Dipimpin oleh</label>
+            <p>Romo {{ data.romo_pemimpin }}</p>
 
-            <v-divider class="mb-5"></v-divider>
+            <label>Alamat komunitas</label>
+            <p>{{ data.alamat_komunitas }}</p>
 
-            <h3 class="mb-5">Informasi Orang Tua</h3>
-
-            <label>Nama orang tua</label>
-            <p>{{ data.nama_ortu }}</p>
-
-            <label>Alamat orang tua</label>
-            <p>{{ data.alamat_ortu }}</p>
-
-            <v-divider class="mb-5"></v-divider>
-
-            <h3 class="mb-5">Keperluan</h3>
-
-            <label>Keperluan</label>
-            <p>{{ data.keperluan }}</p>
+            <label>Nomor telepon komunitas</label>
+            <p>{{ data.no_telp_komunitas }}</p>
           </v-card-text>
         </v-card>    
       </v-col>
@@ -97,12 +87,16 @@
 </template>
 
 <script>
-import { getOneData, editData } from '../../../../utils'
+import { getOneData } from '../../../../utils'
+import { verifySurat } from '../../../../utils/pengurus'
 
 export default {
   data: () => ({
-    url: '/surat-keterangan',
-    data: {},
+    url: '/surat-izin-pelayanan-ekaristi',
+    data: {
+      waktu_mulai: '',
+      waktu_selesai: '',
+    },
     textChat: '',
     isAlertOrtuActive: false,
   }),
@@ -116,29 +110,16 @@ export default {
   },
   methods: {
     async verify() {
+      let snackbar
+      
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
-      let snackbar = {}
-
       this.data.ketua_lingkungan_approval = 1
       this.data.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
+      snackbar = await verifySurat(this.url, this.data.id, this.data)
 
-      try {
-        let response = await editData('/surat-keterangan', this.data.id, this.data)
-
-        if (response.status >= 200 && response.status < 300) {
-          snackbar.color = 'success',
-          snackbar.text = 'Surat berhasil diverifikasi!'
-          this.data = await getOneData(`/surat-keterangan/${this.$route.params.id}`)
-        } else {
-          snackbar.color = 'error',
-          snackbar.text = 'Terjadi kesalahan! Mohon coba lagi'
-        }
-      } catch (error) {
-        snackbar.color = 'error',
-        snackbar.text = error
-      }
+      this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
 
       this.$store.dispatch('snackbar/openSnackbar', snackbar)
       this.$store.dispatch('loading/closeLoading')

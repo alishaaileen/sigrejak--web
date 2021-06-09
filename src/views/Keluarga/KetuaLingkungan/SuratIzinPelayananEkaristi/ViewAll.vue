@@ -2,7 +2,7 @@
   <div>
     <btn-kembali path="/keluarga/ketua/surat" />
     
-    <h1>Surat Keterangan</h1>
+    <h1>Surat Izin Pelayanan Ekaristi</h1>
 
     <div class="data-table mt-5">
       <v-card flat>
@@ -48,6 +48,9 @@
           </template>
 
           <!-- TABLE CONTENT -->
+          <template v-slot:[`item.waktu`]="{ item }">
+            {{ `${item.waktu_mulai.substring(0, 5)}-${item.waktu_selesai.substring(0, 5)}` }}
+          </template>
           <template v-slot:[`item.status_ketua_lingkungan`]="{ item }">
             <span v-if="item.ketua_lingkungan_approval === 1" class="d-flex justify-center">
               <v-icon color="green darken-2">far fa-check-circle</v-icon>
@@ -98,7 +101,7 @@ import { getData } from '../../../../utils'
 
 export default {
   data: () => ({
-    url: '/surat-keterangan',
+    url: '/surat-izin-pelayanan-ekaristi',
 		selectedShowData: 'Semua',
     tableLoading: true,
     search: '',
@@ -110,10 +113,13 @@ export default {
         text: 'Tanggal pembuatan', value: 'created_at',
       },
       {
-        text: 'Umat', value: 'nama',
+        text: 'Intensi', value: 'intensi',
       },
       {
-        text: 'Keperluan', value: 'keperluan',
+        text: 'Waktu', value: 'waktu',
+      },
+      {
+        text: 'Lokasi', value: 'lokasi_rumah',
       },
       {
         text: 'K. Lingkungan', value: 'status_ketua_lingkungan', align: 'center', sortable: false
@@ -149,7 +155,7 @@ export default {
   },
   methods: {
     goToDetail(id) {
-      this.$router.push(`surat-keterangan/detil/${id}`)
+      this.$router.push(`surat-izin-ekaristi/detil/${id}`)
     },
   }
 }
