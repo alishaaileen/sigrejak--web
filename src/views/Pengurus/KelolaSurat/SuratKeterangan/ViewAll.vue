@@ -35,7 +35,7 @@
                 </v-col>
                 <v-col cols="4">
                   <v-combobox
-                    v-model="select"
+                    v-model="selectedLingkungan"
                     :items="lingkunganList"
                     item-text="nama_lingkungan"
                     label="Filter lingkungan"
@@ -47,6 +47,7 @@
                     multiple
                     small-chips
                     clearable
+                    deletable-chips
                   ></v-combobox>
                 </v-col>
                 <v-col cols="3">
@@ -149,7 +150,7 @@ export default {
   },
   data: () => ({
     url: '/surat-keterangan',
-    select: [],
+    selectedLingkungan: [],
     selectedShowData: 'Semua',
     tableLoading: true,
     search: '',
@@ -191,11 +192,29 @@ export default {
   computed: {
     suratList() {
       if (this.selectedShowData === 'Semua') {
-        return this.surat.filter(e => e.deleted_at === null && e.ketua_lingkungan_approval === 1)
+        return this.surat.filter(e => {
+          if(this.selectedLingkungan.length === 0) {
+            return e.deleted_at === null && e.ketua_lingkungan_approval === 1
+          } else {
+            return e.deleted_at === null && e.ketua_lingkungan_approval === 1 && this.selectedLingkungan.some(el => el.id === e.id_lingkungan)
+          }
+        })
       } else if (this.selectedShowData === 'Belum diverifikasi') {
-        return this.surat.filter(e => e.deleted_at === null && e.sekretariat_approval === null)
+        return this.surat.filter(e => {
+          if(this.selectedLingkungan.length === 0) {
+            return e.deleted_at === null && e.sekretariat_approval === null
+          } else {
+            return e.deleted_at === null && e.sekretariat_approval === null && this.selectedLingkungan.some(el => el.id === e.id_lingkungan)
+          }
+        })
       } else {
-        return this.surat.filter(e => e.deleted_at === null && e.sekretariat_approval === 1)
+        return this.surat.filter(e => {
+          if(this.selectedLingkungan.length === 0) {
+            return e.deleted_at === null && e.sekretariat_approval === 1
+          } else {
+            return e.deleted_at === null && e.sekretariat_approval === 1 && this.selectedLingkungan.some(el => el.id === e.id_lingkungan)
+          }
+        })
       }
     }
   },
