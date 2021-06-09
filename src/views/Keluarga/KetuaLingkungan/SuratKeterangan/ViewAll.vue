@@ -8,7 +8,7 @@
       <v-card flat>
         <v-data-table
           :headers="headers"
-          :items="suratNotDeleted"
+          :items="suratList"
           :search="search"
           :page.sync="page"
           :items-per-page="selectedJumlahData"
@@ -20,26 +20,30 @@
           <!-- TABLE TOP -->
           <template v-slot:top>
             <v-card-title>
-              <v-text-field
-                v-model="search"
-                prepend-inner-icon="mdi-magnify"
-                label="Cari"
-                single-line
-                hide-details
-                outlined
-                dense
-                background-color="#FAFAFA"
-              ></v-text-field>
-              <!-- <v-btn
-                class="btn text-none ml-4 mt-2"
-                color="blue accent-4"
-                tag="router-link"
-                to="surat-keterangan/tambah"
-                dark
-                depressed
-              >
-                Buat surat
-              </v-btn> -->
+              <v-row dense>
+                <v-col>
+                  <v-text-field
+                    v-model="search"
+                    prepend-inner-icon="mdi-magnify"
+                    label="Cari"
+                    single-line
+                    hide-details
+                    outlined
+                    dense
+                    background-color="#FAFAFA"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="3">
+                  <v-select
+                    v-model="selectedShowData"
+                    :items="[ 'Semua', 'Belum diverifikasi', 'Terverifikasi' ]"
+                    outlined
+                    dense
+                    hide-details
+                    label="Tampil data"
+                  ></v-select>
+                </v-col>
+              </v-row>
             </v-card-title>
           </template>
 
@@ -98,6 +102,7 @@ import { getData } from '../../../../utils'
 export default {
   data: () => ({
     url: '/surat-keterangan',
+		selectedShowData: 'Semua',
     tableLoading: true,
     search: '',
     headers: [
@@ -130,9 +135,15 @@ export default {
     selectedDetail: null,
   }),
   computed: {
-    suratNotDeleted() {
-      return this.surat.filter(e => e.deleted_at === null)
-    }
+    suratList() {
+			if (this.selectedShowData === 'Semua') {
+				return this.surat.filter(e => e.deleted_at === null)
+			} else if (this.selectedShowData === 'Belum diverifikasi') {
+				return this.surat.filter(e => e.deleted_at === null && e.ketua_lingkungan_approval === null)
+			} else {
+				return this.surat.filter(e => e.deleted_at === null && e.ketua_lingkungan_approval === 1)
+			}
+		}
   },
   async mounted() {
     this.tableLoading = true

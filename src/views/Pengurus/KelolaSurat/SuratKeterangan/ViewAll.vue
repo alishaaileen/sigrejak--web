@@ -193,7 +193,7 @@ export default {
 			if (this.selectedShowData === 'Semua') {
 				return this.surat.filter(e => e.deleted_at === null && e.ketua_lingkungan_approval === 1)
 			} else if (this.selectedShowData === 'Belum diverifikasi') {
-				return this.surat.filter(e => e.deleted_at === null && e.sekretariat_approval === 0)
+				return this.surat.filter(e => e.deleted_at === null && e.sekretariat_approval === null)
 			} else {
 				return this.surat.filter(e => e.deleted_at === null && e.sekretariat_approval === 1)
 			}
