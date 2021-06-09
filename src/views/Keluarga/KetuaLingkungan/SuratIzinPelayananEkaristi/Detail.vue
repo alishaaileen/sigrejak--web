@@ -55,6 +55,12 @@
 
             <v-divider class="mb-5"></v-divider>
 
+            <label>Keluarga yang mengajukan</label>
+            <p>{{ `${data.nama_keluarga} (${data.nama_kepala_keluarga})` }}</p>
+
+            <label>Nomor telepon kepala keluarga</label>
+            <p>{{ data.no_telp_kepala_keluarga }}</p>
+
             <label>Tanggal pelaksanaan • Waktu</label>
             <p>{{ `${data.tgl_pelaksanaan} • ${data.waktu_mulai.substring(0, 5)} - ${data.waktu_selesai.substring(0, 5)}` }}</p>
 
