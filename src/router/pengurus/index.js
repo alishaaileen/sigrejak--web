@@ -106,6 +106,17 @@ const pengurus = {
       name: 'AdminViewSurat',
       component: importView("Pengurus/KelolaSurat/index")
     },
+    // ===== Surat Izin Pelayanan Ekaristi =====
+    {
+      path: 'surat/surat-izin-ekaristi',
+      name: 'AdminViewSuratIzinEkaristi',
+      component: importView("Pengurus/KelolaSurat/SuratIzinPelayananEkaristi/ViewAll")
+    },
+    {
+      path: 'surat/surat-keterangan/detil/:id',
+      name: 'AdminViewSuratIzinEkaristiDetail',
+      component: importView("Pengurus/KelolaSurat/SuratIzinPelayananEkaristi/Detail")
+    },
     // ===== Surat Keterangan =====
     {
       path: 'surat/surat-keterangan',

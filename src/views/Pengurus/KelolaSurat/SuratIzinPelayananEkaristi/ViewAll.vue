@@ -2,7 +2,7 @@
   <div>
     <btn-kembali path="/pengurus/surat" />
       
-    <h1>Surat Keterangan</h1>
+    <h1>Surat Izin Pelayanan Ekaristi</h1>
 
     <div class="data-table mt-5">
       <v-card flat>
@@ -65,6 +65,9 @@
           </template>
 
           <!-- TABLE CONTENT -->
+          <template v-slot:[`item.waktu`]="{ item }">
+            {{ `${item.waktu_mulai.substring(0, 5)}-${item.waktu_selesai.substring(0, 5)}` }}
+          </template>
           <template v-slot:[`item.status_sekretariat`]="{ item }">
             <span v-if="item.sekretariat_approval === 1" class="d-flex justify-center">
               <v-icon color="green darken-2">far fa-check-circle</v-icon>
@@ -150,7 +153,7 @@ export default {
     ModalDetail,
   },
   data: () => ({
-    url: '/surat-keterangan',
+    url: '/surat-izin-pelayanan-ekaristi',
     selectedLingkungan: [],
     selectedShowData: 'Semua',
     tableLoading: true,
@@ -163,10 +166,13 @@ export default {
         text: 'Tanggal pembuatan', value: 'created_at',
       },
       {
-        text: 'Umat', value: 'nama',
+        text: 'Intensi', value: 'intensi',
       },
       {
-        text: 'Keperluan', value: 'keperluan',
+        text: 'Waktu', value: 'waktu',
+      },
+      {
+        text: 'Lokasi', value: 'lokasi_rumah',
       },
       {
         text: 'Sekretariat', value: 'status_sekretariat', align: 'center', sortable: false
@@ -185,7 +191,7 @@ export default {
     jumlahData: [10, 30, 50],
     deleteId: null,
     isModalDetailActive: false,
-    selectedDetail: {},
+    selectedDetail: { waktu_mulai: '', waktu_selesai: '' },
     sekretariat: {},
     romoParoki: {},
     lingkunganList: [],
@@ -227,7 +233,7 @@ export default {
   },
   methods: {
     async openModalDetail(data) {
-      this.selectedDetail = data
+      this.selectedDetail = await getOneData(`${this.url}/${data.id}`)
 
       if(data.id_sekretariat != null) {
           this.sekretariat = await getOneData(`/admin/${data.id_sekretariat}`)

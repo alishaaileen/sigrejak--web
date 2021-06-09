@@ -56,7 +56,7 @@
               </v-row>
             </v-card>
 
-            <h2 class="mt-7 mb-3">Informasi Surat</h2>
+            <h2 class="mt-7 mb-3">Informasi Surat Izin</h2>
 
             <label>No. surat</label>
             <p>{{ data.no_surat }}</p>
@@ -64,36 +64,37 @@
             <label>Tanggal surat</label>
             <p>{{ data.created_at }}</p>
 
+            <v-divider class="mb-5"></v-divider>
 
-            <h2 class="mt-7 mb-3">Informasi Umat</h2>
+            <label>Keluarga yang mengajukan</label>
+            <p>{{ `${data.nama_keluarga} (${data.nama_kepala_keluarga})` }}</p>
 
-            <label>Nama</label>
-            <p>{{ data.nama }}</p>
+            <label>Nomor telepon kepala keluarga</label>
+            <p>{{ data.no_telp_kepala_keluarga }}</p>
 
-            <label>Tempat, tanggal lahir</label>
-            <p>{{ `${data.tempat_lahir}, ${data.tgl_lahir}` }}</p>
+            <label>Tanggal pelaksanaan • Waktu</label>
+            <p>{{ `${data.tgl_pelaksanaan} • ${data.waktu_mulai.substring(0, 5)} - ${data.waktu_selesai.substring(0, 5)}` }}</p>
 
-            <label>Alamat</label>
-            <p>{{ data.alamat }}</p>
+            <label>Ujud/intensi</label>
+            <p>{{ data.intensi }}</p>
 
-            <label>Pendidikan</label>
-            <p>{{ data.pendidikan }}</p>
+            <label>Lingkungan pelaksanaan ekaristi</label>
+            <p>{{ data.nama_lingkungan }}</p>
 
-            <label>Pekerjaan</label>
-            <p>{{ data.pekerjaan }}</p>
+            <label>Alamat lokasi/tempat/rumah</label>
+            <p>{{ data.lokasi_rumah }}</p>
 
-            <h2 class="mt-7 mb-3">Informasi Orang tua</h2>
+            <label>Nomor telepon rumah/HP</label>
+            <p>{{ data.no_telp_lokasi }}</p>
 
-            <label>Nama orang tua</label>
-            <p>{{ data.nama_ortu }}</p>
+            <label>Dipimpin oleh</label>
+            <p>Romo {{ data.romo_pemimpin }}</p>
 
-            <label>Alamat orang tua</label>
-            <p>{{ data.alamat_ortu }}</p>
+            <label>Alamat komunitas</label>
+            <p>{{ data.alamat_komunitas }}</p>
 
-            <h2 class="mt-7 mb-3">Keperluan</h2>
-
-            <label>Keperluan</label>
-            <p>{{ data.keperluan }}</p>
+            <label>Nomor telepon komunitas</label>
+            <p>{{ data.no_telp_komunitas }}</p>
 
           </div>
         </v-card-text>
@@ -120,8 +121,8 @@ import { verifySurat } from '../../../../utils/pengurus'
 export default {
   props:{
     isModalDetailActive: Boolean,
-    data: Object,
     url: String,
+    data: Object,
     sekretariat: Object,
     romoParoki: Object,
   },
@@ -136,7 +137,7 @@ export default {
       this.data.sekretariat_approval = 1
       this.data.id_sekretariat = this.$store.state.pengurus.id
       snackbar = await verifySurat(this.url, this.data.id, this.data)
-      
+
       this.$store.dispatch('snackbar/openSnackbar', snackbar)
       this.$store.dispatch('loading/closeLoading')
     },
