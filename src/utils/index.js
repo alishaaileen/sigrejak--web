@@ -80,3 +80,15 @@ export function countAge(tglLahir) {
     }
     return age;
 }
+
+export const cetakSurat = async (endpoint, id) => {
+    let url = `${API_URL}/cetak${endpoint}/${id}`
+
+    try {
+		let response = await axios.get(url)
+
+        return response
+	} catch (error) {
+		return error
+	}
+}

@@ -18,32 +18,26 @@
           <!-- TABLE TOP -->
           <template v-slot:top>
             <v-card-title>
-              <v-row>
-                <v-col>
-                  <v-text-field
-                    v-model="search"
-                    prepend-inner-icon="mdi-magnify"
-                    label="Cari"
-                    single-line
-                    hide-details
-                    outlined
-                    dense
-                    background-color="#FAFAFA"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="3">
-                  <v-btn
-                    class="btn text-none mt-2"
-                    color="blue accent-4"
-                    tag="router-link"
-                    :to="`/pengurus/lingkungan/tambah`"
-                    dark
-                    depressed
-                  >
-                    Tambah lingkungan
-                  </v-btn>
-                </v-col>
-              </v-row>
+              <v-text-field
+                v-model="search"
+                prepend-inner-icon="mdi-magnify"
+                label="Cari"
+                single-line
+                hide-details
+                outlined
+                dense
+                background-color="#FAFAFA"
+              ></v-text-field>
+              <v-btn
+                class="btn text-none ml-4 mt-2"
+                color="blue accent-4"
+                tag="router-link"
+                :to="`/pengurus/lingkungan/tambah`"
+                dark
+                depressed
+              >
+                Tambah lingkungan
+              </v-btn>
             </v-card-title>
           </template>
 

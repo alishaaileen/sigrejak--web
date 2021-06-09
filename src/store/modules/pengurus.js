@@ -47,12 +47,9 @@ const actions = {
         commit('setToken', login.token);
         commit('setStatus', 'success');
     },
-    async checkUserToken({ commit, state }) {
-        const config = { headers: { Authorization: `Bearer ${state.appKey}` } };
-        const bodyParameters = { key: "value" };
-
+    async checkUserToken({ commit }) {
         try {
-            let response = await axios.get(`${API_URL}/check-user`,bodyParameters, config)
+            let response = await axios.get(`${API_URL}/check-user`)
             commit('setData', response.data);
 
             return true
@@ -64,11 +61,9 @@ const actions = {
         }
     },
     async getPengurusProfile({ commit, state }) {
-        const config = { headers: { Authorization: `Bearer ${state.appKey}` } };
-        const bodyParameters = { key: "value" };
-
         try {
-            let response = await axios.get(`${API_URL}/admin/${state.id}`,bodyParameters, config)
+            let response = await axios.get(`${API_URL}/admin/${state.id}`)
+            console.log(response.data.result[0])
             commit('setData', response.data.result[0]);
 
             return true

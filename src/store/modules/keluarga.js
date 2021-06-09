@@ -56,9 +56,6 @@ const actions = {
         commit('setStatus', 'success');
     },
     async checkUserToken({ commit }) {
-        // const config = { headers: { Authorization: `Bearer ${state.appKey}` } };
-        // const bodyParameters = { key: "value" };
-
         try {
             let response = await axios.get(`${API_URL}/check-user`)
             commit('setData', response.data);
@@ -72,9 +69,6 @@ const actions = {
         }
     },
     async getUserProfile({commit, state}) {
-        // const config = { headers: { Authorization: `Bearer ${state.appKey}` } };
-        // const bodyParameters = { key: "value" };
-
         try {
             let response = await axios.get(`${API_URL}/keluarga/${state.id}`)
             commit('setData', response.data.result[0]);

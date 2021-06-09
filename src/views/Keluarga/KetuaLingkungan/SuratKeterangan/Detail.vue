@@ -5,22 +5,42 @@
     <h1 class="mb-5">Detail Surat Keterangan</h1>
 
     <v-row>
-      <v-col cols="7">
+      <v-col>
         <v-card flat>
           <v-card-title>
             <h3>Detail Informasi</h3>
             <v-spacer></v-spacer>
+            <v-btn
+              class="btn text-none mr-3"
+              color="yellow accent-4"
+              dark
+              depressed
+              rounded
+            >
+              <v-icon small>mdi-chat</v-icon>
+              Chat
+            </v-btn>
+
+            <v-btn
+              class="btn text-none"
+              color="blue accent-4"
+              dark
+              rounded
+              depressed
+              v-if="data.ketua_lingkungan_approval === 0"
+              @click="verify"
+            >
+              Verifikasi
+            </v-btn>
             <v-chip
+              v-if="data.ketua_lingkungan_approval === 1"
               :color="data.ketua_lingkungan_approval === 1 ? 'green' : 'grey lighten-2'"
             >
-              <span 
-                v-if="data.ketua_lingkungan_approval === 1"
-                class="color-white"
-              >
+              <span class="color-white">
                 Terverifikasi
               </span>
-              <span v-else>Belum diverifikasi</span>
             </v-chip>
+
           </v-card-title>
 
           <v-divider></v-divider>
@@ -69,27 +89,12 @@
             <label>Keperluan</label>
             <p>{{ data.keperluan }}</p>
           </v-card-text>
-          <v-divider></v-divider>
-          <v-card-action>
-            <div class="px-6 pb-6">
-              <v-btn
-                class="btn text-none mt-2"
-                color="blue accent-4"
-                dark
-                depressed
-                :disabled="isVerifyDisabled"
-                @click="verify"
-              >
-                Verifikasi
-              </v-btn>
-            </div>
-          </v-card-action>
         </v-card>    
       </v-col>
 
 
       <!-- CHAT -->
-      <v-col>
+      <!-- <v-col>
         <v-card flat>
           <v-card-title>
             <h3>Keluarga</h3>
@@ -115,7 +120,7 @@
           <v-card-actions>
           </v-card-actions>
         </v-card>
-      </v-col> 
+      </v-col>  -->
     </v-row>
     <snackbar />
   </div>

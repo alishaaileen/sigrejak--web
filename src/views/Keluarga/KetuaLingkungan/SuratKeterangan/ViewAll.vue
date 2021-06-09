@@ -89,28 +89,13 @@
     </div>
 
     <snackbar></snackbar>
-
-    <!-- <modal-detail
-      :isModalDetailActive="isModalDetailActive"
-      :data="selectedDetail"
-      @closeModal="(_) => { isModalDetailActive = _ }"
-    ></modal-detail> -->
-
-    <confirm-delete-modal
-      @confirmDelete="confirmDeleteData"
-    ></confirm-delete-modal>
   </div>
 </template>
 
 <script>
-import { getData, editData } from '../../../../utils'
-
-// import ModalDetail from './DetailModal'
+import { getData } from '../../../../utils'
 
 export default {
-  // components: {
-  //   ModalDetail,
-  // },
   data: () => ({
     url: '/surat-keterangan',
     tableLoading: true,
@@ -158,39 +143,6 @@ export default {
     goToDetail(id) {
       this.$router.push(`surat-keterangan/detil/${id}`)
     },
-    openConfirmDelete(id) {
-      this.deleteId = id
-      this.$store.dispatch('deleteData/openModal')
-    },
-    async confirmDeleteData(decision) {
-      // Close confirmation modal
-      this.$store.commit('deleteData/resetModal')
-      
-      if (decision) {
-        let snackbar = {}
-
-        // Activate loading overlay
-        this.$store.dispatch('loading/openLoading')
-
-        try {
-          let response = await editData(this.url, this.deleteId)
-          
-          if (response.status === 200) {
-            snackbar.color = 'success'
-            snackbar.text = 'Data berhasil dihapus'
-            this.surat = await getData(`/surat-keterangan/keluarga/${this.$store.state.keluarga.id}`)
-          } else {
-            snackbar.color = 'error'
-            snackbar.text = 'Terjadi kesalahan. Silahkan refresh dan coba lagi'
-          }
-        } catch (error) {
-          snackbar.color = 'error'
-          snackbar.text = error
-        }
-        this.$store.dispatch('snackbar/openSnackbar', snackbar)
-        this.$store.dispatch('loading/closeLoading')
-      }
-    }
   }
 }
 </script>

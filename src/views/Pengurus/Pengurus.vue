@@ -7,7 +7,11 @@
         <v-icon>mdi-bell-outline</v-icon>
       </v-btn> -->
 
-      <chip-account color="" icon="" text="" />
+      <chip-account
+        :color="getColor($store.state.pengurus.role)"
+        :icon="getIcon($store.state.pengurus.role)"
+        :text="getRole($store.state.pengurus.role)"
+      />
 
       <v-menu
         offset-y
@@ -175,13 +179,27 @@ export default {
       ],
     }
   },
-  created() {
+  async created() {
     setAxiosBearerToken()
-
-    this.$store.dispatch('pengurus/checkUserToken')
-    this.$store.dispatch('pengurus/getPengurusProfile')
+    await this.$store.dispatch('pengurus/checkUserToken')
+    await this.$store.dispatch('pengurus/getPengurusProfile')
   },
   methods: {
+    getColor(role) {
+      if (role === 1) return "indigo lighten-1"
+      else if (role === 2) return "lime darken-2"
+      else if (role === 3) return "light-blue"
+    },
+    getIcon(role) {
+      if (role === 1) return "head-outline"
+      else if (role === 2) return "account-cog-outline"
+      else if (role === 3) return "cross-outline"
+    },
+    getRole(role) {
+      if (role === 1) return "Super Admin"
+      else if (role === 2) return "Sekretariat"
+      else if (role === 3) return "Romo"
+    },
     logout() {
       this.$store.dispatch('pengurus/logout')
       this.$router.push('/login-pengurus')

@@ -3,7 +3,7 @@
     <h1>Surat Izin Pelayanan Ekaristi</h1>
 
     <div class="data-table mt-5">
-      <v-card flat class="px-4">
+      <v-card flat>
         <v-data-table
           :headers="headers"
           :items="suratNotDeleted"
@@ -43,7 +43,7 @@
 
           <!-- TABLE CONTENT -->
           <template v-slot:[`item.waktu`]="{ item }">
-            {{ `${item.waktu_mulai}-${item.waktu_selesai}` }}
+            {{ `${item.waktu_mulai.substring(0, 5)}-${item.waktu_selesai.substring(0, 5)}` }}
           </template>
           <template v-slot:[`item.status_ketua_lingkungan`]="{ item }">
             <span v-if="item.ketua_lingkungan_approval === 1">
@@ -148,13 +148,13 @@ export default {
         text: 'Lokasi', value: 'lokasi_rumah',
       },
       {
-        text: 'K. Lingkungan', value: 'status_ketua_lingkungan',
+        text: 'K. Lingkungan', value: 'status_ketua_lingkungan', align: 'center', sortable: false
       },
       {
-        text: 'Sekretariat', value: 'status_sekretariat',
+        text: 'Sekretariat', value: 'status_sekretariat', align: 'center', sortable: false
       },
       {
-        text: 'Romo', value: 'status_romo',
+        text: 'Romo', value: 'status_romo', align: 'center', sortable: false
       },
       {
         text: '', value: 'action',

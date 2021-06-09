@@ -1,5 +1,6 @@
 <template>
   <div>
+    <btn-kembali path="/keluarga/surat" />
     <h1>Surat Keterangan</h1>
 
     <div class="data-table mt-5">
@@ -78,7 +79,13 @@
                   <v-list-item @click="openModalDetail(item)">
                     <v-list-item-title>Detil</v-list-item-title>
                   </v-list-item>
-                  <v-list-item :disabled="item.ketua_lingkungan_approval" @click="openConfirmDelete(item.id)">
+                  <v-list-item
+                    v-if="item.romo_approval === 1"
+                    @click="openConfirmDelete(item.id)"
+                  >
+                    <v-list-item-title>Cetak surat</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item :disabled="item.ketua_lingkungan_approval === 1" @click="openConfirmDelete(item.id)">
                     <v-list-item-title>Hapus</v-list-item-title>
                   </v-list-item>
                 </v-list>

@@ -100,6 +100,23 @@ const pengurus = {
       name: 'DetailLingkungan',
       component: importView("Pengurus/KelolaLingkungan/Detail")
     },
+    // Kelola Surat =========================
+    {
+      path: 'surat',
+      name: 'AdminViewSurat',
+      component: importView("Pengurus/KelolaSurat/index")
+    },
+    // ===== Surat Keterangan =====
+    {
+      path: 'surat/surat-keterangan',
+      name: 'AdminViewSuratKeterangan',
+      component: importView("Pengurus/KelolaSurat/SuratKeterangan/ViewAll")
+    },
+    {
+      path: 'surat/surat-keterangan/detil/:id',
+      name: 'AdminViewSuratKeteranganDetail',
+      component: importView("Pengurus/KelolaSurat/SuratKeterangan/Detail")
+    },
   ]
 }
 
