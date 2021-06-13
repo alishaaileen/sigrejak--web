@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { saveAs } from 'file-saver'
 
 import { API_URL } from '../constants'
 
@@ -85,9 +86,12 @@ export const cetakSurat = async (endpoint, id) => {
     let url = `${API_URL}/cetak${endpoint}/${id}`
 
     try {
-		let response = await axios.get(url)
+		let response = await axios.get(url, {
+            responseType: 'blob',
+        })
 
-        return response
+        await saveAs(response.data, 'surat.pdf')
+
 	} catch (error) {
 		return error
 	}

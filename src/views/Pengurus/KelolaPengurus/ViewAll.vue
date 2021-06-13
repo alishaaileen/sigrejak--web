@@ -112,7 +112,7 @@ export default {
         text: 'Nomor telepon', value: 'no_telp',
       },
       {
-        text: '', value: 'action',
+        text: '', value: 'action', sortable: false,
       },
     ],
     pengurus: [],

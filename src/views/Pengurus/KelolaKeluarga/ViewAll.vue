@@ -111,7 +111,7 @@ export default {
         text: 'E-mail', value: 'email',
       },
       {
-        text: '', value: 'action',
+        text: '', value: 'action', sortable: false,
       },
     ],
     families: [],

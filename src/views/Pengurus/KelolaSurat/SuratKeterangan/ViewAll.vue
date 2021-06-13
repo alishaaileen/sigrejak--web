@@ -260,11 +260,11 @@ export default {
     async cetak(id) {
       this.$store.dispatch('loading/openLoading')
       
-      let data = await cetakSurat(this.url, id)
-
-      console.log(data)
+      let link = await cetakSurat(this.url, id)
       
       this.$store.dispatch('loading/closeLoading')
+
+      window.open(link)
     },
   }
 }

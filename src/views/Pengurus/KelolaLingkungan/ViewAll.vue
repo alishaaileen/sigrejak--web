@@ -101,10 +101,16 @@ export default {
         text: 'Nama lingkungan', value: 'nama_lingkungan',
       },
       {
-        text: 'Ketua lingkungan', value: 'ketua_lingkungan',
+        text: 'Ketua lingkungan', value: 'nama_ketua_lingkungan',
       },
       {
-        text: '', value: 'action',
+        text: 'Nomor HP', value: 'no_hp',
+      },
+      {
+        text: 'E-mail', value: 'email',
+      },
+      {
+        text: '', value: 'action', sortable: false,
       },
     ],
     data: [],
