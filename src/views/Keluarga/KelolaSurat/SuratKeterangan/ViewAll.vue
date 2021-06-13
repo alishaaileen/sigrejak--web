@@ -76,7 +76,7 @@
                   </v-btn>
                 </template>
                 <v-list>
-                  <v-list-item @click="openModalDetail(item)">
+                  <v-list-item @click="goToDetail(item.id)">
                     <v-list-item-title>Detil</v-list-item-title>
                   </v-list-item>
 
@@ -185,18 +185,8 @@ export default {
     this.tableLoading = false
   },
   methods: {
-    async openModalDetail(data) {
-      this.selectedDetail = data
-      this.selectedDetail.isEditable = data.ketua_lingkungan_approval === 1 ? false : true
-
-      if(data.id_sekretariat != null) {
-        this.sekretariat = await getData(`/admin/${data.id_sekretariat}`)
-      }
-      if(data.id_romo != null) {
-        this.romoParoki = await getData(`/admin/${data.id_romo}`)
-      }
-
-      this.isModalDetailActive = true
+    goToDetail(id) {
+      this.$router.push(`/keluarga/surat${this.url}/detil/${id}`)
     },
     openConfirmDelete(id) {
       this.deleteId = id

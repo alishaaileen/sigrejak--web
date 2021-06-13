@@ -78,7 +78,7 @@ const keluarga = {
       component: importView("Keluarga/KelolaSurat/SuratKeteranganPindah/Add")
     },
     {
-      path: 'surat/surat-keterangan-pindah/edit/:id',
+      path: 'surat/surat-keterangan-pindah/detil/:id',
       name: 'UpdateSuratKeteranganPindah',
       component: importView("Keluarga/KelolaSurat/SuratKeteranganPindah/Edit")
     },
@@ -94,7 +94,7 @@ const keluarga = {
       component: importView("Keluarga/KelolaSurat/SuratKeterangan/Add")
     },
     {
-      path: 'surat/surat-keterangan/edit/:id',
+      path: 'surat/surat-keterangan/detil/:id',
       name: 'UpdateSuratKeterangan',
       component: importView("Keluarga/KelolaSurat/SuratKeterangan/Edit")
     },
@@ -110,7 +110,7 @@ const keluarga = {
       component: importView("Keluarga/KelolaSurat/SuratKeteranganBeasiswa/Add")
     },
     {
-      path: 'surat/surat-keterangan-beasiswa/edit/:id',
+      path: 'surat/surat-keterangan-beasiswa/detil/:id',
       name: 'UpdateSuratKeteranganBeasiswa',
       component: importView("Keluarga/KelolaSurat/SuratKeteranganBeasiswa/Edit")
     },
@@ -126,7 +126,7 @@ const keluarga = {
       component: importView("Keluarga/KelolaSurat/SuratIzinPelayananEkaristi/Add")
     },
     {
-      path: 'surat/surat-izin-ekaristi/edit/:id',
+      path: 'surat/surat-izin-ekaristi/detil/:id',
       name: 'UpdateSuratIzinEkaristi',
       component: importView("Keluarga/KelolaSurat/SuratIzinPelayananEkaristi/Edit")
     },
@@ -142,7 +142,7 @@ const keluarga = {
       component: importView("Keluarga/KelolaSurat/SuratBaptisAnak/Add")
     },
     {
-      path: 'surat/surat-baptis-anak/edit/:id',
+      path: 'surat/surat-baptis-anak/detil/:id',
       name: 'UpdateSuratBaptisAnak',
       component: importView("Keluarga/KelolaSurat/SuratBaptisAnak/Edit")
     },
@@ -158,7 +158,7 @@ const keluarga = {
       component: importView("Keluarga/KelolaSurat/SuratPelayananMinyakSuci/Add")
     },
     {
-      path: 'surat/surat-minyak-suci/edit/:id',
+      path: 'surat/surat-minyak-suci/detil/:id',
       name: 'UpdateSuratMinyakSuci',
       component: importView("Keluarga/KelolaSurat/SuratPelayananMinyakSuci/Edit")
     },
@@ -174,7 +174,7 @@ const keluarga = {
       component: importView("Keluarga/KelolaSurat/SuratKeteranganMati/Add")
     },
     {
-      path: 'surat/surat-keterangan-mati/edit/:id',
+      path: 'surat/surat-keterangan-mati/detil/:id',
       name: 'UpdateSuratKeteranganMati',
       component: importView("Keluarga/KelolaSurat/SuratKeteranganMati/Edit")
     },
