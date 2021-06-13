@@ -27,7 +27,7 @@
               dark
               rounded
               depressed
-              v-if="data.ketua_lingkungan_approval === null"
+              v-if="data.ketua_lingkungan_approval === 0"
               @click="verify"
             >
               Verifikasi

@@ -92,25 +92,31 @@ export default {
   },
   methods: {
     async editProfile() {
-      let snackbar ={}
+      this.$store.dispatch('loading/openLoading')
+      this.$store.commit('snackbar/resetSnackbar')
+      let snackbar = {}
       
       try {
         let response = await editData(`/keluarga`, this.$store.state.keluarga.id, this.profile)
         
         if (response.status >= 200 && response.status < 300) {
-          // this.profile = await getData(`/keluarga/${this.$store.state.keluarga.id}`)
-          // this.profile = this.profile[0]
           this.$store.dispatch('keluarga/getUserProfile')
-          console.log(this.$store.state.keluarga)
           snackbar.color = 'success',
           snackbar.text = 'Profile keluarga berhasil diubah!'
-        } else {
-          snackbar.color = 'error',
-          snackbar.text = 'Harap periksa kembali inputan anda'
+        }else {
+          snackbar.color = 'error'
+          snackbar.text = response.data.message
         }
-      }catch(e) {
-        snackbar.color = 'error',
-        snackbar.text = 'Harap periksa kembali inputan anda'
+      }catch(error) {
+        console.log('nahhh')
+        snackbar.color = 'error'
+        if (error.status === 500) {
+          snackbar.text = 'Terjadi kesalahan... harap coba lagi'
+        }
+        else if (error.status === 409) {
+          snackbar.text = error.response.message
+        }
+        console.log(error.response.status)
       }
 
       this.$store.dispatch('snackbar/openSnackbar', snackbar)
