@@ -239,8 +239,8 @@ export default {
       this.isModalDetailActive = true
     },
     async closeModal(modalActive) {
-      this.isModalDetailActive = modalActive
       this.surat = await getData(`${this.url}`)
+      this.isModalDetailActive = modalActive
     },
     async romoVerify(data) {
       let snackbar
