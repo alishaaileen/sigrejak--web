@@ -79,12 +79,14 @@
                   <v-list-item @click="openModalDetail(item)">
                     <v-list-item-title>Detil</v-list-item-title>
                   </v-list-item>
+
                   <v-list-item
-                    v-if="item.romo_approval === 1"
-                    @click="openConfirmDelete(item.id)"
+                    v-if="item.ketua_lingkungan_approval === 1 && item.sekretariat_approval === 1 && item.romo_approval === 1"
+                    @click="cetak(item.id)"
                   >
                     <v-list-item-title>Cetak surat</v-list-item-title>
                   </v-list-item>
+
                   <v-list-item :disabled="item.ketua_lingkungan_approval === 1" @click="openConfirmDelete(item.id)">
                     <v-list-item-title>Hapus</v-list-item-title>
                   </v-list-item>
@@ -126,7 +128,7 @@
 </template>
 
 <script>
-import { getData, deleteData } from '../../../../utils'
+import { getData, deleteData, cetakSurat } from '../../../../utils'
 
 import ModalDetail from './DetailModal'
 
@@ -135,6 +137,7 @@ export default {
     ModalDetail,
   },
   data: () => ({
+    url: '/surat-keterangan',
     tableLoading: true,
     search: '',
     headers: [
@@ -178,7 +181,7 @@ export default {
   },
   async mounted() {
     this.tableLoading = true
-    this.surat = await getData(`/surat-keterangan/keluarga/${this.$store.state.keluarga.id}`)
+    this.surat = await getData(`${this.url}/keluarga/${this.$store.state.keluarga.id}`)
     this.tableLoading = false
   },
   methods: {
@@ -210,12 +213,12 @@ export default {
         this.$store.dispatch('loading/openLoading')
 
         try {
-          let response = await deleteData('/surat-keterangan', this.deleteId)
+          let response = await deleteData(this.url, this.deleteId)
           
           if (response.status === 200) {
             snackbar.color = 'success'
             snackbar.text = 'Data berhasil dihapus'
-            this.surat = await getData(`/surat-keterangan/keluarga/${this.$store.state.keluarga.id}`)
+            this.surat = await getData(`${this.url}/keluarga/${this.$store.state.keluarga.id}`)
           } else {
             snackbar.color = 'error'
             snackbar.text = 'Terjadi kesalahan. Silahkan refresh dan coba lagi'
@@ -227,7 +230,16 @@ export default {
         this.$store.dispatch('snackbar/openSnackbar', snackbar)
         this.$store.dispatch('loading/closeLoading')
       }
-    }
+    },
+    async cetak(id) {
+      this.$store.dispatch('loading/openLoading')
+      
+      let link = await cetakSurat(this.url, id)
+      
+      this.$store.dispatch('loading/closeLoading')
+
+      window.open(link, '_blank')
+    },
   }
 }
 </script>
