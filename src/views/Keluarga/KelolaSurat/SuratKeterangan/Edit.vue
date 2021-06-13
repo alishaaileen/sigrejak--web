@@ -238,6 +238,11 @@ export default {
 
       let snackbar = {}
 
+      if(this.formData.ketua_lingkungan_approval === 1) {
+        alert('tidak bisa edit karna sudah diapprove ketua lingkungan')
+        return
+      }
+
       try {
         let response = await editData('/surat-keterangan', this.formData.id, this.formData)
 
