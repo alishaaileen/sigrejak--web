@@ -46,46 +46,56 @@
           <v-divider></v-divider>
 
           <v-card-text class="pa-6">
-            <h3 class="mb-5">Informasi Surat Izin</h3>
-            <label>No. surat</label>
-            <p>{{ data.no_surat }}</p>
+            <div class="mb-15">
+              <h2 class="mb-5">Informasi Surat</h2>
+              <v-divider class="mb-5"></v-divider>
 
-            <label>Tanggal surat</label>
-            <p>{{ data.created_at }}</p>
+              <label>No. surat</label>
+              <p>{{ data.no_surat }}</p>
 
-            <v-divider class="mb-5"></v-divider>
+              <label>Tanggal surat</label>
+              <p>{{ data.created_at }}</p>
+            </div>
+            <div class="mb-15">
+              <h2 class="mb-5">Informasi Keluarga yang mengajukan</h2>
+              <v-divider class="mb-5"></v-divider>
 
-            <label>Keluarga yang mengajukan</label>
-            <p>{{ `${data.nama_keluarga} (${data.nama_kepala_keluarga})` }}</p>
+              <label>Keluarga yang mengajukan</label>
+              <p>{{ `${data.nama_keluarga} (${data.nama_kepala_keluarga})` }}</p>
 
-            <label>Nomor telepon kepala keluarga</label>
-            <p>{{ data.no_telp_kepala_keluarga }}</p>
+              <label>Nomor telepon kepala keluarga</label>
+              <p>{{ data.no_telp_kepala_keluarga }}</p>
+            </div>
+            <div>
+              <h2 class="mb-5">Informasi Pelaksanaan Ekaristi</h2>
+              <v-divider class="mb-5"></v-divider>
 
-            <label>Tanggal pelaksanaan • Waktu</label>
-            <p>{{ `${data.tgl_pelaksanaan} • ${data.waktu_mulai.substring(0, 5)} - ${data.waktu_selesai.substring(0, 5)}` }}</p>
+              <label>Tanggal pelaksanaan • Waktu</label>
+              <p>{{ `${data.tgl_pelaksanaan} • ${data.waktu_mulai.substring(0, 5)} - ${data.waktu_selesai.substring(0, 5)}` }}</p>
 
-            <label>Ujud/intensi</label>
-            <p>{{ data.intensi }}</p>
+              <label>Ujud/intensi</label>
+              <p>{{ data.intensi }}</p>
 
-            <label>Lingkungan pelaksanaan ekaristi</label>
-            <p>{{ data.nama_lingkungan }}</p>
+              <label>Lingkungan pelaksanaan ekaristi</label>
+              <p>{{ data.nama_lingkungan }}</p>
 
-            <label>Alamat lokasi/tempat/rumah</label>
-            <p>{{ data.lokasi_rumah }}</p>
+              <label>Alamat lokasi/tempat/rumah</label>
+              <p>{{ data.lokasi_rumah }}</p>
 
-            <label>Nomor telepon rumah/HP</label>
-            <p>{{ data.no_telp_lokasi }}</p>
+              <label>Nomor telepon rumah/HP</label>
+              <p>{{ data.no_telp_lokasi }}</p>
 
-            <label>Dipimpin oleh</label>
-            <p>Romo {{ data.romo_pemimpin }}</p>
+              <label>Dipimpin oleh</label>
+              <p>Romo {{ data.romo_pemimpin }}</p>
 
-            <label>Alamat komunitas</label>
-            <p>{{ data.alamat_komunitas }}</p>
+              <label>Alamat komunitas</label>
+              <p>{{ data.alamat_komunitas }}</p>
 
-            <label>Nomor telepon komunitas</label>
-            <p>{{ data.no_telp_komunitas }}</p>
+              <label>Nomor telepon komunitas</label>
+              <p>{{ data.no_telp_komunitas }}</p>
+            </div>
           </v-card-text>
-        </v-card>    
+        </v-card>
       </v-col>
     </v-row>
     <snackbar />

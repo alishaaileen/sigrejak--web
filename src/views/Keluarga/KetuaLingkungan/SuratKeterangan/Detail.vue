@@ -46,48 +46,50 @@
           <v-divider></v-divider>
 
           <v-card-text class="pa-6">
-            <h3 class="mb-5">Informasi Surat</h3>
-            <label>No. surat</label>
-            <p>{{ data.no_surat }}</p>
+            <div class="mb-15">
+              <h2 class="mb-5">Informasi Surat</h2>
+              <v-divider class="mb-5"></v-divider>
 
-            <label>Tanggal surat</label>
-            <p>{{ data.created_at }}</p>
+              <label>No. surat</label>
+              <p>{{ data.no_surat }}</p>
 
+              <label>Tanggal surat</label>
+              <p>{{ data.created_at }}</p>
+
+              <label>Keperluan</label>
+              <p>{{ data.keperluan }}</p>
+            </div>
+
+            <div class="mb-15">
+              <h2 class="mb-5">Informasi Umat</h2>
+
+              <v-divider class="mb-5"></v-divider>
+
+              <label>Nama</label>
+              <p>{{ data.nama }}</p>
+
+              <label>Tempat, tanggal lahir</label>
+              <p>{{ `${data.tempat_lahir}, ${data.tgl_lahir}` }}</p>
+
+              <label>Alamat</label>
+              <p>{{ data.alamat }}</p>
+
+              <label>Pendidikan</label>
+              <p>{{ data.pendidikan }}</p>
+
+              <label>Pekerjaan</label>
+              <p>{{ data.pekerjaan }}</p>
+            </div>
+
+            <h2 class="mb-5">Informasi Orang Tua</h2>
+            
             <v-divider class="mb-5"></v-divider>
-
-            <h3 class="mb-5">Informasi Umat</h3>
-
-            <label>Nama</label>
-            <p>{{ data.nama }}</p>
-
-            <label>Tempat, tanggal lahir</label>
-            <p>{{ `${data.tempat_lahir}, ${data.tgl_lahir}` }}</p>
-
-            <label>Alamat</label>
-            <p>{{ data.alamat }}</p>
-
-            <label>Pendidikan</label>
-            <p>{{ data.pendidikan }}</p>
-
-            <label>Pekerjaan</label>
-            <p>{{ data.pekerjaan }}</p>
-
-            <v-divider class="mb-5"></v-divider>
-
-            <h3 class="mb-5">Informasi Orang Tua</h3>
 
             <label>Nama orang tua</label>
             <p>{{ data.nama_ortu }}</p>
 
             <label>Alamat orang tua</label>
             <p>{{ data.alamat_ortu }}</p>
-
-            <v-divider class="mb-5"></v-divider>
-
-            <h3 class="mb-5">Keperluan</h3>
-
-            <label>Keperluan</label>
-            <p>{{ data.keperluan }}</p>
           </v-card-text>
         </v-card>    
       </v-col>
