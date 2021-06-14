@@ -27,7 +27,7 @@
               dark
               rounded
               depressed
-              v-if="data.ketua_lingkungan_approval === null"
+              v-if="data.ketua_lingkungan_approval === 0"
               @click="verify"
             >
               Verifikasi
@@ -124,6 +124,10 @@ export default {
       this.data.ketua_lingkungan_approval = 1
       this.data.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
       snackbar = await verifySurat(this.url, this.data.id, this.data)
+
+      if (snackbar.color === 'success') {
+        this.$router.push('/keluarga/ketua/surat/surat-izin-ekaristi')
+      }
 
       this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
 

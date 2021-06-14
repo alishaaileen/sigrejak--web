@@ -97,7 +97,8 @@
 </template>
 
 <script>
-import { getOneData, editData } from '../../../../utils'
+import { getOneData } from '../../../../utils'
+import { verifySurat } from '../../../../utils/pengurus'
 
 export default {
   data: () => ({
@@ -116,29 +117,20 @@ export default {
   },
   methods: {
     async verify() {
+      let snackbar
+      
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
-      let snackbar = {}
-
       this.data.ketua_lingkungan_approval = 1
       this.data.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
+      snackbar = await verifySurat(this.url, this.data.id, this.data)
 
-      try {
-        let response = await editData('/surat-keterangan', this.data.id, this.data)
-
-        if (response.status >= 200 && response.status < 300) {
-          snackbar.color = 'success',
-          snackbar.text = 'Surat berhasil diverifikasi!'
-          this.data = await getOneData(`/surat-keterangan/${this.$route.params.id}`)
-        } else {
-          snackbar.color = 'error',
-          snackbar.text = 'Terjadi kesalahan! Mohon coba lagi'
-        }
-      } catch (error) {
-        snackbar.color = 'error',
-        snackbar.text = error
+      if (snackbar.color === 'success') {
+        this.$router.push('/keluarga/ketua/surat/surat-keterangan')
       }
+
+      this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
 
       this.$store.dispatch('snackbar/openSnackbar', snackbar)
       this.$store.dispatch('loading/closeLoading')
