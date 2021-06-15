@@ -248,8 +248,10 @@ export default {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
+      let tempRomoParoki = await getOneData('/admin/role/3')
       data.romo_approval = 1
-      data.id_romo = this.$store.state.pengurus.id
+      data.id_romo = tempRomoParoki.id
+      
       snackbar = await verifySurat(this.url, data.id, data)
 
       this.surat = await getData(`${this.url}`)
