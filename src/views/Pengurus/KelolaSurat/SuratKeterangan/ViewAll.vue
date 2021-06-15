@@ -134,7 +134,8 @@
       :url="url"
       :sekretariat="sekretariat"
       :romoParoki="romoParoki"
-      @closeModal="closeModal"
+      @verify="sekretariatVerify"
+      @closeModal="closeModalDetail"
     ></modal-detail>
   </div>
 </template>
@@ -221,7 +222,7 @@ export default {
   },
   async mounted() {
     this.tableLoading = true
-    this.surat = await getData(`${this.url}`)
+    this.surat = await getData(this.url)
     this.lingkunganList = await getData(`/lingkungan`)
     this.tableLoading = false
   },
@@ -230,17 +231,33 @@ export default {
       this.selectedDetail = data
 
       if(data.id_sekretariat != null) {
-          this.sekretariat = await getOneData(`/admin/${data.id_sekretariat}`)
+        this.sekretariat = await getOneData(`/admin/${data.id_sekretariat}`)
       }
       if(data.id_romo != null) {
-          this.romoParoki = await getOneData(`/admin/${data.id_romo}`)
+        this.romoParoki = await getOneData(`/admin/${data.id_romo}`)
       }
 
       this.isModalDetailActive = true
     },
-    async closeModal(modalActive) {
-      this.surat = await getData(`${this.url}`)
-      this.isModalDetailActive = modalActive
+    async closeModalDetail() {
+      this.isModalDetailActive = false
+    },
+    async sekretariatVerify(dataSurat) {
+      this.$store.dispatch('loading/openLoading')
+      this.$store.commit('snackbar/resetSnackbar')
+
+      let snackbar = {}
+      
+      dataSurat.sekretariat_approval = 1
+      dataSurat.id_sekretariat = this.$store.state.pengurus.id
+      snackbar = await verifySurat(this.url, dataSurat.id, dataSurat)
+      
+      this.surat = await getData(this.url)
+      
+      this.closeModalDetail()
+      
+      this.$store.dispatch('snackbar/openSnackbar', snackbar)
+      this.$store.dispatch('loading/closeLoading')
     },
     async romoVerify(data) {
       let snackbar

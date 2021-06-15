@@ -105,7 +105,7 @@
             rounded
             dark
             :disabled="data.sekretariat_approval === 1"
-            @click="sekretariatVerify(data.id)"
+            @click="sekretariatVerify(data)"
           >
             <div class="ma-4">Verifikasi</div>
           </v-btn>
@@ -116,7 +116,6 @@
 </template>
 
 <script>
-import { verifySurat } from '../../../../utils/pengurus'
 export default {
   props:{
     isModalDetailActive: Boolean,
@@ -126,22 +125,11 @@ export default {
     romoParoki: Object,
   },
   methods: {
-    async sekretariatVerify() {
-      this.$store.dispatch('loading/openLoading')
-      this.$store.commit('snackbar/resetSnackbar')
-
-      this.close()
-      let snackbar = {}
-      
-      this.data.sekretariat_approval = 1
-      this.data.id_sekretariat = this.$store.state.pengurus.id
-      snackbar = await verifySurat(this.url, this.data.id, this.data)
-      
-      this.$store.dispatch('snackbar/openSnackbar', snackbar)
-      this.$store.dispatch('loading/closeLoading')
+    sekretariatVerify(dataSurat) {
+      this.$emit('verify', dataSurat)
     },
     close() {
-      this.$emit('closeModal', false)
+      this.$emit('closeModal')
     },
   }
 
