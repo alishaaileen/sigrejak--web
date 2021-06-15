@@ -1,7 +1,7 @@
 <template>
   <div>
     <!------------- NAVBAR ----------->
-    <v-app-bar color="white" light flat>
+    <v-app-bar color="white" light flat fixed>
       <v-spacer></v-spacer>
 
       <v-chip
@@ -142,7 +142,7 @@
     </v-navigation-drawer>
 
     <div class="app-container pa-10 grey lighten-4">
-      <router-view />
+      <router-view class="pt-15"/>
     </div>
 
     <loading-overlay></loading-overlay>
