@@ -1,5 +1,6 @@
 <template>
   <div>
+    <btn-kembali path="/pengurus/pengurus" />
     <h1>Detail Pengurus</h1>
 
     <div class="form mt-5">
@@ -22,12 +23,7 @@
           ></v-text-field>
 
           <label>Jabatan*</label>
-          <v-select
-            :items="[ 'Sekretariat', 'Romo' ]"
-            v-model="pengurus.role"
-            outlined
-            dense
-          ></v-select>
+          <p>{{ pengurus.role }}</p>
 
           <label>Nomor telepon</label>
           <v-text-field
@@ -72,18 +68,22 @@ export default {
     this.pengurus = await getData(`/admin/${this.$route.params.id}`)
     this.pengurus = this.pengurus[0]
 
-    if (this.pengurus.role === 1) this.pengurus.role = "Super Pengurus";
+    // Ubah Role dari angka jadi kata-kata
+    if (this.pengurus.role === 1) this.pengurus.role = "Super Admin";
     else if (this.pengurus.role === 2) this.pengurus.role = "Sekretariat";
-    else if (this.pengurus.role === 3) this.pengurus.role = "Romo";
+    else if (this.pengurus.role === 3) this.pengurus.role = "Romo Paroki";
+    else if (this.pengurus.role === 4) this.pengurus.role = "Romo";
   },
   methods: {
     async save() {
       this.$store.dispatch('loading/openLoading')
       let snackbar = {}
 
+      // Ubah role kata-kata jadi angka
       if (this.pengurus.role === "Super Admin") this.pengurus.role = 1;
       else if (this.pengurus.role === "Sekretariat") this.pengurus.role = 2;
-      else if (this.pengurus.role === "Romo") this.pengurus.role = 3;
+      else if (this.pengurus.role === "Romo Paroki") this.pengurus.role = 3;
+      else if (this.pengurus.role === "Romo") this.pengurus.role = 4;
 
       try {
         let response = await editData('/admin', this.$route.params.id, this.pengurus)

@@ -94,7 +94,7 @@
                 </template>
                 <v-list>
                   <v-list-item @click="openModalDetail(item)">
-                    <v-list-item-title>Detil</v-list-item-title>
+                    <v-list-item-title>Detail</v-list-item-title>
                   </v-list-item>
                   <v-list-item
                     v-if="item.ketua_lingkungan_approval === 1 && item.sekretariat_approval === 1 && item.romo_approval === null"

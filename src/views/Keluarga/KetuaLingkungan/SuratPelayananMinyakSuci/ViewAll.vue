@@ -69,7 +69,7 @@
                 </template>
                 <v-list>
                   <v-list-item @click="openModalDetail(item)">
-                    <v-list-item-title>Detil</v-list-item-title>
+                    <v-list-item-title>Detail</v-list-item-title>
                   </v-list-item>
                   <v-list-item :disabled="item.ketua_lingkungan_approval" @click="openConfirmDelete(item.id)">
                     <v-list-item-title>Hapus</v-list-item-title>

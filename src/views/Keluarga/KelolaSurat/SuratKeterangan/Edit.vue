@@ -2,7 +2,7 @@
   <div>
     <btn-kembali path="/keluarga/surat/surat-keterangan" />
     
-    <h1>Detil Surat Keterangan</h1>
+    <h1>Detail Surat Keterangan</h1>
 
     <div class="form mt-5">
       <v-card class="mx-auto" flat>

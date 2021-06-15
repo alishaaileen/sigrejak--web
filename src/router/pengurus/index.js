@@ -113,7 +113,7 @@ const pengurus = {
       component: importView("Pengurus/KelolaSurat/SuratIzinPelayananEkaristi/ViewAll")
     },
     {
-      path: 'surat/surat-keterangan/detil/:id',
+      path: 'surat/surat-keterangan/detail/:id',
       name: 'AdminViewSuratIzinEkaristiDetail',
       component: importView("Pengurus/KelolaSurat/SuratIzinPelayananEkaristi/Detail")
     },
@@ -124,7 +124,7 @@ const pengurus = {
       component: importView("Pengurus/KelolaSurat/SuratKeterangan/ViewAll")
     },
     {
-      path: 'surat/surat-keterangan/detil/:id',
+      path: 'surat/surat-keterangan/detail/:id',
       name: 'AdminViewSuratKeteranganDetail',
       component: importView("Pengurus/KelolaSurat/SuratKeterangan/Detail")
     },

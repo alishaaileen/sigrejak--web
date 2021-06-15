@@ -23,7 +23,7 @@
 
           <label>Jabatan*</label>
           <v-select
-            :items="[ 'Sekretariat', 'Romo', 'Super Pengurus' ]"
+            :items="[ 'Sekretariat', 'Romo' ]"
             v-model="formData.role"
             outlined
             dense
@@ -72,9 +72,8 @@ export default {
       this.$store.dispatch('loading/openLoading')
       let snackbar = {}
 
-      if (this.formData.role === "Super Pengurus") this.formData.role = 1;
-      else if (this.formData.role === "Sekretariat") this.formData.role = 2;
-      else if (this.formData.role === "Romo") this.formData.role = 3;
+      if (this.formData.role === "Sekretariat") this.formData.role = 2;
+      else if (this.formData.role === "Romo") this.formData.role = 4;
 
       try {
         let response = await postData('/admin/register', this.formData)
