@@ -256,6 +256,8 @@ export default {
     // Set editable boolean to true if ketua lingkungan have not approved
     this.isEditable = this.formData.ketua_lingkungan_approval === 1 ? false : true
 
+    // Data from backend is in hh:mm:ss format
+    // So, it is trimmed to hh:mm in the code below
     this.waktu.mulai.jam = this.formData.waktu_mulai.substring(0,2)
     this.waktu.mulai.menit = this.formData.waktu_mulai.substring(3,5)
     this.waktu.selesai.jam = this.formData.waktu_selesai.substring(0,2)
