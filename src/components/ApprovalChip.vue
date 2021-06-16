@@ -7,7 +7,7 @@
         v-bind="attrs"
         v-on="on"
       >
-        <v-avatar left v-if="getApprovalBoolean()" class="green lighten-3">
+        <v-avatar left v-if="getApprovalBoolean()" class="green lighten-4">
           <v-icon color="green">mdi-check</v-icon>
         </v-avatar>
         <span :class="getApprovalBoolean() ? 'color-white' : ''">{{ role }}</span>

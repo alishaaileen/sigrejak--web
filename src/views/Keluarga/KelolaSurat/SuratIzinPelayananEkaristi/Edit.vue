@@ -5,150 +5,204 @@
     <h1>Edit Surat Izin Pelayanan Ekaristi</h1>
 
     <div class="form mt-5">
-      <v-card class="pa-6 mx-auto" flat>
-        <v-form @submit.prevent="submit">
-          <label>Tanggal pelaksanaan*</label>
-          <v-menu
-            ref="menu"
-            v-model="isDatePickerActive"
-            :close-on-content-click="false"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
+      <v-card class="mx-auto" flat>
+        <v-card-title>
+          <h3>Detail Informasi</h3>
+          
+          <v-spacer></v-spacer>
+
+          <v-btn
+            class="btn text-none mr-3"
+            color="yellow accent-4"
+            dark
+            depressed
+            rounded
           >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="formData.tgl_pelaksanaan"
-                prepend-inner-icon="mdi-calendar"
-                readonly
-                outlined
-                dense
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="formData.tgl_pelaksanaan"
-              :min="new Date().toISOString().substr(0, 10)"
-              @change="saveDate"
-            ></v-date-picker>
-          </v-menu>
+            <v-icon small>mdi-chat</v-icon>
+            Chat
+          </v-btn>
 
-          <v-row>
-            <v-col>
-              <label>Waktu mulai*</label>
-              <div class="d-flex">
-                <v-select
-                  :items="jam"
-                  v-model="waktu.mulai.jam"
-                  outlined
-                  dense
-                  placeholder="jam"
-                ></v-select>
-                <h3 class="mx-2 py-2">:</h3>
-                <v-select
-                  :items="menit"
-                  v-model="waktu.mulai.menit"
-                  outlined
-                  dense
-                  placeholder="menit"
-                ></v-select>
-              </div>
-            </v-col>
-            <v-col>
-              <label>Waktu selesai*</label>
-              <div class="d-flex">
-                <v-select
-                  :items="jam"
-                  v-model="waktu.selesai.jam"
-                  outlined
-                  dense
-                  placeholder="jam"
-                ></v-select>
-                <h3 class="mx-2 py-2">:</h3>
-                <v-select
-                  :items="menit"
-                  v-model="waktu.selesai.menit"
-                  outlined
-                  dense
-                  placeholder="menit"
-                ></v-select>
-              </div>
-            </v-col>
-          </v-row>
+          <approval-chip
+            :approval="formData.ketua_lingkungan_approval"
+            role="Ketua Lingkungan"
+            :nama="formData.ketua_lingkungan"
+          ></approval-chip>
 
-          <label>Ujud/intensi*</label>
-          <v-textarea
-            v-model="formData.intensi"
-            required
-            outlined
-            dense
-          ></v-textarea>
+          <approval-chip
+            :approval="formData.sekretariat_approval"
+            role="Sekretariat"
+            :nama="sekretariat.nama"
+          ></approval-chip>
 
-          <autocomplete
-            label="Lingkungan pelaksanaan ekaristi*"
-            :value="formData.nama_lingkungan"
-            :suggestionList="lingkunganList"
-            itemText="nama_lingkungan"
-            @changeData="changeIdLingkungan"
-          ></autocomplete>
+          <approval-chip
+            :approval="formData.romo_approval"
+            role="Romo"
+            :nama="romoParoki.nama"
+          ></approval-chip>
+        </v-card-title>
 
-          <label>Alamat lokasi/tempat/rumah*</label>
-          <v-textarea
-            v-model="formData.lokasi_rumah"
-            required
-            outlined
-            dense
-          ></v-textarea>
+        <v-divider></v-divider>
 
-          <label>Nomor telepon rumah/HP*</label>
-          <v-text-field
-            v-model="formData.no_telp_lokasi"
-            required
-            outlined
-            dense
-          ></v-text-field>
-
-          <v-divider class="mb-5"></v-divider>
-
-          <label>Dipimpin oleh*</label>
-          <v-text-field
-            v-model="formData.romo_pemimpin"
-            prefix="Romo"
-            placeholder="nama romo"
-            required
-            outlined
-            dense
-          ></v-text-field>
-
-          <label>Alamat/komunitas*</label>
-          <v-textarea
-            v-model="formData.alamat_komunitas"
-            required
-            outlined
-            dense
-          ></v-textarea>
-
-          <label>Nomor telepon komunitas*</label>
-          <v-text-field
-            v-model="formData.no_telp_komunitas"
-            required
-            outlined
-            dense
-          ></v-text-field>
-
-          <div class="d-flex justify-end">
-            <v-btn
-              class="btn text-none mt-2"
-              type="submit"
-              color="blue accent-4"
-              dark
-              depressed
+        <v-content class="pa-6">
+          <v-form @submit.prevent="submit">
+            <label>Tanggal pelaksanaan*</label>
+            <v-menu
+              :disabled="(!isEditable)"
+              ref="menu"
+              v-model="isDatePickerActive"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
             >
-              Simpan
-            </v-btn>
-          </div>
-        </v-form>
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="formData.tgl_pelaksanaan"
+                  prepend-inner-icon="mdi-calendar"
+                  readonly
+                  :disabled="(!isEditable)"
+                  outlined
+                  dense
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                :disabled="(!isEditable)"
+                v-model="formData.tgl_pelaksanaan"
+                :min="new Date().toISOString().substr(0, 10)"
+                @change="saveDate"
+              ></v-date-picker>
+            </v-menu>
+
+            <v-row>
+              <v-col>
+                <label>Waktu mulai*</label>
+                <div class="d-flex">
+                  <v-select
+                    :disabled="(!isEditable)"
+                    :items="jam"
+                    v-model="waktu.mulai.jam"
+                    outlined
+                    dense
+                    placeholder="jam"
+                  ></v-select>
+                  <h3 class="mx-2 py-2">:</h3>
+                  <v-select
+                    :disabled="(!isEditable)"
+                    :items="menit"
+                    v-model="waktu.mulai.menit"
+                    outlined
+                    dense
+                    placeholder="menit"
+                  ></v-select>
+                </div>
+              </v-col>
+              <v-col>
+                <label>Waktu selesai*</label>
+                <div class="d-flex">
+                  <v-select
+                    :disabled="(!isEditable)"
+                    :items="jam"
+                    v-model="waktu.selesai.jam"
+                    outlined
+                    dense
+                    placeholder="jam"
+                  ></v-select>
+                  <h3 class="mx-2 py-2">:</h3>
+                  <v-select
+                    :disabled="(!isEditable)"
+                    :items="menit"
+                    v-model="waktu.selesai.menit"
+                    outlined
+                    dense
+                    placeholder="menit"
+                  ></v-select>
+                </div>
+              </v-col>
+            </v-row>
+
+            <label>Ujud/intensi*</label>
+            <v-textarea
+              v-model="formData.intensi"
+              :disabled="(!isEditable)"
+              required
+              outlined
+              dense
+            ></v-textarea>
+
+            <autocomplete
+              label="Lingkungan pelaksanaan ekaristi*"
+              :disable="(!isEditable)"
+              :value="formData.nama_lingkungan"
+              :suggestionList="lingkunganList"
+              itemText="nama_lingkungan"
+              @changeData="changeIdLingkungan"
+            ></autocomplete>
+
+            <label>Alamat lokasi/tempat/rumah*</label>
+            <v-textarea
+              v-model="formData.lokasi_rumah"
+              :disabled="(!isEditable)"
+              required
+              outlined
+              dense
+            ></v-textarea>
+
+            <label>Nomor telepon rumah/HP*</label>
+            <v-text-field
+              v-model="formData.no_telp_lokasi"
+              :disabled="(!isEditable)"
+              required
+              outlined
+              dense
+            ></v-text-field>
+
+            <v-divider class="mb-5"></v-divider>
+
+            <label>Dipimpin oleh*</label>
+            <v-text-field
+              v-model="formData.romo_pemimpin"
+              :disabled="(!isEditable)"
+              prefix="Romo"
+              placeholder="nama romo"
+              required
+              outlined
+              dense
+            ></v-text-field>
+
+            <label>Alamat/komunitas*</label>
+            <v-textarea
+              v-model="formData.alamat_komunitas"
+              :disabled="(!isEditable)"
+              required
+              outlined
+              dense
+            ></v-textarea>
+
+            <label>Nomor telepon komunitas*</label>
+            <v-text-field
+              v-model="formData.no_telp_komunitas"
+              :disabled="(!isEditable)"
+              required
+              outlined
+              dense
+            ></v-text-field>
+
+            <div class="d-flex justify-end">
+              <v-btn
+                class="btn text-none mt-2"
+                type="submit"
+                color="blue accent-4"
+                dark
+                depressed
+                :disabled="isSubmitDisabled"
+              >
+                Simpan
+              </v-btn>
+            </div>
+          </v-form>
+        </v-content>
       </v-card>     
     </div>
     <snackbar />
@@ -156,15 +210,18 @@
 </template>
 
 <script>
-import { getData, editData } from '../../../../utils'
+import { getData, getOneData, editData } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
+import ApprovalChip from '../../../../components/ApprovalChip.vue'
 
 export default {
   components: {
     Autocomplete,
+    ApprovalChip,
   },
   data: () => ({
     url: '/surat-izin-pelayanan-ekaristi',
+    isEditable: true,
     isDatePickerActive: false,
     jam: [],
     menit: [],
@@ -173,7 +230,9 @@ export default {
       selesai: { jam: '', menit: '' },
     },
     lingkunganList: [],
-      formData: {},
+    formData: {},
+    sekretariat: { nama: '' },
+    romoParoki: { nama: '' },
   }),
   async mounted() {
     // Inisialisasi array jam
@@ -184,13 +243,28 @@ export default {
     this.lingkunganList = await getData(`/lingkungan`)
     
     // Get data surat
-    this.formData = await getData(`${this.url}/${this.$route.params.id}`)
-    this.formData = this.formData[0]
+    this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
+
+    // Get data sekretariat and romo if surat has been approved
+    if(this.formData.id_sekretariat != null) {
+      this.sekretariat = await getOneData(`/admin/${this.formData.id_sekretariat}`)
+    }
+    if(this.formData.id_romo != null) {
+      this.romoParoki = await getOneData(`/admin/${this.formData.id_romo}`)
+    }
+
+    // Set editable boolean to true if ketua lingkungan have not approved
+    this.isEditable = this.formData.ketua_lingkungan_approval === 1 ? false : true
 
     this.waktu.mulai.jam = this.formData.waktu_mulai.substring(0,2)
     this.waktu.mulai.menit = this.formData.waktu_mulai.substring(3,5)
     this.waktu.selesai.jam = this.formData.waktu_selesai.substring(0,2)
     this.waktu.selesai.menit = this.formData.waktu_selesai.substring(3,5)
+  },
+  computed: {
+    isSubmitDisabled() {
+      return !this.isEditable
+    }
   },
   methods: {
     initWaktu(start, limit) {

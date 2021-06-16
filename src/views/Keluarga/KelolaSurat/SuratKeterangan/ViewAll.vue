@@ -113,14 +113,6 @@
 
     <snackbar></snackbar>
 
-    <modal-detail
-      :isModalDetailActive="isModalDetailActive"
-      :data="selectedDetail"
-      :sekretariat="sekretariat"
-      :romoParoki="romoParoki"
-      @closeModal="(_) => { isModalDetailActive = _ }"
-    ></modal-detail>
-
     <confirm-delete-modal
       @confirmDelete="confirmDeleteData"
     ></confirm-delete-modal>
@@ -130,12 +122,7 @@
 <script>
 import { getData, deleteData, cetakSurat } from '../../../../utils'
 
-import ModalDetail from './DetailModal'
-
 export default {
-  components: {
-    ModalDetail,
-  },
   data: () => ({
     url: '/surat-keterangan',
     tableLoading: true,

@@ -180,6 +180,7 @@ export default {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.formData = await getOneData(`/surat-keterangan/${this.$route.params.id}`)
 
+    // Get data sekretariat and romo if surat has been approved
     if(this.formData.id_sekretariat != null) {
       this.sekretariat = await getOneData(`/admin/${this.formData.id_sekretariat}`)
     }
@@ -187,7 +188,8 @@ export default {
       this.romoParoki = await getOneData(`/admin/${this.formData.id_romo}`)
     }
 
-    this.isEditable = this.formData.ketua_lingkungan_approval ? false : true
+    // Set editable boolean to true if ketua lingkungan have not approved
+    this.isEditable = this.formData.ketua_lingkungan_approval === 1 ? false : true
   },
   computed: {
     isSubmitDisabled() {
