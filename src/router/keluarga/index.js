@@ -233,6 +233,11 @@ const keluarga = {
       name: 'KetuaAddSuratMinyakSuci',
       component: importView("Keluarga/KetuaLingkungan/SuratPelayananMinyakSuci/Add")
     },
+    {
+      path: 'ketua/surat/surat-minyak-suci/detail/:id',
+      name: 'KetuaViewSuratMinyakSuciDetail',
+      component: importView("Keluarga/KetuaLingkungan/SuratPelayananMinyakSuci/Detail")
+    },
   ]
 }
 
