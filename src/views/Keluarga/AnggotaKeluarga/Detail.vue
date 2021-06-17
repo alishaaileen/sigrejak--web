@@ -116,7 +116,7 @@
           </v-icon>
         </v-avatar>
           <span>
-            Hanya data ayah dan ibu yang dapat diubah.
+            Hanya data ayah, ibu, file akta lahir, dan file ktp yang dapat diubah.
             <br>
             Jika data salah, harap hubungi sekretariat
           </span>
@@ -150,32 +150,25 @@
           <label>File akta lahir</label>
           <v-file-input
             style="display: none"
+            show-size
             ref="inputAktaLahir"
-            accept="application/pdf"
+            accept="image/*"
             v-model="detailUmat.file_akta_lahir"
+            @change="previewImage('akta')"
           ></v-file-input>
-          <v-card
-            outlined
-            class="pa-6 my-1"
-            hover
-            @click="selectFile('akta')"
-          >
-            <p class="text-center ma-0">
-              <v-icon large color="blue darken-3" class="mb-3">fas fa-arrow-circle-up</v-icon>
-              <br>
-              {{ detailUmat.file_akta_lahir != null ? `Ubah file` : `Unggah file` }}
-            </p>
-          </v-card>
-          <div v-if="detailUmat.file_akta_lahir != null && detailUmat.file_akta_lahir != ''">
-            <v-chip
-              color="blue darken-2"
-              small
-              @click="openFile(detailUmat.file_akta_lahir)"
+          <div>
+            <v-btn
+              class="text-none"
+              color="blue darken-3"
+              dark
+              depressed
+              @click="selectFile('akta')"
             >
-              <span class="color-white">
-                Klik untuk melihat file
-              </span>
-            </v-chip>
+              Upload file
+            </v-btn>
+          </div>
+          <div class="image-preview" v-if="detailUmat.file_akta_lahir != null">
+            <v-img contain :src="displayGambarAkta"></v-img>
           </div>
         </div>
 
@@ -183,55 +176,36 @@
           <label>File KTP</label>
           <v-file-input
             style="display: none"
+            show-size
             ref="inputKtp"
-            accept="application/pdf"
+            accept="image/*"
             v-model="detailUmat.file_ktp"
+            @change="previewImage($event, 'ktp')"
           ></v-file-input>
-          <v-card
-            outlined
-            class="pa-6 my-1"
-            hover
-            @click="selectFile('ktp')"
-          >
-            <p class="text-center ma-0">
-              <v-icon large color="blue darken-3" class="mb-3">fas fa-arrow-circle-up</v-icon>
-              <br>
-              {{ detailUmat.file_ktp != null ? `Ubah file` : `Unggah file` }}
-            </p>
-          </v-card>
-          <div v-if="detailUmat.file_ktp != null && detailUmat.file_ktp != ''">
-            <v-chip
-              color="blue darken-2"
-              small
-              @click="openFile(detailUmat.file_ktp)"
+          <div>
+            <v-btn
+              class="text-none"
+              color="blue darken-3"
+              dark
+              depressed
+              @click="selectFile('ktp')"
             >
-              <span class="color-white">
-                Klik untuk melihat file
-              </span>
-            </v-chip>
+              Upload file
+            </v-btn>
+          </div>
+          <div class="image-preview" v-if="detailUmat.file_ktp != null">
+            <v-img contain :src="displayGambarKtp"></v-img>
           </div>
         </div>
 
         <label>Tanggal baptis</label>
-        <birth-date-picker
-          :tgl="detailUmat.tgl_baptis"
-          @saveDate="saveDate"
-          :editable="true"
-        ></birth-date-picker>
+        <p>{{ detailUmat.tgl_baptis ? detailUmat.tgl_baptis : '-' }}</p>
 
         <label>Tanggal komuni</label>
-        <birth-date-picker
-          :tgl="detailUmat.tgl_komuni"
-          @saveDate="saveDate"
-          :editable="true"
-        ></birth-date-picker>
+        <p>{{ detailUmat.tgl_komuni ? detailUmat.tgl_komuni : '-' }}</p>
 
         <label>Tanggal penguatan</label>
-        <birth-date-picker
-          :tgl="detailUmat.tgl_penguatan"
-          @saveDate="saveDate"
-          :editable="true"
-        ></birth-date-picker>
+        <p>{{ detailUmat.tgl_penguatan ? detailUmat.tgl_penguatan : '-' }}</p>
         
         <div class="d-flex justify-end">
           <v-btn
@@ -251,7 +225,8 @@
 </template>
 
 <script>
-import { getData, editData } from '../../../utils'
+// import axios from 'axios'
+import { getData, getOneData, editData } from '../../../utils'
 import { API_URL } from '../../../constants'
 
 import BirthDatePicker from '../../../components/BirthDatePicker'
@@ -269,6 +244,9 @@ export default {
     anggotaKeluarga: [],
     namaAyah: '',
     namaIbu: '',
+
+    displayGambarAkta: null,
+    displayGambarKtp: null,
   }),
   computed: {
     keluargaNameList() {
@@ -283,17 +261,18 @@ export default {
     this.lingkunganList = await getData(`/lingkungan`)
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
 
-    this.umat = await getData(`/umat/${this.$route.params.id}`)
-    this.umat = this.umat[0]
-    this.detailUmat = await getData(`/detail-umat/${this.$route.params.id}`)
-    this.detailUmat = this.detailUmat[0]
+    this.umat = await getOneData(`/umat/${this.$route.params.id}`)
+    this.detailUmat = await getOneData(`/detail-umat/${this.$route.params.id}`)
+    
     if(this.detailUmat.id_ayah) this.setNamaAyah()
     if(this.detailUmat.id_ibu) this.setNamaIbu()
+
+    if(this.detailUmat.file_akta_lahir)
+      this.getImage(this.detailUmat.file_akta_lahir, 'akta')
+    if(this.detailUmat.file_ktp)
+      this.getImage(this.detailUmat.file_ktp, 'ktp')
   },
   methods: {
-    openFile(fileName) {
-      window.open(`${API_URL}/${fileName}`, "blank")
-    },
     changeIdLingkungan(e) {
       let temp = this.lingkunganList.find(_ => _.nama_lingkungan == e)
       this.umat.lingkungan_id = temp.id
@@ -305,12 +284,6 @@ export default {
     changeIdIbu(e) {
       let temp = this.anggotaKeluarga.find(_ => _.nama === e)
       this.detailUmat.id_ibu = temp.id
-    },
-    selectFile(file) {
-      if (file === 'akta')
-        this.$refs.inputAktaLahir.$refs.input.click()
-      else if(file === 'ktp')
-        this.$refs.inputKtp.$refs.input.click()
     },
     setNamaAyah() {
       let temp = this.anggotaKeluarga.find(_ => _.id === this.detailUmat.id_ayah)
@@ -325,8 +298,6 @@ export default {
     saveDate(newDate) {
       this.umat.tgl_lahir = newDate
     },
-
-
     async saveUmat() {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
@@ -390,7 +361,64 @@ export default {
 
       this.$store.dispatch('snackbar/openSnackbar', snackbar)
       this.$store.dispatch('loading/closeLoading')
-    }
+    },
+
+
+    async getImage(endpoint, expectedImage) {
+      const url = `${API_URL}/files/${endpoint}`
+      // const res = await axios.get(url, { responseType: "blob", });
+
+      // const displayImage = URL.createObjectURL(res.data);
+      // const fileName =
+      //   expectedImage == "akta"
+      //     ? `${this.detailUmat.file_akta_lahir}`
+      //     : `${this.detailUmat.file_ktp}`;
+      // const imgFile = new File([res.data], fileName, {
+      //   type: "image/*",
+      // });
+      if (expectedImage == "akta") {
+        this.displayGambarAkta = url;
+        // this.displayGambarAkta = displayImage;
+        // this.detailUmat.file_akta_lahir = imgFile;
+      } else {
+        this.displayGambarKtp = url;
+        // this.displayGambarKtp = displayImage;
+        // this.detailUmat.file_ktp = imgFile;
+      }
+    },
+    selectFile(file) {
+      if (file === 'akta')
+        this.$refs.inputAktaLahir.$refs.input.click()
+      else if(file === 'ktp')
+        this.$refs.inputKtp.$refs.input.click()
+    },
+    previewImage(img) {
+      // Reference to the DOM input element
+      let input
+      if (img == "akta") {
+        input = this.detailUmat.file_akta_lahir;
+      } else {
+        input = this.detailUmat.file_ktp;
+      }
+      // Ensure that you have a file before attempting to read it
+      if (input) {
+        // create a new FileReader to read this image and convert to base64 format
+        var reader = new FileReader();
+        reader.readAsDataURL(input);
+        // Define a callback function to run, when FileReader finishes its job
+        reader.onload = (e) => {
+          // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
+          // Read image as base64 and set to imageData
+          if (img == "akta") {
+            this.displayGambarAkta = e.target.result;
+          } else {
+            this.displayGambarKtp = e.target.result;
+          }
+        };
+        // Start the reader job - read file as a data url (base64 format)
+        reader.readAsDataURL(input);
+      }
+    },
   }
 }
 </script>
