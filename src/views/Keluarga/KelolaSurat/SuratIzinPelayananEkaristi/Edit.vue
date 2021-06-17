@@ -2,6 +2,8 @@
   <div>
     <btn-kembali path="/keluarga/surat/surat-izin-ekaristi" />
 
+    <h1>Detail Surat Izin Pelayanan Ekaristi</h1>
+
     <div class="form mt-5">
       <v-card class="mx-auto" flat>
         <v-card-title>

@@ -158,8 +158,6 @@ export default {
     deleteId: null,
     isModalDetailActive: false,
     selectedDetail: {},
-    sekretariat: {},
-    romoParoki: {},
   }),
   computed: {
     suratNotDeleted() {

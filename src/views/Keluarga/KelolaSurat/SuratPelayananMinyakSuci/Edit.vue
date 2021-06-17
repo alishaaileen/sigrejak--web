@@ -2,11 +2,55 @@
   <div>
     <btn-kembali path="/keluarga/surat/surat-minyak-suci" />
 
-    <h1>Edit Surat Pelayanan Minyak Suci</h1>
+    <h1>Detail Surat Pelayanan Minyak Suci</h1>
 
     <div class="form mt-5">
-      <v-card class="pa-6 mx-auto" flat>
-        <v-form @submit.prevent="submit">
+      <v-card class="mx-auto" flat>
+        <v-card-title>
+          <h3>Detail Informasi</h3>
+          
+          <v-spacer></v-spacer>
+
+          <v-btn
+            class="btn text-none mr-3"
+            color="yellow accent-4"
+            dark
+            depressed
+            rounded
+          >
+            <v-icon small>mdi-chat</v-icon>
+            Chat
+          </v-btn>
+
+          <approval-chip
+            :approval="formData.ketua_lingkungan_approval"
+            role="Ketua Lingkungan"
+            :nama="formData.ketua_lingkungan"
+          ></approval-chip>
+
+          <approval-chip
+            :approval="formData.sekretariat_approval"
+            role="Sekretariat"
+            :nama="sekretariat.nama"
+          ></approval-chip>
+
+          <approval-chip
+            :approval="formData.romo_approval"
+            role="Romo"
+            :nama="romoParoki.nama"
+          ></approval-chip>
+        </v-card-title>
+
+        <v-divider></v-divider>
+
+
+        <v-form class="pa-6" @submit.prevent="submit">
+          <v-alert type="info" text icon="fas fa-info-circle">
+            <p class="ma-0">
+              Data dapat diedit jika belum disetujui Ketua Lingkungan
+            </p>
+          </v-alert>
+
           <h3 class="mb-5">Informasi Umat</h3>
 
           <autocomplete
@@ -14,6 +58,7 @@
             :value="formData.nama"
             :suggestionList="anggotaKeluarga"
             itemText="nama"
+            :disable="(!isEditable)"
             @changeData="changeIdUmat"
           ></autocomplete>
 
@@ -55,6 +100,8 @@
             v-model="formData.status_terima_minyak"
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-select>
 
           <div v-show="formData.status_terima_minyak === 'Sudah pernah'">
@@ -66,6 +113,7 @@
               transition="scale-transition"
               offset-y
               min-width="auto"
+              :disabled="(!isEditable)"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
@@ -76,12 +124,15 @@
                   dense
                   v-bind="attrs"
                   v-on="on"
+                  :disabled="(!isEditable)"
                 ></v-text-field>
               </template>
               <v-date-picker
                 v-model="formData.tgl_terima_minyak"
                 :max="new Date().toISOString().substr(0, 10)"
                 @change="saveDate"
+                :disabled="(!isEditable)"
+                :readonly="(!isEditable)"
               ></v-date-picker>
             </v-menu>
           </div>
@@ -97,6 +148,8 @@
             color="primary"
             background-color="white"
             @change="changePasangan"
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-switch>
 
           <div v-if="isPunyaPasangan">
@@ -106,6 +159,8 @@
               required
               outlined
               dense
+              :disabled="(!isEditable)"
+              :readonly="(!isEditable)"
             ></v-text-field>
 
             <label>Cara menikah</label>
@@ -114,6 +169,8 @@
               v-model="formData.cara_menikah"
               outlined
               dense
+              :disabled="(!isEditable)"
+              :readonly="(!isEditable)"
             ></v-select>
 
             <label>Tahun menikah</label>
@@ -123,6 +180,8 @@
               clearable
               outlined
               dense
+              :disabled="(!isEditable)"
+              :readonly="(!isEditable)"
             ></v-select>
           </div>
 
@@ -136,6 +195,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-text-field>
 
           <label>Alamat*</label>
@@ -144,6 +205,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-textarea>
 
           <label>Nomor telepon*</label>
@@ -152,6 +215,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -164,16 +229,16 @@
             :suggestionList="pastorList"
             itemText="nama"
             @changeData="changeIdPastor"
+            :disable="(!isEditable)"
           ></autocomplete>
 
           <div class="d-flex justify-end">
             <v-btn
-              class="btn text-none mt-2"
+              class="btn text-none"
               type="submit"
               color="blue accent-4"
               dark
               depressed
-              :disabled="isSubmitDisabled"
             >
               Simpan
             </v-btn>
@@ -186,16 +251,19 @@
 </template>
 
 <script>
-import { getData, editData } from '../../../../utils'
+import { getData, getOneData, editData } from '../../../../utils'
 import { caraMenikahList } from '../../../../constants'
 import Autocomplete from '../../../../components/Autocomplete'
+import ApprovalChip from '../../../../components/ApprovalChip.vue'
 
 export default {
   components: {
     Autocomplete,
+    ApprovalChip
   },
   data: () => ({
     url: '/surat-pelayanan-minyak-suci',
+    isEditable: false,
     isDatePickerActive: false,
     isPunyaPasangan: true,
     caraMenikahList,
@@ -204,16 +272,30 @@ export default {
     },
     anggotaKeluarga: [],
     pastorList: [],
+    sekretariat: { nama: '' },
+    romoParoki: { nama: '' },
   }),
   async mounted() {
     this.initTahun()
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.pastorList = await getData(`/admin/role/3`)
-    this.formData = await getData(`${this.url}/${this.$route.params.id}`)
-    this.formData = this.formData[0]
+    this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
+
+    // Get data sekretariat and romo if surat has been approved
+    if(this.formData.id_sekretariat != null) {
+      this.sekretariat = await getOneData(`/admin/${this.formData.id_sekretariat}`)
+    }
+    if(this.formData.id_romo != null) {
+      this.romoParoki = await getOneData(`/admin/${this.formData.id_romo}`)
+    }
 
     if(this.formData.nama_pasangan === null) {
       this.isPunyaPasangan = false
+    }
+  },
+  computed: {
+    isSubmitDisabled() {
+      return !this.isEditable
     }
   },
   methods: {

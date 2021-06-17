@@ -44,6 +44,13 @@
         <v-divider></v-divider>
 
         <v-content class="pa-6">
+
+          <v-alert type="info" text icon="fas fa-info-circle">
+            <p class="ma-0">
+              Data dapat diedit jika belum disetujui Ketua Lingkungan
+            </p>
+          </v-alert>
+          
           <h3 class="mb-5">Informasi Surat</h3>
 
           <label>Nomor surat</label>
@@ -53,18 +60,6 @@
           <p>{{ formData.created_at }}</p>
 
           <v-divider class="mb-5"></v-divider>
-
-          <v-alert
-            type="info"
-            color="blue accent-2"
-            elevation="0"
-            icon="fas fa-info-circle"
-            text
-          >
-            <span>
-              Data dapat diedit jika belum disetujui Ketua Lingkungan
-            </span>
-          </v-alert>
 
           <v-form @submit.prevent="submit">
             <h3 class="mb-5">Informasi Umat</h3>
