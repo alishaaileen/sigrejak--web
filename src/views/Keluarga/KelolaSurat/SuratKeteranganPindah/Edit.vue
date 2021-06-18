@@ -5,8 +5,51 @@
     <h1>Edit Surat Keterangan Pindah</h1>
 
     <div class="form mt-5">
-      <v-card class="pa-6 mx-auto" flat>
-        <v-form @submit.prevent="submit">
+      <v-card class="mx-auto" flat>
+        <v-card-title>
+          <h3>Detail Informasi</h3>
+          
+          <v-spacer></v-spacer>
+
+          <v-btn
+            class="btn text-none mr-3"
+            color="yellow accent-4"
+            dark
+            depressed
+            rounded
+          >
+            <v-icon small>mdi-chat</v-icon>
+            Chat
+          </v-btn>
+
+          <approval-chip
+            :approval="formData.ketua_lingkungan_approval"
+            role="Ketua Lingkungan"
+            :nama="formData.ketua_lingkungan"
+          ></approval-chip>
+
+          <approval-chip
+            :approval="formData.sekretariat_approval"
+            role="Sekretariat"
+            :nama="sekretariat.nama"
+          ></approval-chip>
+
+          <approval-chip
+            :approval="formData.romo_approval"
+            role="Romo"
+            :nama="romoParoki.nama"
+          ></approval-chip>
+        </v-card-title>
+
+        <v-divider></v-divider>
+
+        <v-form class="pa-6" @submit.prevent="submit">
+          <v-alert type="info" text icon="fas fa-info-circle">
+            <p class="ma-0">
+              Data dapat diedit jika belum disetujui Ketua Lingkungan
+            </p>
+          </v-alert>
+
           <h3 class="mb-5">Informasi Umat</h3>
 
           <autocomplete
@@ -14,65 +57,31 @@
             :value="formData.nama"
             :suggestionList="anggotaKeluarga"
             itemText="nama"
+            :disable="(!isEditable)"
             @changeData="changeIdUmat"
           ></autocomplete>
 
           <label>Tempat lahir</label>
-          <v-text-field
-            v-model="formData.tempat_lahir"
-            required
-            outlined
-            dense
-            readonly
-            disabled
-          ></v-text-field>
+          <p>{{ formData.tempat_lahir }}</p>
 
           <label>Tanggal lahir</label>
-          <v-text-field
-            v-model="formData.tgl_lahir"
-            required
-            outlined
-            dense
-            readonly
-            disabled
-          ></v-text-field>
+          <p>{{ formData.tgl_lahir }}</p>
 
           <v-divider class="mb-5"></v-divider>
 
           <h3 class="mb-5">Tempat Tinggal Lama</h3>
 
           <label>Alamat lama</label>
-          <v-text-field
-            v-model="formData.alamat_lama"
-            required
-            outlined
-            dense
-            readonly
-            disabled
-          ></v-text-field>
+          <p>{{ formData.alamat_lama }}</p>
 
           <v-row>
             <v-col>
               <label>Paroki lama</label>
-              <v-text-field
-                v-model="formData.paroki_lama"
-                required
-                outlined
-                dense
-                readonly
-                disabled
-              ></v-text-field>
+              <p>{{ formData.paroki_lama }}</p>
             </v-col>
             <v-col>
               <label>Lingkungan lama</label>
-              <v-text-field
-                v-model="formData.nama_lingkungan_lama"
-                required
-                outlined
-                dense
-                readonly
-                disabled
-              ></v-text-field>
+              <p>{{ formData.nama_lingkungan_lama }}</p>
             </v-col>
           </v-row>
 
@@ -86,10 +95,12 @@
             <v-col cols="6">
               <v-switch
                 v-model="isNotKumetiran"
-                label="Pindah ke paroki lain"
+                :label="isNotKumetiran ? 'Pindah ke paroki lain' : 'Pindah lingkungan saja (tetap di Kumetiran)'"
                 color="primary"
                 background-color="white"
                 @change="switchParoki"
+                :disabled="(!isEditable)"
+                :readonly="(!isEditable)"
               ></v-switch>
             </v-col>
           </v-row>
@@ -102,11 +113,13 @@
             transition="scale-transition"
             offset-y
             min-width="auto"
+            :disabled="(!isEditable)"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="formData.tgl_mulai_domisili"
                 prepend-inner-icon="mdi-calendar"
+                :disabled="(!isEditable)"
                 readonly
                 outlined
                 dense
@@ -118,6 +131,8 @@
               v-model="formData.tgl_mulai_domisili"
               :min="new Date().toISOString().substr(0, 10)"
               @change="saveDate"
+              :disabled="(!isEditable)"
+              :readonly="(!isEditable)"
             ></v-date-picker>
           </v-menu>
 
@@ -129,7 +144,7 @@
                 required
                 outlined
                 dense
-                :readonly="!isNotKumetiran"
+                :readonly="!isNotKumetiran || (!isEditable)"
                 :disabled="!isNotKumetiran"
               ></v-text-field>
             </v-col>
@@ -142,6 +157,7 @@
                 :suggestionList="lingkunganList"
                 itemText="nama_lingkungan"
                 @changeData="changeIdLingkungan"
+                :disable="(!isEditable)"
               ></autocomplete>
               <div v-else>
                 <label>Lingkungan baru*</label>
@@ -150,6 +166,8 @@
                   required
                   outlined
                   dense
+                  :disabled="(!isEditable)"
+                  :readonly="(!isEditable)"
                 ></v-text-field>
               </div>
             </v-col>
@@ -161,6 +179,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-text-field>
 
           <label>Nomor telepon baru*</label>
@@ -169,6 +189,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-text-field>
 
           <div class="d-flex justify-end">
@@ -178,6 +200,7 @@
               color="blue accent-4"
               dark
               depressed
+              :disabled="isSubmitDisabled"
             >
               Simpan
             </v-btn>
@@ -190,54 +213,55 @@
 </template>
 
 <script>
-import { getData, editData } from '../../../../utils'
+import { getData, getOneData, editData } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
+import ApprovalChip from '../../../../components/ApprovalChip.vue'
 
 export default {
   components: {
     Autocomplete,
+    ApprovalChip,
   },
   data: () => ({
     formData: {
-      id_lingkungan: null,
-      ketua_lingkungan: null,
-      id_keluarga: null,
-      id_umat: null,
       paroki_lama: 'Kumetiran',
-      nama: '',
-      tempat_lahir: '',
-      tgl_lahir: null,
-
-      alamat_lama: '',
-      id_lingkungan_lama: null,
-      lingkungan_lama: '',
-      no_telp_lama: '',
-      
-      tgl_mulai_domisili: null,
-      alamat_baru: '',
-      nama_lingkungan_baru: '',
-      no_telp_baru: '',
-      id_lingkungan_baru: null,
       paroki_baru: 'Kumetiran',
-      ketua_lingkungan_approval: 0,
     },
+    isEditable: false,
     isNotKumetiran: false,
     anggotaKeluarga: [],
     parokiList: [],
     lingkunganList: [],
     umat: {},
     isDatePickerActive: false,
+    sekretariat: { nama: '' },
+    romoParoki: { nama: '' },
   }),
+  computed: {
+    isSubmitDisabled() {
+      return !this.isEditable
+    }
+  },
   async mounted() {
     this.lingkunganList = await getData(`/lingkungan`)
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     
     // Get data surat
-    this.formData = await getData(`/surat-keterangan-pindah/${this.$route.params.id}`)
-    this.formData = this.formData[0]
+    this.formData = await getOneData(`/surat-keterangan-pindah/${this.$route.params.id}`)
 
     // Mengaktifkan switch jika umat pindah ke paroki baru
     this.isNotKumetiran = this.formData.paroki_baru != 'Kumetiran' ? true : false
+
+    // Get data sekretariat and romo if surat has been approved
+    if(this.formData.id_sekretariat != null) {
+      this.sekretariat = await getOneData(`/admin/${this.formData.id_sekretariat}`)
+    }
+    if(this.formData.id_romo != null) {
+      this.romoParoki = await getOneData(`/admin/${this.formData.id_romo}`)
+    }
+
+    // Set editable boolean to true if ketua lingkungan have not approved
+    this.isEditable = this.formData.ketua_lingkungan_approval === 1 ? false : true
   },
   methods: {
     saveDate (date) {

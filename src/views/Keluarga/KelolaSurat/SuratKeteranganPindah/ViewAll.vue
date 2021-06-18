@@ -75,7 +75,7 @@
                   </v-btn>
                 </template>
                 <v-list>
-                  <v-list-item @click="openModalDetail(item)">
+                  <v-list-item @click="goToDetail(item.id)">
                     <v-list-item-title>Detail</v-list-item-title>
                   </v-list-item>
                   <v-list-item :disabled="item.ketua_lingkungan_approval === 1" @click="openConfirmDelete(item.id)">
@@ -126,6 +126,7 @@ export default {
     ModalDetail,
   },
   data: () => ({
+    url: '/surat-keterangan-pindah',
     tableLoading: true,
     search: '',
     headers: [
@@ -169,18 +170,8 @@ export default {
     this.tableLoading = false
   },
   methods: {
-    async openModalDetail(data) {
-      this.selectedDetail = data
-      this.selectedDetail.isEditable = data.ketua_lingkungan_approval === 1 ? false : true
-
-      if(data.id_sekretariat != null) {
-        this.sekretariat = await getData(`/admin/${data.id_sekretariat}`)
-      }
-      if(data.id_romo != null) {
-        this.romoParoki = await getData(`/admin/${data.id_romo}`)
-      }
-      
-      this.isModalDetailActive = true
+    goToDetail(id) {
+      this.$router.push(`/keluarga/surat${this.url}/detail/${id}`)
     },
     openConfirmDelete(id) {
       this.deleteId = id
@@ -197,7 +188,7 @@ export default {
         this.$store.dispatch('loading/openLoading')
 
         try {
-          let response = await deleteData('/surat-keterangan-pindah', this.deleteId)
+          let response = await deleteData(this.url, this.deleteId)
           
           if (response.status === 200) {
             snackbar.color = 'success'
