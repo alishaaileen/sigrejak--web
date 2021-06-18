@@ -97,12 +97,6 @@
 
     <snackbar></snackbar>
 
-    <!-- <modal-detail
-      :isModalDetailActive="isModalDetailActive"
-      :data="selectedDetail"
-      @closeModal="(_) => { isModalDetailActive = _ }"
-    ></modal-detail> -->
-
     <confirm-delete-modal
       @confirmDelete="confirmDeleteData"
     ></confirm-delete-modal>
@@ -112,12 +106,7 @@
 <script>
 import { getData, editData } from '../../../../utils'
 
-// import ModalDetail from './DetailModal'
-
 export default {
-  // components: {
-  //   ModalDetail,
-  // },
   data: () => ({
     url: '/surat-pelayanan-minyak-suci',
     tableLoading: true,

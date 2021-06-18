@@ -112,21 +112,17 @@ const pengurus = {
       name: 'AdminViewSuratIzinEkaristi',
       component: importView("Pengurus/KelolaSurat/SuratIzinPelayananEkaristi/ViewAll")
     },
-    {
-      path: 'surat/surat-keterangan/detail/:id',
-      name: 'AdminViewSuratIzinEkaristiDetail',
-      component: importView("Pengurus/KelolaSurat/SuratIzinPelayananEkaristi/Detail")
-    },
     // ===== Surat Keterangan =====
     {
       path: 'surat/surat-keterangan',
       name: 'AdminViewSuratKeterangan',
       component: importView("Pengurus/KelolaSurat/SuratKeterangan/ViewAll")
     },
+    // ===== Surat Pelayanan Minyak Suci =====
     {
-      path: 'surat/surat-keterangan/detail/:id',
-      name: 'AdminViewSuratKeteranganDetail',
-      component: importView("Pengurus/KelolaSurat/SuratKeterangan/Detail")
+      path: 'surat/surat-minyak-suci',
+      name: 'AdminViewSuratKeterangan',
+      component: importView("Pengurus/KelolaSurat/SuratPelayananMinyakSuci/ViewAll")
     },
   ]
 }
