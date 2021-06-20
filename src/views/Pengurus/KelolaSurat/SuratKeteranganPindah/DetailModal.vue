@@ -76,6 +76,9 @@
             
             <h2 class="mt-15 mb-5">Tempat Tinggal Lama</h2>
 
+            <label>Tanggal pertama kali tinggal di domisili lama</label>
+            <p>{{ data.tgl_domisili_lama }}</p>
+
             <label>Alamat lama</label>
             <p>{{ data.alamat_lama }}</p>
 
@@ -88,7 +91,7 @@
 
             <h2 class="mt-15 mb-5">Tempat Tinggal Baru</h2>
 
-            <label>Tanggal mulai domisili</label>
+            <label>Tanggal mulai domisili baru</label>
             <p>{{ data.tgl_domisili_baru }}</p>
 
             <label>Paroki baru</label>
