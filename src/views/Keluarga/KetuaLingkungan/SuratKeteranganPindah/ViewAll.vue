@@ -107,13 +107,13 @@ export default {
         text: 'No. surat', value: 'no_surat',
       },
       {
-        text: 'Tanggal pembuatan', value: 'created_at',
+        text: 'Tgl surat', value: 'created_at',
       },
       {
         text: 'Umat', value: 'nama',
       },
       {
-        text: 'Tanggal mulai domisili', value: 'tgl_mulai_domisili',
+        text: 'Tanggal mulai domisili', value: 'tgl_domisili_baru',
       },
       {
         text: 'K. Lingkungan', value: 'status_ketua_lingkungan', align: 'center', sortable: false

@@ -56,7 +56,7 @@
               </v-row>
             </v-card>
 
-            <h2 class="mt-7 mb-3">Informasi Surat</h2>
+            <h2 class="mt-7 mb-5">Informasi Surat</h2>
 
             <label>No. surat</label>
             <p>{{ data.no_surat }}</p>
@@ -65,7 +65,7 @@
             <p>{{ data.created_at }}</p>
 
 
-            <h2 class="mt-7 mb-3">Informasi Umat</h2>
+            <h2 class="mt-15 mb-5">Informasi Umat</h2>
 
             <label>Nama</label>
             <p>{{ data.nama }}</p>
@@ -82,7 +82,7 @@
             <label>Pekerjaan</label>
             <p>{{ data.pekerjaan }}</p>
 
-            <h2 class="mt-7 mb-3">Informasi Orang tua</h2>
+            <h2 class="mt-15 mb-5">Informasi Orang tua</h2>
 
             <label>Nama orang tua</label>
             <p>{{ data.nama_ortu }}</p>
@@ -90,7 +90,7 @@
             <label>Alamat orang tua</label>
             <p>{{ data.alamat_ortu }}</p>
 
-            <h2 class="mt-7 mb-3">Keperluan</h2>
+            <h2 class="mt-15 mb-5">Keperluan</h2>
 
             <label>Keperluan</label>
             <p>{{ data.keperluan }}</p>

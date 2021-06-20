@@ -56,7 +56,7 @@
               </v-row>
             </v-card>
 
-            <h2 class="mt-7 mb-3">Informasi Surat</h2>
+            <h2 class="mt-7 mb-5">Informasi Surat</h2>
 
             <label>No. surat</label>
             <p>{{ data.no_surat }}</p>
@@ -65,7 +65,7 @@
             <p>{{ data.created_at }}</p>
 
 
-            <h2 class="mt-7 mb-3">Informasi Siswa</h2>
+            <h2 class="mt-15 mb-5">Informasi Siswa</h2>
 
             <label>Nama</label>
             <p>{{ data.nama }}</p>
@@ -82,7 +82,7 @@
             <label>Sekolah/Kelas</label>
             <p>{{ `${data.sekolah}/${data.kelas}` }}</p>
 
-            <h2 class="mt-7 mb-3">Informasi Orang tua</h2>
+            <h2 class="mt-15 mb-5">Informasi Orang tua</h2>
 
             <label>Nama orang tua</label>
             <p>{{ data.nama_ortu }}</p>

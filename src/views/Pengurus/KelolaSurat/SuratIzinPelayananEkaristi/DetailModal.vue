@@ -56,7 +56,7 @@
               </v-row>
             </v-card>
 
-            <h2 class="mt-7 mb-3">Informasi Surat Izin</h2>
+            <h2 class="mt-15 mb-5">Informasi Surat Izin</h2>
 
             <label>No. surat</label>
             <p>{{ data.no_surat }}</p>

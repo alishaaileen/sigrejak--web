@@ -71,19 +71,45 @@
 
           <h3 class="mb-5">Tempat Tinggal Lama</h3>
 
+          <label>Tanggal pertama kali tinggal di domisili lama*</label>
+          <v-menu
+            ref="menu"
+            v-model="isDatePickerActive"
+            :close-on-content-click="false"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+            :disabled="(!isEditable)"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="formData.tgl_domisili_lama"
+                prepend-inner-icon="mdi-calendar"
+                :disabled="(!isEditable)"
+                readonly
+                outlined
+                dense
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="formData.tgl_domisili_lama"
+              :min="new Date().toISOString().substr(0, 10)"
+              @change="saveDate"
+              :disabled="(!isEditable)"
+              :readonly="(!isEditable)"
+            ></v-date-picker>
+          </v-menu>
+
           <label>Alamat lama</label>
           <p>{{ formData.alamat_lama }}</p>
 
-          <v-row>
-            <v-col>
-              <label>Paroki lama</label>
-              <p>{{ formData.paroki_lama }}</p>
-            </v-col>
-            <v-col>
-              <label>Lingkungan lama</label>
-              <p>{{ formData.nama_lingkungan_lama }}</p>
-            </v-col>
-          </v-row>
+          <label>Paroki lama</label>
+          <p>{{ formData.paroki_lama }}</p>
+
+          <label>Lingkungan lama</label>
+          <p>{{ formData.nama_lingkungan_lama }}</p>
 
           <v-divider class="mb-5"></v-divider>
 
@@ -105,7 +131,7 @@
             </v-col>
           </v-row>
           
-          <label>Tanggal mulai domisili*</label>
+          <label>Tanggal mulai domisili baru*</label>
           <v-menu
             ref="menu"
             v-model="isDatePickerActive"
@@ -117,7 +143,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
-                v-model="formData.tgl_mulai_domisili"
+                v-model="formData.tgl_domisili_baru"
                 prepend-inner-icon="mdi-calendar"
                 :disabled="(!isEditable)"
                 readonly
@@ -128,7 +154,7 @@
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="formData.tgl_mulai_domisili"
+              v-model="formData.tgl_domisili_baru"
               :min="new Date().toISOString().substr(0, 10)"
               @change="saveDate"
               :disabled="(!isEditable)"

@@ -161,7 +161,7 @@ export default {
         text: 'No. surat', value: 'no_surat',
       },
       {
-        text: 'Tanggal pembuatan', value: 'created_at',
+        text: 'Tgl surat', value: 'created_at',
       },
       {
         text: 'Nama', value: 'nama',

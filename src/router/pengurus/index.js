@@ -124,6 +124,12 @@ const pengurus = {
       name: 'AdminViewSuratKeterangan',
       component: importView("Pengurus/KelolaSurat/SuratPelayananMinyakSuci/ViewAll")
     },
+    // ===== Surat Keterangan Pindah =====
+    {
+      path: 'surat/surat-keterangan-pindah',
+      name: 'AdminViewSuratKeteranganPindah',
+      component: importView("Pengurus/KelolaSurat/SuratKeteranganPindah/ViewAll")
+    },
   ]
 }
 

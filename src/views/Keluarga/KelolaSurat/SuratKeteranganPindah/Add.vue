@@ -17,63 +17,49 @@
           ></autocomplete>
 
           <label>Tempat lahir</label>
-          <v-text-field
-            v-model="formData.tempat_lahir"
-            required
-            outlined
-            dense
-            readonly
-            disabled
-          ></v-text-field>
+          <p>{{ formData.tempat_lahir }}</p>
 
           <label>Tanggal lahir</label>
-          <v-text-field
-            v-model="formData.tgl_lahir"
-            required
-            outlined
-            dense
-            readonly
-            disabled
-          ></v-text-field>
+          <p>{{ formData.tgl_lahir }}</p>
 
           <v-divider class="mb-5"></v-divider>
 
           <h3 class="mb-5">Tempat Tinggal Lama</h3>
 
-          <label>Alamat lama</label>
-          <v-text-field
-            v-model="formData.alamat_lama"
-            required
-            outlined
-            dense
-            readonly
-            disabled
-          ></v-text-field>
+          <label>Tanggal pertama kali tinggal di domisili lama*</label>
+          <v-menu
+            ref="menu"
+            v-model="isDatePickerTglLamaActive"
+            :close-on-content-click="false"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="formData.tgl_domisili_lama"
+                prepend-inner-icon="mdi-calendar"
+                readonly
+                outlined
+                dense
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="formData.tgl_domisili_lama"
+              @change="saveDate"
+            ></v-date-picker>
+          </v-menu>
 
-          <v-row>
-            <v-col>
-              <label>Paroki lama</label>
-              <v-text-field
-                v-model="formData.paroki_lama"
-                required
-                outlined
-                dense
-                readonly
-                disabled
-              ></v-text-field>
-            </v-col>
-            <v-col>
-              <label>Lingkungan lama</label>
-              <v-text-field
-                v-model="formData.lingkungan_lama"
-                required
-                outlined
-                dense
-                readonly
-                disabled
-              ></v-text-field>
-            </v-col>
-          </v-row>
+          <label>Alamat lama</label>
+          <p>{{ formData.alamat_lama }}</p>
+
+          <label>Paroki lama</label>
+          <p>{{ formData.paroki_lama }}</p>
+
+          <label>Lingkungan lama</label>
+          <p>{{ formData.lingkungan_lama }}</p>
 
           <v-divider class="mb-5"></v-divider>
 
@@ -92,10 +78,10 @@
             </v-col>
           </v-row>
           
-          <label>Tanggal mulai domisili*</label>
+          <label>Tanggal mulai domisili baru*</label>
           <v-menu
-            ref="menu"
-            v-model="isDatePickerActive"
+            ref="datePickerTglLama"
+            v-model="isDatePickerTglBaruActive"
             :close-on-content-click="false"
             transition="scale-transition"
             offset-y
@@ -103,7 +89,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
-                v-model="formData.tgl_mulai_domisili"
+                v-model="formData.tgl_domisili_baru"
                 prepend-inner-icon="mdi-calendar"
                 readonly
                 outlined
@@ -113,8 +99,7 @@
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="formData.tgl_mulai_domisili"
-              :min="new Date().toISOString().substr(0, 10)"
+              v-model="formData.tgl_domisili_baru"
               @change="saveDate"
             ></v-date-picker>
           </v-menu>
@@ -153,12 +138,12 @@
           </v-row>
 
           <label>Alamat baru*</label>
-          <v-text-field
+          <v-textarea
             v-model="formData.alamat_baru"
             required
             outlined
             dense
-          ></v-text-field>
+          ></v-textarea>
 
           <label>Nomor telepon baru*</label>
           <v-text-field
@@ -202,15 +187,16 @@ export default {
       id_umat: null,
       paroki_lama: 'Kumetiran',
       nama: '',
-      tempat_lahir: '',
-      tgl_lahir: null,
+      tempat_lahir: '-',
+      tgl_lahir: '-',
 
-      alamat_lama: '',
+      tgl_domisili_lama: null,
+      alamat_lama: '-',
       id_lingkungan_lama: null,
-      lingkungan_lama: '',
-      no_telp_lama: '',
+      lingkungan_lama: '-',
+      no_telp_lama: '-',
       
-      tgl_mulai_domisili: null,
+      tgl_domisili_baru: null,
       alamat_baru: '',
       nama_lingkungan_baru: '',
       no_telp_baru: '',
@@ -223,7 +209,8 @@ export default {
     parokiList: [],
     lingkunganList: [],
     umat: {},
-    isDatePickerActive: false,
+    isDatePickerTglLamaActive: false,
+    isDatePickerTglBaruActive: false,
   }),
   async mounted() {
     this.lingkunganList = await getData(`/lingkungan`)
@@ -237,6 +224,7 @@ export default {
   methods: {
     saveDate (date) {
       this.$refs.menu.save(date)
+      this.$refs.datePickerTglLama.save(date)
     },
     changeIdLingkungan(e) {
       let temp = this.lingkunganList.find((_) => { return _.nama_lingkungan === e })

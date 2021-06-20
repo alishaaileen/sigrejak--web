@@ -45,11 +45,11 @@
                 </v-col>
                 <v-col>
                   <div class="py-2">
-                    <v-icon v-if="data.pastor_pelayan_approval === 1" color="green darken-1" large>far fa-check-circle</v-icon>
+                    <v-icon v-if="data.romo_approval === 1" color="green darken-1" large>far fa-check-circle</v-icon>
                     <v-icon v-else color="grey" large>fas fa-history</v-icon>
                     <div class="mt-2">
-                      <label>Pastor Pelayan</label>
-                      <p class="ma-0">{{ data.pastor_pelayan_approval === 1 ? pastorPelayan.nama : '-' }}</p>
+                      <label>Romo Paroki</label>
+                      <p class="ma-0">{{ data.romo_approval === 1 ? romoParoki.nama : '-' }}</p>
                     </div>
                   </div>
                 </v-col>
@@ -73,47 +73,35 @@
             <label>Tempat, tanggal lahir</label>
             <p>{{ `${data.tempat_lahir}, ${data.tgl_lahir}` }}</p>
 
-            <label>Alamat</label>
-            <p>{{ data.alamat }}</p>
-
-            <h2 class="mt-15 mb-5">Informasi Minyak Suci</h2>
-
-            <label>Sudah/Belum pernah menerima minyak suci</label>
-            <p>{{ data.status_terima_minyak }}</p>
-
-            <label v-if="data.status_terima_minyak === 'Sudah pernah'">Tanggal penerimaan minyak suci</label>
-            <p>{{ data.tgl_terima_minyak }}</p>
-
-            <h2 class="mt-15 mb-5">Informasi Pasangan</h2>
-
-            <p v-if="data.nama_pasangan === null">Tidak punya pasangan</p>
-
-            <div v-if="data.nama_pasangan != null">
-              <label>Nama pasangan</label>
-              <p>{{ data.nama_pasangan }}</p>
-
-              <label>Cara menikah</label>
-              <p>{{ data.cara_menikah }}</p>
-
-              <label>Tahun menikah</label>
-              <p>{{ data.tahun_menikah }}</p>
-            </div>
-
-            <h2 class="mt-15 mb-5">Informasi Keluarga Yang Bertanggung Jawab</h2>
             
-            <label>Nama keluarga</label>
-            <p>{{ data.nama_keluarga_penanggung_jawab }}</p>
+            <h2 class="mt-15 mb-5">Tempat Tinggal Lama</h2>
 
-            <label>Alamat</label>
-            <p>{{ data.alamat_keluarga_penanggung_jawab }}</p>
+            <label>Alamat lama</label>
+            <p>{{ data.alamat_lama }}</p>
 
-            <label>Nomor telepon</label>
-            <p>{{ data.no_telp_keluarga_penanggung_jawab }}</p>
+            <label>Paroki lama</label>
+            <p>Kumetiran</p>
 
-            <h2 class="mt-15 mb-5">Informasi Pastor Pelayan</h2>
+            <label>Lingkungan lama</label>
+            <p>{{ data.nama_lingkungan_lama }}</p>
 
-            <label>Nama pastor</label>
-            <p>{{ pastorPelayan.nama }}</p>
+
+            <h2 class="mt-15 mb-5">Tempat Tinggal Baru</h2>
+
+            <label>Tanggal mulai domisili</label>
+            <p>{{ data.tgl_domisili_baru }}</p>
+
+            <label>Paroki baru</label>
+            <p>{{ data.paroki_baru }}</p>
+
+            <label>Lingkungan baru</label>
+            <p>{{ data.nama_lingkungan_baru }}</p>
+
+            <label>Alamat baru</label>
+            <p>{{ data.alamat_baru }}</p>
+
+            <label>Nomor telepon baru</label>
+            <p>{{ data.no_telp_baru }}</p>
 
           </div>
         </v-card-text>
@@ -142,7 +130,7 @@ export default {
     data: Object,
     url: String,
     sekretariat: Object,
-    pastorPelayan: Object,
+    romoParoki: Object,
   },
   methods: {
     sekretariatVerify(dataSurat) {

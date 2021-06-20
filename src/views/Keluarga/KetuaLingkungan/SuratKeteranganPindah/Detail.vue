@@ -89,7 +89,7 @@
             <v-divider class="mb-5"></v-divider>
 
             <label>Tanggal mulai domisili</label>
-            <p>{{ data.tgl_mulai_domisili }}</p>
+            <p>{{ data.tgl_domisili_baru }}</p>
 
             <label>Paroki baru</label>
             <p>{{ data.paroki_baru }}</p>

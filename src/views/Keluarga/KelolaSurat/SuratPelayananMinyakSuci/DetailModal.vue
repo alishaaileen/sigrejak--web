@@ -56,9 +56,9 @@
               </v-row>
             </v-card>
 
-            <!-- <h2 class="mt-7 mb-3">Informasi Surat</h2> -->
+            <!-- <h2 class="mt-7 mb-5">Informasi Surat</h2> -->
             
-            <h2 class="mt-7 mb-3">Informasi Surat</h2>
+            <h2 class="mt-7 mb-5">Informasi Surat</h2>
 
             <label>No. surat</label>
             <p>{{ data.no_surat }}</p>
@@ -95,7 +95,7 @@
               <p>{{ data.tahun_menikah }}</p>
             </div>
 
-            <h2 class="mt-7 mb-3">Keluarga yang bertanggung jawab</h2>
+            <h2 class="mt-15 mb-5">Keluarga yang bertanggung jawab</h2>
 
             <label>Nama keluarga</label>
             <p>{{ data.nama_keluarga_penanggung_jawab }}</p>
@@ -106,7 +106,7 @@
             <label>Nomor telepon</label>
             <p>{{ data.no_telp_keluarga_penanggung_jawab }}</p>
 
-            <h2 class="mt-7 mb-3">Pastor pelayan</h2>
+            <h2 class="mt-15 mb-5">Pastor pelayan</h2>
             
             <label>Nama pastor</label>
             <p>Romo {{ pastorPelayan.nama }}</p>

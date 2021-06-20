@@ -2,7 +2,7 @@
   <div>
     <btn-kembali path="/pengurus/surat" />
       
-    <h1>Surat Keterangan</h1>
+    <h1>Surat Keterangan Pindah</h1>
 
     <div class="data-table mt-5">
       <v-card flat>
@@ -65,6 +65,13 @@
           </template>
 
           <!-- TABLE CONTENT -->
+          <template v-slot:[`item.paroki_baru`]="{ item }">
+            <v-chip
+              :color="item.paroki_baru === 'Kumetiran' ? 'lime accent-1' : 'light-blue lighten-4'"
+            >
+              {{ item.paroki_baru}}
+            </v-chip>
+          </template>
           <template v-slot:[`item.status_sekretariat`]="{ item }">
             <span v-if="item.sekretariat_approval === 1" class="d-flex justify-center">
               <v-icon color="green darken-2">far fa-check-circle</v-icon>
@@ -151,7 +158,7 @@ export default {
     ModalDetail,
   },
   data: () => ({
-    url: '/surat-keterangan',
+    url: '/surat-keterangan-pindah',
     selectedLingkungan: [],
     selectedShowData: 'Semua',
     tableLoading: true,
@@ -164,10 +171,16 @@ export default {
         text: 'Tgl surat', value: 'created_at',
       },
       {
-        text: 'Umat', value: 'nama',
+        text: 'Nama', value: 'nama',
       },
       {
-        text: 'Keperluan', value: 'keperluan',
+        text: 'Tgl domisili', value: 'tgl_domisili_baru',
+      },
+      {
+        text: 'Lingkungan baru', value: 'nama_lingkungan_baru',
+      },
+      {
+        text: 'Paroki baru', value: 'paroki_baru',
       },
       {
         text: 'Sekretariat', value: 'status_sekretariat', align: 'center', sortable: false
@@ -198,7 +211,7 @@ export default {
           if(this.selectedLingkungan.length === 0) {
             return e.deleted_at === null && e.ketua_lingkungan_approval === 1
           } else {
-            return e.deleted_at === null && e.ketua_lingkungan_approval === 1 && this.selectedLingkungan.some(el => el.id === e.id_lingkungan)
+            return e.deleted_at === null && e.ketua_lingkungan_approval === 1 && this.selectedLingkungan.some(el => el.id === e.id_lingkungan_lama)
           }
         })
       } else if (this.selectedShowData === 'Belum diverifikasi') {
@@ -206,7 +219,7 @@ export default {
           if(this.selectedLingkungan.length === 0) {
             return e.deleted_at === null && e.sekretariat_approval === null
           } else {
-            return e.deleted_at === null && e.sekretariat_approval === null && this.selectedLingkungan.some(el => el.id === e.id_lingkungan)
+            return e.deleted_at === null && e.sekretariat_approval === null && this.selectedLingkungan.some(el => el.id === e.id_lingkungan_lama)
           }
         })
       } else {
@@ -214,7 +227,7 @@ export default {
           if(this.selectedLingkungan.length === 0) {
             return e.deleted_at === null && e.sekretariat_approval === 1
           } else {
-            return e.deleted_at === null && e.sekretariat_approval === 1 && this.selectedLingkungan.some(el => el.id === e.id_lingkungan)
+            return e.deleted_at === null && e.sekretariat_approval === 1 && this.selectedLingkungan.some(el => el.id === e.id_lingkungan_lama)
           }
         })
       }

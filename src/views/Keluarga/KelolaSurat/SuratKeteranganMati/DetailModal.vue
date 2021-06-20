@@ -56,9 +56,9 @@
               </v-row>
             </v-card>
 
-            <!-- <h2 class="mt-7 mb-3">Informasi Surat</h2> -->
+            <!-- <h2 class="mt-7 mb-5">Informasi Surat</h2> -->
             
-            <h2 class="mt-7 mb-3">Informasi Surat</h2>
+            <h2 class="mt-7 mb-5">Informasi Surat</h2>
 
             <label>No. surat</label>
             <p>{{ data.no_surat }}</p>
@@ -90,7 +90,7 @@
             <label>Tanggal makam/kremasi</label>
             <p>{{ data.tgl_makam_kremasi }}</p>
             
-            <h2 class="mt-7 mb-3">Informasi Keluarga</h2>
+            <h2 class="mt-15 mb-5">Informasi Keluarga</h2>
             
             <label>Nama orang tua</label>
             <p>{{ ortu.nama }}</p>
@@ -100,7 +100,7 @@
               <p>{{ data.nama_pasangan }}</p>
             </div>
 
-            <h2 class="mt-7 mb-3">Sakramen yang diterima sebelum meninggal</h2>
+            <h2 class="mt-15 mb-5">Sakramen yang diterima sebelum meninggal</h2>
 
             <label>a. Viaticum (Komuni)</label>
             <p>{{ data.tgl_komuni }} oleh {{ data.pelayan_komuni }}</p>
@@ -114,7 +114,7 @@
             <label>d. Baptis Darurat</label>
             <p>{{ data.tgl_baptis_darurat }} oleh {{ data.pelayan_baptis_darurat }}</p>
 
-            <h2 class="mt-7 mb-3">Informasi lain</h2>
+            <h2 class="mt-15 mb-5">Informasi lain</h2>
 
             <label>Imam yang memberkati</label>
             <p>{{ data.nama_imam }}</p>

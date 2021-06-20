@@ -46,9 +46,9 @@
               </v-row>
             </v-card>
 
-            <!-- <h2 class="mt-7 mb-3">Informasi Surat</h2> -->
+            <!-- <h2 class="mt-7 mb-5">Informasi Surat</h2> -->
             
-            <h2 class="mt-7 mb-3">Informasi Surat Baptis Anak</h2>
+            <h2 class="mt-15 mb-5">Informasi Surat Baptis Anak</h2>
 
             <label>No. surat</label>
             <p>{{ data.no_surat }}</p>
@@ -65,7 +65,7 @@
             <label>Nama baptis</label>
             <p>{{ data.nama_baptis }}</p>
 
-            <h2 class="mt-7 mb-3">Informasi Orang Tua</h2>
+            <h2 class="mt-15 mb-5">Informasi Orang Tua</h2>
             
             <label>Nama ayah</label>
             <p>{{ data.nama_ayah }}</p>
@@ -85,7 +85,7 @@
             <label>Tanggal menikah orang tua</label>
             <p>{{ data.tgl_ortu_menikah }}</p>
 
-            <h2 class="mt-7 mb-3">Informasi Orang Tua</h2>
+            <h2 class="mt-15 mb-5">Informasi Orang Tua</h2>
             
             <label>Nama wali baptis</label>
             <p>{{ data.nama_wali_baptis }}</p>
@@ -93,7 +93,7 @@
             <label>Tanggal krisma wali baptis</label>
             <p>{{ data.tgl_krisma_wali_baptis }}</p>
 
-            <h2 class="mt-7 mb-3">Jadwal Baptis</h2>
+            <h2 class="mt-15 mb-5">Jadwal Baptis</h2>
 
             <label>Tanggal baptis</label>
             <p>{{ data.tgl_baptis ? data.tgl_baptis : 'Menunggu proses verifikasi' }}</p>
