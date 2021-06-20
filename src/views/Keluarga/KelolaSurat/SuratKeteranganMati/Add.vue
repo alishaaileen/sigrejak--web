@@ -10,7 +10,7 @@
           <h3 class="mb-5">Informasi Umat</h3>
 
           <autocomplete
-            label="Nama*"
+            label="Nama* (Pastikan umat yang dipilih memiliki data orang tua)"
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdUmat"

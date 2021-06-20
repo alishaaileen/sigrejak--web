@@ -5,16 +5,60 @@
     <h1>Edit Surat Keterangan Mati</h1>
 
     <div class="form mt-5">
-      <v-card class="pa-6 mx-auto" flat>
-        <v-form @submit.prevent="submit">
+      <v-card class="mx-auto" flat>
+        <v-card-title>
+          <h3>Detail Informasi</h3>
+          
+          <v-spacer></v-spacer>
+
+          <v-btn
+            class="btn text-none mr-3"
+            color="yellow accent-4"
+            dark
+            depressed
+            rounded
+          >
+            <v-icon small>mdi-chat</v-icon>
+            Chat
+          </v-btn>
+
+          <approval-chip
+            :approval="formData.ketua_lingkungan_approval"
+            role="Ketua Lingkungan"
+            :nama="formData.ketua_lingkungan"
+          ></approval-chip>
+
+          <approval-chip
+            :approval="formData.sekretariat_approval"
+            role="Sekretariat"
+            :nama="sekretariat.nama"
+          ></approval-chip>
+
+          <approval-chip
+            :approval="formData.romo_approval"
+            role="Romo"
+            :nama="romoParoki.nama"
+          ></approval-chip>
+        </v-card-title>
+
+        <v-divider></v-divider>
+
+        <v-form class="pa-6" @submit.prevent="submit">
+          <v-alert type="info" text icon="fas fa-info-circle">
+            <p class="ma-0">
+              Data dapat diedit jika belum disetujui Ketua Lingkungan
+            </p>
+          </v-alert>
+
           <h3 class="mb-5">Informasi Umat</h3>
 
           <autocomplete
-            label="Nama*"
+            label="Nama* (Pastikan umat yang dipilih memiliki data orang tua)"
             :value="formData.nama"
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdUmat"
+            :disable="(!isEditable)"
           ></autocomplete>
 
           <label>Nama baptis</label>
@@ -39,6 +83,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-textarea>
 
           <label>Tanggal meninggal*</label>
@@ -49,6 +95,7 @@
             transition="scale-transition"
             offset-y
             min-width="auto"
+            :disabled="(!isEditable)"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
@@ -59,11 +106,14 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :disabled="(!isEditable)"
               ></v-text-field>
             </template>
             <v-date-picker
               v-model="formData.tgl_meninggal"
               @change="saveDate"
+              :disabled="(!isEditable)"
+              :readonly="(!isEditable)"
             ></v-date-picker>
           </v-menu>
 
@@ -73,6 +123,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-textarea>
 
           <label>Tanggal pemakaman/kremasi*</label>
@@ -83,6 +135,7 @@
             transition="scale-transition"
             offset-y
             min-width="auto"
+            :disabled="(!isEditable)"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
@@ -93,11 +146,14 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :disabled="(!isEditable)"
               ></v-text-field>
             </template>
             <v-date-picker
               v-model="formData.tgl_makam_kremasi"
               @change="saveDate"
+              :disabled="(!isEditable)"
+              :readonly="(!isEditable)"
             ></v-date-picker>
           </v-menu>
 
@@ -127,6 +183,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -144,6 +202,7 @@
                 transition="scale-transition"
                 offset-y
                 min-width="auto"
+                :disabled="(!isEditable)"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
@@ -154,11 +213,14 @@
                     dense
                     v-bind="attrs"
                     v-on="on"
+                    :disabled="(!isEditable)"
                   ></v-text-field>
                 </template>
                 <v-date-picker
                   v-model="formData.tgl_komuni"
                   @change="saveDate"
+                  :disabled="(!isEditable)"
+                  :readonly="(!isEditable)"
                 ></v-date-picker>
               </v-menu>
             </v-col>
@@ -169,6 +231,8 @@
                 required
                 outlined
                 dense
+                :disabled="(!isEditable)"
+                :readonly="(!isEditable)"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -184,6 +248,7 @@
                 transition="scale-transition"
                 offset-y
                 min-width="auto"
+                :disabled="(!isEditable)"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
@@ -194,11 +259,14 @@
                     dense
                     v-bind="attrs"
                     v-on="on"
+                    :disabled="(!isEditable)"
                   ></v-text-field>
                 </template>
                 <v-date-picker
                   v-model="formData.tgl_pengampunan_dosa"
                   @change="saveDate"
+                  :disabled="(!isEditable)"
+                  :readonly="(!isEditable)"
                 ></v-date-picker>
               </v-menu>
             </v-col>
@@ -209,6 +277,8 @@
                 required
                 outlined
                 dense
+                :disabled="(!isEditable)"
+                :readonly="(!isEditable)"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -224,6 +294,7 @@
                 transition="scale-transition"
                 offset-y
                 min-width="auto"
+                :disabled="(!isEditable)"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
@@ -234,11 +305,14 @@
                     dense
                     v-bind="attrs"
                     v-on="on"
+                    :disabled="(!isEditable)"
                   ></v-text-field>
                 </template>
                 <v-date-picker
                   v-model="formData.tgl_perminyakan"
                   @change="saveDate"
+                  :disabled="(!isEditable)"
+                  :readonly="(!isEditable)"
                 ></v-date-picker>
               </v-menu>
             </v-col>
@@ -249,6 +323,8 @@
                 required
                 outlined
                 dense
+                :disabled="(!isEditable)"
+                :readonly="(!isEditable)"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -264,6 +340,7 @@
                 transition="scale-transition"
                 offset-y
                 min-width="auto"
+                :disabled="(!isEditable)"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
@@ -274,11 +351,14 @@
                     dense
                     v-bind="attrs"
                     v-on="on"
+                    :disabled="(!isEditable)"
                   ></v-text-field>
                 </template>
                 <v-date-picker
                   v-model="formData.tgl_baptis_darurat"
                   @change="saveDate"
+                  :disabled="(!isEditable)"
+                  :readonly="(!isEditable)"
                 ></v-date-picker>
               </v-menu>
             </v-col>
@@ -289,6 +369,8 @@
                 required
                 outlined
                 dense
+                :disabled="(!isEditable)"
+                :readonly="(!isEditable)"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -301,6 +383,7 @@
             :suggestionList="imamList"
             itemText="nama"
             @changeData="changeIdImam"
+            :disable="(!isEditable)"
           ></autocomplete>
 
           <label>Nama pelapor*</label>
@@ -309,6 +392,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-text-field>
 
           <label>Nomor HP pelapor*</label>
@@ -317,6 +402,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-text-field>
 
           <label>Nomor HP keluarga/penanggung jawab yang bisa dihubungi*</label>
@@ -325,6 +412,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-text-field>
 
           <div class="d-flex justify-end">
@@ -349,13 +438,16 @@
 <script>
 import { getData, editData } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
+import ApprovalChip from '../../../../components/ApprovalChip.vue'
 
 export default {
   components: {
     Autocomplete,
+    ApprovalChip
   },
   data: () => ({
     url: '/surat-keterangan-mati',
+    isEditable: false,
     isDatePickerTglMeninggalActive: false,
     isDatePickerTglMakamActive: false,
     isDatePickerKomuniActive: false,
@@ -366,10 +458,12 @@ export default {
     formData: {},
     anggotaKeluarga: [],
     imamList: [],
+    sekretariat: { nama: '' },
+    romoParoki: { nama: '' },
   }),
   computed: {
     isSubmitDisabled() {
-      return this.isAlertOrtuActive ? true : false
+      return this.isAlertOrtuActive || !this.isEditable ? true : false
     }
   },
   async mounted() {
@@ -379,6 +473,9 @@ export default {
     this.formData = this.formData[0]
 
     this.setOrtu(this.formData.id_ayah, this.formData.id_ibu)
+
+    // Set editable boolean to true if ketua lingkungan have not approved
+    this.isEditable = this.formData.ketua_lingkungan_approval === 1 ? false : true
   },
   methods: {
     saveDate(date) {
