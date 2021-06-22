@@ -130,6 +130,12 @@ const pengurus = {
       name: 'AdminViewSuratKeteranganPindah',
       component: importView("Pengurus/KelolaSurat/SuratKeteranganPindah/ViewAll")
     },
+    // ===== Surat Keterangan Mati =====
+    {
+      path: 'surat/surat-keterangan-mati',
+      name: 'AdminViewSuratKeteranganMati',
+      component: importView("Pengurus/KelolaSurat/SuratKeteranganMati/ViewAll")
+    },
   ]
 }
 
