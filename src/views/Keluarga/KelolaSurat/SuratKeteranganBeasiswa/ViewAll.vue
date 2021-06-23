@@ -75,7 +75,7 @@
                   </v-btn>
                 </template>
                 <v-list>
-                  <v-list-item @click="openModalDetail(item)">
+                  <v-list-item @click="goToDetail(item.id)">
                     <v-list-item-title>Detail</v-list-item-title>
                   </v-list-item>
                   <v-list-item :disabled="item.ketua_lingkungan_approval === 1" @click="openConfirmDelete(item.id)">
@@ -104,14 +104,6 @@
 
     <snackbar></snackbar>
 
-    <modal-detail
-      :isModalDetailActive="isModalDetailActive"
-      :data="selectedDetail"
-      :sekretariat="sekretariat"
-      :romoParoki="romoParoki"
-      @closeModal="(_) => { isModalDetailActive = _ }"
-    ></modal-detail>
-
     <confirm-delete-modal
       @confirmDelete="confirmDeleteData"
     ></confirm-delete-modal>
@@ -121,13 +113,9 @@
 <script>
 import { getData, deleteData } from '../../../../utils'
 
-import ModalDetail from './DetailModal'
-
 export default {
-  components: {
-    ModalDetail,
-  },
   data: () => ({
+    url: '/surat-keterangan-beasiswa',
     tableLoading: true,
     search: '',
     headers: [
@@ -162,10 +150,6 @@ export default {
     selectedJumlahData: 10,
     jumlahData: [10, 30, 50],
     deleteId: null,
-    isModalDetailActive: false,
-    selectedDetail: {},
-    sekretariat: {},
-    romoParoki: {},
   }),
   computed: {
     suratNotDeleted() {
@@ -174,22 +158,12 @@ export default {
   },
   async mounted() {
     this.tableLoading = true
-    this.surat = await getData(`/surat-keterangan-beasiswa/keluarga/${this.$store.state.keluarga.id}`)
+    this.surat = await getData(`${this.url}/keluarga/${this.$store.state.keluarga.id}`)
     this.tableLoading = false
   },
   methods: {
-    async openModalDetail(data) {
-      this.selectedDetail = data
-      this.selectedDetail.isEditable = data.ketua_lingkungan_approval === 1 ? false : true
-      
-      if(data.id_sekretariat != null) {
-        this.sekretariat = await getData(`/admin/${data.id_sekretariat}`)
-      }
-      if(data.id_romo != null) {
-        this.romoParoki = await getData(`/admin/${data.id_romo}`)
-      }
-
-      this.isModalDetailActive = true
+    goToDetail(id) {
+      this.$router.push(`/keluarga/surat${this.url}/detail/${id}`)
     },
     openConfirmDelete(id) {
       this.deleteId = id

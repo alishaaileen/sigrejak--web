@@ -337,6 +337,7 @@ export default {
       if(this.detailUmat.id_ibu != null) {
         formData.append('id_ibu', this.detailUmat.id_ibu)
       }
+      // maybe tambah if file_akta_lahir bukan string maka append?
       formData.append('file_akta_lahir', this.detailUmat.file_akta_lahir)
       formData.append('file_ktp', this.detailUmat.file_ktp)
 

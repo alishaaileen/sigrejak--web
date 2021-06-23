@@ -1,10 +1,55 @@
 <template>
   <div>
+    <btn-kembali path="/keluarga/surat/surat-keterangan-beasiswa" />
+    
     <h1>Edit Surat Keterangan</h1>
 
     <div class="form mt-5">
-      <v-card class="pa-6 mx-auto" flat>
-        <v-form @submit.prevent="submit">
+      <v-card class="mx-auto" flat>
+        <v-card-title>
+          <h3>Detail Informasi</h3>
+          
+          <v-spacer></v-spacer>
+
+          <v-btn
+            class="btn text-none mr-3"
+            color="yellow accent-4"
+            dark
+            depressed
+            rounded
+          >
+            <v-icon small>mdi-chat</v-icon>
+            Chat
+          </v-btn>
+
+          <approval-chip
+            :approval="formData.ketua_lingkungan_approval"
+            role="Ketua Lingkungan"
+            :nama="formData.ketua_lingkungan"
+          ></approval-chip>
+
+          <approval-chip
+            :approval="formData.sekretariat_approval"
+            role="Sekretariat"
+            :nama="sekretariat.nama"
+          ></approval-chip>
+
+          <approval-chip
+            :approval="formData.romo_approval"
+            role="Romo"
+            :nama="romoParoki.nama"
+          ></approval-chip>
+        </v-card-title>
+
+        <v-divider></v-divider>
+
+        <v-form class="pa-6" @submit.prevent="submit">
+          <v-alert type="info" text icon="fas fa-info-circle">
+            <p class="ma-0">
+              Data dapat diedit jika belum disetujui Ketua Lingkungan
+            </p>
+          </v-alert>
+
           <h3 class="mb-5">Informasi Umat</h3>
 
           <autocomplete
@@ -94,19 +139,43 @@
             dense
           ></v-textarea>
 
-          <v-alert
-            text
-            rounded="4"
-            color="orange"
-          >
-            <!-- <div class="title">
-              Lorem Ipsum
-            </div> -->
-            <h4>Catatan</h4>
-            <p class="subtitle-5 ma-0">
-              1. Dengan mengajukan surat, anak dianggap belum/tidak pernah menerima bantuan beasiswa dari lembaga/instansi lain
-            </p>
+          <label>File syarat beasiswa*</label>
+          <v-alert type="info" dense text>
+            Harap memasukan semua syarat dalam format <em>.zip</em> lalu upload file <em>.zip</em> -nya  
           </v-alert>
+          <div class="my-5">
+            <v-btn v-if="(typeof formData.file_syarat_beasiswa) == 'string'"
+              text
+              small
+              color="blue"
+              @click="downloadFile(formData.file_syarat_beasiswa)"
+            >
+              klik untuk melihat file
+            </v-btn>
+          </div>
+          <div class="d-flex mb-5">
+            <v-file-input
+              accept="application/zip"
+              style="display: none;"
+              ref="inputSyaratBeasiswa"
+              v-model="formData.file_syarat_beasiswa"
+            ></v-file-input>
+            <div>
+              <v-btn
+                class="text-none"
+                color="blue darken-3"
+                dark
+                depressed
+                @click="$refs.inputSyaratBeasiswa.$refs.input.click()"
+              >
+                Upload file
+              </v-btn>
+            </div>
+            <div v-if="(typeof formData.file_syarat_beasiswa) != 'string'" class="ml-5">
+              <p class="ma-0">{{formData.file_syarat_beasiswa.name}}</p>
+              <small>{{ fileSize }} Mb</small>
+            </div>
+          </div>
 
           <div class="d-flex justify-end">
             <v-btn
@@ -117,7 +186,7 @@
               depressed
               :disabled="isSubmitDisabled"
             >
-              Ajukan surat
+              Simpan
             </v-btn>
           </div>
         </v-form>
@@ -128,30 +197,57 @@
 </template>
 
 <script>
-import { getData, editData } from '../../../../utils'
+import { getData, getOneData, editData } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
+import ApprovalChip from '../../../../components/ApprovalChip.vue'
+import { API_URL } from '../../../../constants'
 
 export default {
   components: {
     Autocomplete,
+    ApprovalChip,
   },
   data: () => ({
-    formData: {},
+    formData: { file_syarat_beasiswa: {size: 0}},
+    isEditable: false,
     anggotaKeluarga: [],
     isAlertOrtuActive: false,
+    sekretariat: { nama: '' },
+    romoParoki: { nama: '' },
   }),
   computed: {
     isSubmitDisabled() {
-      return this.isAlertOrtuActive ? true : false
+      return this.isAlertOrtuActive || !this.isEditable ? true : false
+    },
+    fileSize() {
+      let sizeInMb = this.formData.file_syarat_beasiswa.size/1024/1024
+      sizeInMb = sizeInMb.toString()
+      sizeInMb = sizeInMb.substring(0, 5)
+
+      return sizeInMb
     }
   },
   async mounted() {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
-    this.formData = await getData(`/surat-keterangan-beasiswa/${this.$route.params.id}`)
-    this.formData = this.formData[0]
-    console.log(this.formData)
+    this.formData = await getOneData(`/surat-keterangan-beasiswa/${this.$route.params.id}`)
+
+    // Get data sekretariat and romo if surat has been approved
+    if(this.formData.id_sekretariat != null) {
+      this.sekretariat = await getOneData(`/admin/${this.formData.id_sekretariat}`)
+    }
+    if(this.formData.id_romo != null) {
+      this.romoParoki = await getOneData(`/admin/${this.formData.id_romo}`)
+    }
+
+    // Set editable boolean to true if ketua lingkungan have not approved
+    this.isEditable = this.formData.ketua_lingkungan_approval === 1 ? false : true
   },
   methods: {
+    async downloadFile(fileName) {
+      window.open(`${API_URL}/files/${fileName}`, '_blank')
+    },
+
+
     async changeIdSiswa(e) {
       let temp = this.anggotaKeluarga.find(_ => {
         return _.nama === e
@@ -199,8 +295,21 @@ export default {
 
       let snackbar = {}
 
+      let formData = new FormData()
+      formData.append('id_keluarga', this.formData.id_keluarga)
+      formData.append('id_lingkungan', this.formData.id_lingkungan)
+      formData.append('id_siswa', this.formData.id_siswa)
+      formData.append('sekolah', this.formData.sekolah)
+      formData.append('kelas', this.formData.kelas)
+      formData.append('id_ortu', this.formData.id_ortu)
+      formData.append('status_beasiswa', this.formData.status_beasiswa)
+      formData.append('permohonan', this.formData.permohonan)
+      if (typeof this.formData.file_syarat_beasiswa != 'string') {
+        formData.append('file_syarat_beasiswa', this.formData.file_syarat_beasiswa)
+      }
+
       try {
-        let response = await editData('/surat-keterangan-beasiswa', this.formData.id, this.formData)
+        let response = await editData('/surat-keterangan-beasiswa', this.formData.id, formData)
 
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',

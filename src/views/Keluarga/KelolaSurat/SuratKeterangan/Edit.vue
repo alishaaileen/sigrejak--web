@@ -44,7 +44,6 @@
         <v-divider></v-divider>
 
         <v-content class="pa-6">
-
           <v-alert type="info" text icon="fas fa-info-circle">
             <p class="ma-0">
               Data dapat diedit jika belum disetujui Ketua Lingkungan

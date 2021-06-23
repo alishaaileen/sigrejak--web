@@ -33,6 +33,18 @@ export async function getOneData(endpoint) {
     }
 }
 
+export async function getFile(endpoint) {
+    let url = `${API_URL}/files/${endpoint}`
+
+    try {
+        let response = await axios.get(url, { responseType: "blob" })
+
+        return response.data
+    } catch (error) {
+        return error
+    }
+}
+
 export async function postData(endpoint, data) {
     let url = `${API_URL}${endpoint}`
     

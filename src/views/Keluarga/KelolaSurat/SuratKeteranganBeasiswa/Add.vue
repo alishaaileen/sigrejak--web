@@ -83,11 +83,6 @@
           ></v-select>
 
           <label>Lampirkan permohonan untuk keterangan beasiswa*</label>
-          <!-- <div>
-            <p class="subtitle-3 mb-1">
-              Tulis lampiran permohonan dari surat keterangan ini
-            </p>
-          </div> -->
           <v-textarea
             v-model="formData.permohonan"
             required
@@ -95,17 +90,46 @@
             dense
           ></v-textarea>
 
+          <label>File syarat beasiswa*</label>
+          <v-alert type="info" dense text>
+            Harap memasukan semua syarat dalam format <em>.zip</em> lalu upload file <em>.zip</em> -nya  
+          </v-alert>
+          <div class="d-flex mb-5">
+            <v-file-input
+              accept="application/zip"
+              style="display: none;"
+              ref="inputSyaratBeasiswa"
+              v-model="formData.file_syarat_beasiswa"
+            ></v-file-input>
+            <div>
+              <v-btn
+                class="text-none"
+                color="blue darken-3"
+                dark
+                depressed
+                @click="$refs.inputSyaratBeasiswa.$refs.input.click()"
+              >
+                Upload file
+              </v-btn>
+            </div>
+            <div v-if="formData.file_syarat_beasiswa.size != 0" class="ml-5">
+              <p class="ma-0">
+                {{ formData.file_syarat_beasiswa.name }}<br>
+              </p>
+              <small>{{ fileSize }} Mb</small>
+            </div>
+          </div>
+
           <v-alert
             text
             rounded="4"
             color="orange"
           >
-            <!-- <div class="title">
-              Lorem Ipsum
-            </div> -->
-            <h4>Catatan</h4>
+            <div class="title">
+              Catatan
+            </div>
             <p class="subtitle-5 ma-0">
-              1. Dengan mengajukan surat, anak dianggap belum/tidak pernah menerima bantuan beasiswa dari lembaga/instansi lain
+              Dengan mengajukan surat, anak dianggap belum/tidak pernah menerima bantuan beasiswa dari lembaga/instansi lain
             </p>
           </v-alert>
 
@@ -157,6 +181,7 @@ export default {
 
       status_beasiswa: 'Belum pernah',
       permohonan: '',
+      file_syarat_beasiswa: { size: 0 },
       
       isKetuaLingkungan: 0,
     },
@@ -166,6 +191,13 @@ export default {
   computed: {
     isSubmitDisabled() {
       return this.isAlertOrtuActive ? true : false
+    },
+    fileSize() {
+      let sizeInMb = this.formData.file_syarat_beasiswa.size/1024/1024
+      sizeInMb = sizeInMb.toString()
+      sizeInMb = sizeInMb.substring(0, 5)
+
+      return sizeInMb
     }
   },
   async mounted() {
@@ -222,10 +254,23 @@ export default {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
+      let formData = new FormData()
+      formData.append('id_keluarga', this.formData.id_keluarga)
+      formData.append('id_lingkungan', this.formData.id_lingkungan)
+      formData.append('id_siswa', this.formData.id_siswa)
+      formData.append('sekolah', this.formData.sekolah)
+      formData.append('kelas', this.formData.kelas)
+      formData.append('id_ortu', this.formData.id_ortu)
+      formData.append('status_beasiswa', this.formData.status_beasiswa)
+      formData.append('permohonan', this.formData.permohonan)
+      formData.append('file_syarat_beasiswa', this.formData.file_syarat_beasiswa)
+      formData.append('ketua_lingkungan', this.formData.ketua_lingkungan)
+      formData.append('isKetuaLingkungan', this.formData.isKetuaLingkungan)
+
       let snackbar = {}
 
       try {
-        let response = await postData('/surat-keterangan-beasiswa/add', this.formData)
+        let response = await postData('/surat-keterangan-beasiswa/add', formData)
 
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
