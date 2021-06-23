@@ -186,7 +186,7 @@ const keluarga = {
     {
       path: 'ketua/surat',
       name: 'KetuaLingkunganSurat',
-      component: importView("Keluarga/KetuaLingkungan/Dashboard")
+      component: importView("Keluarga/KetuaLingkungan/index")
     },
     // ===== Surat Izin Pelayanan Ekaristi =====
     {
@@ -198,6 +198,17 @@ const keluarga = {
       path: 'ketua/surat/surat-izin-ekaristi/detail/:id',
       name: 'KetuaViewSuratIzinEkaristiDetail',
       component: importView("Keluarga/KetuaLingkungan/SuratIzinPelayananEkaristi/Detail")
+    },
+    // ===== Surat Keterangan Beasiswa =====
+    {
+      path: 'ketua/surat/surat-keterangan-beasiswa',
+      name: 'KetuaViewSuratKeteranganBeasiswa',
+      component: importView("Keluarga/KetuaLingkungan/SuratKeteranganBeasiswa/ViewAll")
+    },
+    {
+      path: 'ketua/surat/surat-keterangan-beasiswa/detail/:id',
+      name: 'KetuaViewSuratKeteranganBeasiswaDetail',
+      component: importView("Keluarga/KetuaLingkungan/SuratKeteranganBeasiswa/Detail")
     },
     // ===== Surat Keterangan Pindah =====
     {
