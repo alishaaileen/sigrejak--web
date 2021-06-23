@@ -136,7 +136,7 @@ export default {
 			if (this.selectedShowData === 'Semua') {
 				return this.surat.filter(e => e.deleted_at === null)
 			} else if (this.selectedShowData === 'Belum diverifikasi') {
-				return this.surat.filter(e => e.deleted_at === null && e.ketua_lingkungan_approval === null)
+				return this.surat.filter(e => e.deleted_at === null && e.ketua_lingkungan_approval === 0)
 			} else {
 				return this.surat.filter(e => e.deleted_at === null && e.ketua_lingkungan_approval === 1)
 			}

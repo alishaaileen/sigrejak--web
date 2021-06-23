@@ -76,7 +76,7 @@
 
           <label>Status beasiswa*</label>
           <v-select
-            :items="[ 'Belum', 'Tidak pernah' ]"
+            :items="[ 'Belum pernah', 'Tidak pernah' ]"
             v-model="formData.status_beasiswa"
             outlined
             dense

@@ -136,6 +136,12 @@ const pengurus = {
       name: 'AdminViewSuratKeteranganMati',
       component: importView("Pengurus/KelolaSurat/SuratKeteranganMati/ViewAll")
     },
+    // ===== Surat Keterangan Beasiswa =====
+    {
+      path: 'surat/surat-keterangan-beasiswa',
+      name: 'AdminViewSuratKeteranganBeasiswa',
+      component: importView("Pengurus/KelolaSurat/SuratKeteranganBeasiswa/ViewAll")
+    },
   ]
 }
 
