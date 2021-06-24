@@ -4,11 +4,9 @@
       v-model="isDialogActive"
       @click:outside="close"
       scrollable
+      max-width="700px"
     >
-      <v-card
-        class="mx-auto"
-        max-width="700px"
-      >
+      <v-card class="mx-auto">
         <v-img
           :src="imageSrc"
         >
