@@ -379,7 +379,7 @@ export default {
       alamat_keluarga_penanggung_jawab: '',
       no_telp_keluarga_penanggung_jawab: '',
       
-      isKetuaLingkungan: 0,
+      isKetuaLingkungan: false,
     },
     anggotaKeluarga: [],
     imamList: [],

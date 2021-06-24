@@ -114,7 +114,7 @@ export default {
       id_ortu: null,
       nama_ortu: '-',
       alamat_ortu: '-',
-      isKetuaLingkungan: 0,
+      isKetuaLingkungan: false,
     },
     anggotaKeluarga: [],
     umat: {},

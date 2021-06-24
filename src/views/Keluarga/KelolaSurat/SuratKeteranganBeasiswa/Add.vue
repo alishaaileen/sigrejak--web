@@ -184,7 +184,7 @@ export default {
       permohonan: '',
       file_syarat_beasiswa: { size: 0 },
       
-      isKetuaLingkungan: 0,
+      isKetuaLingkungan: false,
     },
     anggotaKeluarga: [],
     isAlertOrtuActive: false,

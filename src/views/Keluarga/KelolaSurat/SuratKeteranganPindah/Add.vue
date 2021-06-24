@@ -202,7 +202,7 @@ export default {
       no_telp_baru: '',
       id_lingkungan_baru: null,
       paroki_baru: 'Kumetiran',
-      ketua_lingkungan_approval: 0,
+      isKetuaLingkungan: false,
     },
     isNotKumetiran: false,
     anggotaKeluarga: [],
@@ -217,7 +217,7 @@ export default {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.formData.id_keluarga = this.$store.state.keluarga.id
     if (this.$store.state.keluarga.lingkunganId) {
-      this.formData.ketua_lingkungan_approval = 1
+      this.formData.isKetuaLingkungan = true
       this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_keluarga
     }
   },
