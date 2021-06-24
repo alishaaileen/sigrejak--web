@@ -259,6 +259,17 @@ const keluarga = {
       name: 'KetuaViewSuratMinyakSuciDetail',
       component: importView("Keluarga/KetuaLingkungan/SuratPelayananMinyakSuci/Detail")
     },
+    // ===== Surat Baptis Anak =====
+    {
+      path: 'ketua/surat/surat-baptis-anak',
+      name: 'KetuaViewSuratBaptisAnak',
+      component: importView("Keluarga/KetuaLingkungan/SuratBaptisAnak/ViewAll")
+    },
+    {
+      path: 'ketua/surat/surat-baptis-anak/detail/:id',
+      name: 'KetuaViewSuratBaptisAnakDetail',
+      component: importView("Keluarga/KetuaLingkungan/SuratBaptisAnak/Detail")
+    },
   ]
 }
 
