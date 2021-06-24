@@ -129,11 +129,11 @@
             color="orange"
           >
             <div class="title">
-              <h4>Catatan</h4>
+              Catatan
             </div>
             <p class="subtitle-5 ma-0">
               Wali baptis harus:
-              <ol>
+              <ol type="a">
                 <li>
                   Berjenis kelamin sama
                 </li>
@@ -181,6 +181,44 @@
               @change="saveDate"
             ></v-date-picker>
           </v-menu>
+
+          <label>File syarat baptis anak*</label>
+          <v-alert type="info" text>
+            Harap melampirkan syarat baptis, yaitu:
+            <ol>
+              <li>Akta kelahiran anak (upload di menu <code>Anggota Keluarga > Detail</code> )</li>
+              <li>Surat nikah sipil & gereja*</li>
+              <li>Surat baptis terbaru Emban/Wali baptis yang sudah menerima Sakramen Penguatan*</li>
+            </ol>
+            Syarat yang memiliki tanda * harap discan/difoto lalu dimasukan ke dalam file <em>.zip</em> dan diupload disini.
+          </v-alert>
+          <div class="d-flex mb-5">
+            <v-file-input
+              accept="application/zip"
+              style="display: none;"
+              ref="inputSyaratBaptisAnak"
+              v-model="formData.file_syarat_baptis"
+            ></v-file-input>
+            <div>
+              <v-btn
+                class="text-none"
+                color="blue darken-3"
+                dark
+                depressed
+                rounded
+                @click="$refs.inputSyaratBaptisAnak.$refs.input.click()"
+              >
+                <v-icon>mdi-upload</v-icon>
+                Upload file
+              </v-btn>
+            </div>
+            <div v-if="formData.file_syarat_baptis.size != 0" class="ml-5">
+              <p class="ma-0">
+                {{ formData.file_syarat_baptis.name }}<br>
+              </p>
+              <small>{{ fileSize }} Mb</small>
+            </div>
+          </div>
 
           <div class="d-flex justify-end">
             <v-btn
@@ -237,7 +275,9 @@ export default {
       nama_wali_baptis: '',
       tgl_krisma_wali_baptis: '',
       
-      isKetuaLingkungan: 0,
+      file_syarat_baptis: { size: 0 },
+      
+      isKetuaLingkungan: false,
     },
     temp_cara_ortu_menikah: '',
     anggotaKeluarga: [],
@@ -247,6 +287,13 @@ export default {
   computed: {
     isSubmitDisabled() {
       return (this.isAlertOrtuActive || this.isAlertUmurActive) ? true : false
+    },
+    fileSize() {
+      let sizeInMb = this.formData.file_syarat_baptis.size/1024/1024
+      sizeInMb = sizeInMb.toString()
+      sizeInMb = sizeInMb.substring(0, 5)
+
+      return sizeInMb
     }
   },
   async mounted() {
@@ -302,12 +349,26 @@ export default {
       this.$store.commit('snackbar/resetSnackbar')
 
       let snackbar = {}
+        , formData = new FormData()
       if(this.formData.cara_ortu_menikah === 'Cara lain') {
         this.formData.cara_ortu_menikah = this.temp_cara_ortu_menikah
       }
 
+      formData.append('id_keluarga', this.formData.id_keluarga)
+      formData.append('id_lingkungan', this.formData.id_lingkungan)
+      formData.append('id_anak', this.formData.id_anak)
+      formData.append('nama_baptis', this.formData.nama_baptis)
+      formData.append('cara_ortu_menikah', this.formData.cara_ortu_menikah)
+      formData.append('tempat_ortu_menikah', this.formData.tempat_ortu_menikah)
+      formData.append('tgl_ortu_menikah', this.formData.tgl_ortu_menikah)
+      formData.append('nama_wali_baptis', this.formData.nama_wali_baptis)
+      formData.append('tgl_krisma_wali_baptis', this.formData.tgl_krisma_wali_baptis)
+      formData.append('ketua_lingkungan', this.formData.ketua_lingkungan)
+      formData.append('isKetuaLingkungan', this.formData.isKetuaLingkungan)
+      formData.append('file_syarat_baptis', this.formData.file_syarat_baptis)
+
       try {
-        let response = await postData(`${this.url}/add`, this.formData)
+        let response = await postData(`${this.url}/add`, formData)
 
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
