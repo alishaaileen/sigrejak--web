@@ -251,7 +251,7 @@ export default {
   computed: {
     keluargaNameList() {
       return this.anggotaKeluarga.filter(e => {
-        if(e.id != this.umat.id && e.id != this.detailUmat.id_ayah && e.id != this.detailUmat.id_ibu) {
+        if(e.id != this.umat.id) {
           return e.nama
         }
       })

@@ -56,23 +56,23 @@
             elevation="2"
           >
             <span>
-              Siswa yang dipilih belum memiliki catatan orang tua.
+              Siswa yang dipilih belum memiliki catatan lengkap ayah dan ibu.
               Harap lengkapi informasi di menu Anggota Keluarga.
             </span>
           </v-alert>
 
-          <label>Nama orang tua*</label>
-          <p>{{ formData.nama_ortu }}</p>
-
-          <label>No. telepon orang tua*</label>
-          <p>{{ formData.no_telp_ortu }}</p>
+          <label>Nama ayah/ibu*</label>
+          <p>{{ formData.nama_ayah }} / {{ formData.nama_ibu }}</p>
 
           <label>Alamat orang tua*</label>
           <p>{{ formData.alamat_ortu }}</p>
 
+          <label>Pekerjaan ayah/ibu*</label>
+          <p>{{ formData.pekerjaan_ayah }} / {{ formData.pekerjaan_ibu }}</p>
+
           <v-divider class="mb-5"></v-divider>
 
-          <!-- <h3 class="mb-5">Tempat Tinggal Baru</h3> -->
+          <h3 class="mb-5">Keterangan Beasiswa</h3>
 
           <label>Status beasiswa*</label>
           <v-select
@@ -82,7 +82,7 @@
             dense
           ></v-select>
 
-          <label>Lampirkan permohonan untuk keterangan beasiswa*</label>
+          <label>Tujuan permohonan beasiswa*</label>
           <v-textarea
             v-model="formData.permohonan"
             required
@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import { getData, postData } from '../../../../utils'
+import { getData, getOneData, postData } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 
 export default {
@@ -174,10 +174,11 @@ export default {
       sekolah: null,
       kelas: null,
 
-      id_ortu: null,
-      nama_ortu: '-',
-      no_telp_ortu: '-',
+      nama_ayah: '-',
+      nama_ibu: '-',
       alamat_ortu: '-',
+      pekerjaan_ayah: '-',
+      pekerjaan_ibu: '-',
 
       status_beasiswa: 'Belum pernah',
       permohonan: '',
@@ -220,34 +221,32 @@ export default {
       this.formData.alamat = temp.alamat
       this.formData.no_telp = temp.no_telp
 
-      let detailTemp = await getData(`/detail-umat/${temp.id}`)
-      detailTemp = detailTemp[0]
+      let detailTemp = await getOneData(`/detail-umat/${temp.id}`)
 
       await this.setOrtu(detailTemp.id_ayah, detailTemp.id_ibu)
     },
     async setOrtu(idAyah, idIbu) {
       let tempOrangTua = {}
 
-      if (idAyah === null) {
-        if (idIbu === null) {
-          this.isAlertOrtuActive = true
-          this.formData.id_ortu = null
-          this.formData.nama_ortu = '-'
-          this.formData.no_telp_ortu = '-'
-          this.formData.alamat_ortu = '-'
-
-          return
-        } else {
-          tempOrangTua = await getData(`/umat/${idIbu}`)
-        }
-      } else {
-        tempOrangTua = await getData(`/umat/${idAyah}`)
+      if (idAyah === null || idIbu === null) {
+        this.isAlertOrtuActive = true
+        this.formData.nama_ayah = '-'
+        this.formData.nama_ibu = '-'
+        this.formData.alamat_ortu = '-'
+        this.formData.pekerjaan_ayah = '-'
+        this.formData.pekerjaan_ibu = '-'
+        return
       }
+      
       this.isAlertOrtuActive = false
-      tempOrangTua = tempOrangTua[0]
-      this.formData.id_ortu = tempOrangTua.id
-      this.formData.nama_ortu = tempOrangTua.nama
-      this.formData.no_telp_ortu = tempOrangTua.no_telp
+      
+      tempOrangTua = await getOneData(`/umat/${idIbu}`)
+      this.formData.nama_ibu = tempOrangTua.nama
+      this.formData.pekerjaan_ibu = tempOrangTua.pekerjaan
+      
+      tempOrangTua = await getOneData(`/umat/${idAyah}`)
+      this.formData.nama_ayah = tempOrangTua.nama
+      this.formData.pekerjaan_ayah = tempOrangTua.pekerjaan
       this.formData.alamat_ortu = tempOrangTua.alamat
     },
     async submit() {
