@@ -67,8 +67,14 @@
                   </v-btn>
                 </template>
                 <v-list>
-                  <v-list-item @click="openModalDetail(item)">
+                  <v-list-item @click="goToDetail(item.id)">
                     <v-list-item-title>Detail</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item
+                    v-if="item.ketua_lingkungan_approval === 1 && item.sekretariat_approval === 1"
+                    @click="cetak(item.id)"
+                  >
+                    <v-list-item-title>Cetak surat</v-list-item-title>
                   </v-list-item>
                   <v-list-item :disabled="item.ketua_lingkungan_approval === 1" @click="openConfirmDelete(item.id)">
                     <v-list-item-title>Hapus</v-list-item-title>
@@ -96,13 +102,6 @@
 
     <snackbar></snackbar>
 
-    <modal-detail
-      :isModalDetailActive="isModalDetailActive"
-      :data="selectedDetail"
-      :sekretariat="sekretariat"
-      @closeModal="(_) => { isModalDetailActive = _ }"
-    ></modal-detail>
-
     <confirm-delete-modal
       @confirmDelete="confirmDeleteData"
     ></confirm-delete-modal>
@@ -110,14 +109,9 @@
 </template>
 
 <script>
-import { getData, deleteData } from '../../../../utils'
-
-import ModalDetail from './DetailModal'
+import { getData, deleteData, cetakSurat } from '../../../../utils'
 
 export default {
-  components: {
-    ModalDetail,
-  },
   data: () => ({
     url: '/surat-baptis-anak',
     tableLoading: true,
@@ -154,8 +148,6 @@ export default {
     selectedJumlahData: 10,
     jumlahData: [10, 30, 50],
     deleteId: null,
-    isModalDetailActive: false,
-    selectedDetail: {},
     sekretariat: {},
   }),
   computed: {
@@ -169,15 +161,8 @@ export default {
     this.tableLoading = false
   },
   methods: {
-    async openModalDetail(data) {
-      this.selectedDetail = data
-      this.selectedDetail.isEditable = data.ketua_lingkungan_approval === 1 ? false : true
-      
-      if(data.id_sekretariat != null) {
-        this.sekretariat = await getData(`/admin/${data.id_sekretariat}`)
-      }
-      
-      this.isModalDetailActive = true
+    goToDetail(id) {
+      this.$router.push(`/keluarga/surat${this.url}/detail/${id}`)
     },
     openConfirmDelete(id) {
       this.deleteId = id
@@ -211,7 +196,16 @@ export default {
         this.$store.dispatch('snackbar/openSnackbar', snackbar)
         this.$store.dispatch('loading/closeLoading')
       }
-    }
+    },
+    async cetak(id) {
+      this.$store.dispatch('loading/openLoading')
+      
+      let link = await cetakSurat(this.url, id)
+      
+      this.$store.dispatch('loading/closeLoading')
+
+      window.open(link, '_blank')
+    },
   }
 }
 </script>

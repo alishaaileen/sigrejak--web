@@ -240,7 +240,7 @@
 </template>
 
 <script>
-import { countAge, getData, postData } from '../../../../utils'
+import { countAge, getData, getOneData, postData } from '../../../../utils'
 import { caraMenikahList } from '../../../../constants'
 import Autocomplete from '../../../../components/Autocomplete'
 
@@ -321,8 +321,7 @@ export default {
       let umur = countAge(temp.tgl_lahir)
       this.isAlertUmurActive = (umur > 7) ? true : false
 
-      let detailTemp = await getData(`/detail-umat/${temp.id}`)
-      detailTemp = detailTemp[0]
+      let detailTemp = await getOneData(`/detail-umat/${temp.id}`)
 
       await this.setOrtu(detailTemp.id_ayah, detailTemp.id_ibu)
     },
@@ -332,15 +331,13 @@ export default {
       this.isAlertOrtuActive = (!idAyah || !idIbu) ? true : false
 
       if (idAyah) {
-        tempOrangTua = await getData(`/umat/${idAyah}`)
-        tempOrangTua = tempOrangTua[0]
+        tempOrangTua = await getOneData(`/umat/${idAyah}`)
         this.formData.nama_ayah = tempOrangTua.nama
         this.formData.alamat_ortu = tempOrangTua.alamat
         this.formData.no_telp_ortu = tempOrangTua.no_telp
       }
       if (idIbu) {
-        tempOrangTua = await getData(`/umat/${idIbu}`)
-        tempOrangTua = tempOrangTua[0]
+        tempOrangTua = await getOneData(`/umat/${idIbu}`)
         this.formData.nama_ibu = tempOrangTua.nama
       }
     },

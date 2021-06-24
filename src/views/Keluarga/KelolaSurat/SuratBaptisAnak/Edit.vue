@@ -5,8 +5,39 @@
     <h1>Edit Surat Baptis Anak</h1>
 
     <div class="form mt-5">
-      <v-card class="pa-6 mx-auto" flat>
-        <v-form @submit.prevent="submit">
+      <v-card class="mx-auto" flat>
+        <v-card-title>
+          <h3>Detail Informasi</h3>
+          
+          <v-spacer></v-spacer>
+
+          <v-btn
+            class="btn text-none mr-3"
+            color="yellow accent-4"
+            dark
+            depressed
+            rounded
+          >
+            <v-icon small>mdi-chat</v-icon>
+            Chat
+          </v-btn>
+
+          <approval-chip
+            :approval="formData.ketua_lingkungan_approval"
+            role="Ketua Lingkungan"
+            :nama="formData.ketua_lingkungan"
+          ></approval-chip>
+
+          <approval-chip
+            :approval="formData.sekretariat_approval"
+            role="Sekretariat"
+            :nama="sekretariat.nama"
+          ></approval-chip>
+        </v-card-title>
+
+        <v-divider></v-divider>
+
+        <v-form class="pa-6" @submit.prevent="submit">
           <h3 class="mb-5">Informasi Anak</h3>
 
           <autocomplete
@@ -15,6 +46,7 @@
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdAnak"
+            :disable="(!isEditable)"
           ></autocomplete>
 
           <v-alert
@@ -42,6 +74,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -100,6 +134,7 @@
               transition="scale-transition"
               offset-y
               min-width="auto"
+              :disabled="(!isEditable)"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
@@ -110,12 +145,15 @@
                   dense
                   v-bind="attrs"
                   v-on="on"
+                  :disabled="(!isEditable)"
                 ></v-text-field>
               </template>
               <v-date-picker
                 v-model="formData.tgl_ortu_menikah"
                 :max="new Date().toISOString().substr(0, 10)"
                 @change="saveDate"
+                :disabled="(!isEditable)"
+                :readonly="(!isEditable)"
               ></v-date-picker>
             </v-menu>
           </div>
@@ -154,6 +192,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-text-field>
 
           <label>Tanggal krisma wali baptis*</label>
@@ -164,6 +204,7 @@
             transition="scale-transition"
             offset-y
             min-width="auto"
+            :disabled="(!isEditable)"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
@@ -174,14 +215,62 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :disabled="(!isEditable)"
               ></v-text-field>
             </template>
             <v-date-picker
               v-model="formData.tgl_krisma_wali_baptis"
               :max="new Date().toISOString().substr(0, 10)"
               @change="saveDate"
+              :disabled="(!isEditable)"
+              :readonly="(!isEditable)"
             ></v-date-picker>
           </v-menu>
+
+          <label>File syarat baptis anak*</label>
+          <v-alert type="info" text>
+            Harap melampirkan syarat baptis, yaitu:
+            <ol>
+              <li>Akta kelahiran anak (upload di menu <code>Anggota Keluarga > Detail</code> )</li>
+              <li>Surat nikah sipil & gereja*</li>
+              <li>Surat baptis terbaru Emban/Wali baptis yang sudah menerima Sakramen Penguatan*</li>
+            </ol>
+            Syarat yang memiliki tanda * harap discan/difoto lalu dimasukan ke dalam file <em>.zip</em> dan diupload disini.
+          </v-alert>
+          <div class="my-5">
+            <v-btn v-if="(typeof formData.file_syarat_baptis) == 'string'"
+              text
+              small
+              color="blue"
+              @click="downloadFile(formData.file_syarat_baptis)"
+            >
+              klik untuk melihat file
+            </v-btn>
+          </div>
+          <div class="d-flex mb-5">
+            <v-file-input
+              accept="application/zip"
+              style="display: none;"
+              ref="inputSyaratBaptisAnak"
+              v-model="formData.file_syarat_baptis"
+            ></v-file-input>
+            <div>
+              <v-btn
+                v-if="isEditable"
+                class="text-none"
+                color="blue darken-3"
+                dark
+                depressed
+                @click="$refs.inputSyaratBaptisAnak.$refs.input.click()"
+              >
+                Upload file
+              </v-btn>
+            </div>
+            <div v-if="(typeof formData.file_syarat_baptis) != 'string'" class="ml-5">
+              <p class="ma-0">{{formData.file_syarat_baptis.name}}</p>
+              <small>{{ fileSize }} Mb</small>
+            </div>
+          </div>
 
           <div class="d-flex justify-end">
             <v-btn
@@ -192,7 +281,7 @@
               depressed
               :disabled="isSubmitDisabled"
             >
-              Ajukan surat
+              Simpan
             </v-btn>
           </div>
         </v-form>
@@ -203,16 +292,20 @@
 </template>
 
 <script>
-import { countAge, getData, editData } from '../../../../utils'
+import { countAge, getData, getOneData, editData } from '../../../../utils'
 import { caraMenikahList } from '../../../../constants'
 import Autocomplete from '../../../../components/Autocomplete'
+import ApprovalChip from '../../../../components/ApprovalChip.vue'
+import { API_URL } from '../../../../constants'
 
 export default {
   components: {
     Autocomplete,
+    ApprovalChip,
   },
   data: () => ({
     url: '/surat-baptis-anak',
+    isEditable: false,
     caraMenikahList,
     isDatePickerTglNikahActive: false,
     isDatePickerTglKrismaWaliActive: false,
@@ -221,23 +314,43 @@ export default {
     anggotaKeluarga: [],
     isAlertUmurActive: false,
     isAlertOrtuActive: false,
+    sekretariat: { nama: '' },
   }),
   computed: {
     isSubmitDisabled() {
-      return (this.isAlertOrtuActive || this.isAlertUmurActive) ? true : false
+      return (this.isAlertOrtuActive || this.isAlertUmurActive || !this.isEditable) ? true : false
+    },
+    fileSize() {
+      let sizeInMb = this.formData.file_syarat_baptis.size/1024/1024
+      sizeInMb = sizeInMb.toString()
+      sizeInMb = sizeInMb.substring(0, 5)
+
+      return sizeInMb
     }
   },
   async mounted() {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
-    this.formData = await getData(`${this.url}/${this.$route.params.id}`)
-    this.formData = this.formData[0]
+    this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
 
     if(!(this.caraMenikahList.find(e => e === this.formData.cara_ortu_menikah))) {
       this.temp_cara_ortu_menikah = this.formData.cara_ortu_menikah
       this.formData.cara_ortu_menikah = 'Cara lain'
     }
+
+    // Get data sekretariat and romo if surat has been approved
+    if(this.formData.id_sekretariat != null) {
+      this.sekretariat = await getOneData(`/admin/${this.formData.id_sekretariat}`)
+    }
+
+    // Set editable boolean to true if ketua lingkungan have not approved
+    this.isEditable = this.formData.ketua_lingkungan_approval === 1 ? false : true
   },
   methods: {
+    async downloadFile(fileName) {
+      window.open(`${API_URL}/files/${fileName}`, '_blank')
+    },
+
+    
     saveDate (date) {
       this.$refs.menu.save(date)
     },
@@ -253,8 +366,7 @@ export default {
       let umur = countAge(temp.tgl_lahir)
       this.isAlertUmurActive = (umur > 7) ? true : false
 
-      let detailTemp = await getData(`/detail-umat/${temp.id}`)
-      detailTemp = detailTemp[0]
+      let detailTemp = await getOneData(`/detail-umat/${temp.id}`)
 
       await this.setOrtu(detailTemp.id_ayah, detailTemp.id_ibu)
     },
@@ -264,15 +376,13 @@ export default {
       this.isAlertOrtuActive = (!idAyah || !idIbu) ? true : false
 
       if (idAyah) {
-        tempOrangTua = await getData(`/umat/${idAyah}`)
-        tempOrangTua = tempOrangTua[0]
+        tempOrangTua = await getOneData(`/umat/${idAyah}`)
         this.formData.nama_ayah = tempOrangTua.nama
         this.formData.alamat_ortu = tempOrangTua.alamat
         this.formData.no_telp_ortu = tempOrangTua.no_telp
       }
       if (idIbu) {
-        tempOrangTua = await getData(`/umat/${idIbu}`)
-        tempOrangTua = tempOrangTua[0]
+        tempOrangTua = await getOneData(`/umat/${idIbu}`)
         this.formData.nama_ibu = tempOrangTua.nama
       }
     },
@@ -281,8 +391,23 @@ export default {
       this.$store.commit('snackbar/resetSnackbar')
 
       let snackbar = {}
+        , formData = new FormData()
       if(this.formData.cara_ortu_menikah === 'Cara lain') {
         this.formData.cara_ortu_menikah = this.temp_cara_ortu_menikah
+      }
+      formData.append('id_keluarga', this.formData.id_keluarga)
+      formData.append('id_lingkungan', this.formData.id_lingkungan)
+      formData.append('id_anak', this.formData.id_anak)
+      formData.append('nama_baptis', this.formData.nama_baptis)
+      formData.append('cara_ortu_menikah', this.formData.cara_ortu_menikah)
+      formData.append('tempat_ortu_menikah', this.formData.tempat_ortu_menikah)
+      formData.append('tgl_ortu_menikah', this.formData.tgl_ortu_menikah)
+      formData.append('nama_wali_baptis', this.formData.nama_wali_baptis)
+      formData.append('tgl_krisma_wali_baptis', this.formData.tgl_krisma_wali_baptis)
+      formData.append('ketua_lingkungan', this.formData.ketua_lingkungan)
+      formData.append('isKetuaLingkungan', this.formData.isKetuaLingkungan)
+      if (typeof this.formData.file_syarat_beasiswa != 'string') {
+        formData.append('file_syarat_baptis', this.formData.file_syarat_baptis)
       }
 
       try {

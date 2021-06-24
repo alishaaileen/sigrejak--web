@@ -58,6 +58,7 @@
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdSiswa"
+            :disabled="(!isEditable)"
           ></autocomplete>
 
           <label>Tempat lahir</label>
@@ -78,6 +79,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-text-field>
 
           <label>Kelas</label>
@@ -86,6 +89,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -124,6 +129,8 @@
             v-model="formData.status_beasiswa"
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-select>
 
           <label>Lampirkan permohonan untuk keterangan beasiswa*</label>
@@ -132,6 +139,8 @@
             required
             outlined
             dense
+            :disabled="(!isEditable)"
+            :readonly="(!isEditable)"
           ></v-textarea>
 
           <label>File syarat beasiswa*</label>
@@ -157,6 +166,7 @@
             ></v-file-input>
             <div>
               <v-btn
+                v-if="isEditable"
                 class="text-none"
                 color="blue darken-3"
                 dark
