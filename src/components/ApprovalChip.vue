@@ -1,5 +1,5 @@
 <template>
-  <v-tooltip top :disabled="(!getApprovalBoolean())">
+  <v-tooltip top>
     <template v-slot:activator="{ on, attrs }">
       <v-chip
         class="mr-3"
@@ -14,7 +14,7 @@
       </v-chip>
     </template>
     <span class="color-white">
-      {{ nama }}
+      {{ getApprovalBoolean() ? nama : 'Belum diverifikasi' }}
     </span>
   </v-tooltip>
 </template>

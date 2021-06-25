@@ -194,6 +194,22 @@ const keluarga = {
       name: 'UpdateSuratKomuniPenguatan',
       component: importView("Keluarga/KelolaSurat/SuratKomuniPenguatan/Edit")
     },
+    // ===== Surat Keterangan Calon Pengantin =====
+    {
+      path: 'surat/surat-keterangan-calon-pengantin',
+      name: 'ViewSuratKeteranganCalonPengantin',
+      component: importView("Keluarga/KelolaSurat/SuratKeteranganCalonPengantin/ViewAll")
+    },
+    {
+      path: 'surat/surat-keterangan-calon-pengantin/tambah',
+      name: 'AddSuratKeteranganCalonPengantin',
+      component: importView("Keluarga/KelolaSurat/SuratKeteranganCalonPengantin/Add")
+    },
+    {
+      path: 'surat/surat-keterangan-calon-pengantin/detail/:id',
+      name: 'UpdateSuratKeteranganCalonPengantin',
+      component: importView("Keluarga/KelolaSurat/SuratKeteranganCalonPengantin/Edit")
+    },
     // ==========================================
     //                      =====================
     // Ketua Lingkungan     =====================
