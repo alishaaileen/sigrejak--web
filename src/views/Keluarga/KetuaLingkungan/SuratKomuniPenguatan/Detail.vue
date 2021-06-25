@@ -132,7 +132,7 @@
               </v-btn>
             </div>
 
-            <label>Surat nikah sipil & gereja dan Surat baptis terbaru Emban/Wali</label>
+            <label>Berkas-berkas syarat</label>
             <div class="mt-1">
               <v-btn
                 class="text-none"

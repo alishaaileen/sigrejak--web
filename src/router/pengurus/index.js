@@ -148,6 +148,12 @@ const pengurus = {
       name: 'AdminViewSuratBaptisAnak',
       component: importView("Pengurus/KelolaSurat/SuratBaptisAnak/ViewAll")
     },
+    // ===== Surat Komuni Penguatan =====
+    {
+      path: 'surat/surat-komuni-penguatan',
+      name: 'AdminViewSuratKomuniPenguatan',
+      component: importView("Pengurus/KelolaSurat/SuratKomuniPenguatan/ViewAll")
+    },
   ]
 }
 
