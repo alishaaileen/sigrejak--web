@@ -1,8 +1,8 @@
 <template>
   <div>
-    <btn-kembali path="/keluarga/ketua/surat/surat-baptis-anak" />
+    <btn-kembali path="/keluarga/ketua/surat/surat-komuni-penguatan" />
     
-    <h1 class="mb-5">Detail Surat Baptis Anak</h1>
+    <h1 class="mb-5">Detail Surat {{ tempJenisSurat }}</h1>
 
     <v-row>
       <v-col>
@@ -57,7 +57,7 @@
             </div>
 
             <div class="mb-15">
-              <h2 class="mb-5">Informasi Siswa</h2>
+              <h2 class="mb-5">Informasi Umat</h2>
 
               <v-divider class="mb-5"></v-divider>
 
@@ -69,6 +69,24 @@
 
               <label>Nama baptis</label>
               <p>{{ data.nama_baptis }}</p>
+
+              <label>Paroki tempat baptis</label>
+              <p>{{ data.paroki_baptis }}</p>
+
+              <label>Tanggal baptis</label>
+              <p>{{ data.tgl_baptis }}</p>
+
+              <label>No. surat baptis</label>
+              <p>{{ data.no_surat_baptis }}</p>
+
+              <label>Alamat</label>
+              <p>{{ data.alamat }}</p>
+
+              <label>No. telepon/HP</label>
+              <p>{{ data.no_telp }}</p>
+
+              <label>Nama sekolah/kelas</label>
+              <p>{{ data.sekolah }} / {{ data.kelas }}</p>
             </div>
 
             <div class="mb-15">
@@ -81,30 +99,21 @@
               
               <label>Nama ibu</label>
               <p>{{ data.nama_ibu }}</p>
-
-              <label>Alamat orang tua</label>
-              <p>{{ data.alamat_ortu }}</p>
-
-              <label>No. telepon orang tua</label>
-              <p>{{ data.no_telp_ortu }}</p>
-
-              <label>Cara menikah</label>
-              <p>{{ data.cara_ortu_menikah }}</p>
-
-              <label>Tanggal menikah</label>
-              <p>{{ data.tgl_ortu_menikah }}</p>
             </div>
 
             <div class="mb-15">
-              <h2 class="mb-5">Informasi Wali Baptis</h2>
+              <h2 class="mb-5">Informasi Wali Penguatan</h2>
               
               <v-divider class="mb-5"></v-divider>
 
-              <label>Nama</label>
-              <p>{{ data.nama_wali_baptis }}</p>
+              <label>Nama Santo/a pelindung</label>
+              <p>{{ data.nama_pelindung }}</p>
 
-              <label>Tanggal krisma</label>
-              <p>{{ data.tgl_krisma_wali_baptis }}</p>
+              <label>Nama wali penguatan</label>
+              <p>{{ data.nama_wali_penguatan }}</p>
+
+              <label>Tanggal krisma wali</label>
+              <p>{{ data.tgl_krisma_wali }}</p>
             </div>
 
             <h2 class="mb-5">Syarat-syarat</h2>
@@ -129,7 +138,7 @@
                 class="text-none"
                 outlined
                 color="blue"
-                @click="downloadFile(data.file_syarat_baptis)"
+                @click="downloadFile(data.file_syarat)"
               >
                 Klik untuk melihat file
               </v-btn>
@@ -160,13 +169,16 @@ export default {
     DialogImage,
   },
   data: () => ({
-    url: '/surat-baptis-anak',
+    url: '/surat-komuni-penguatan',
     data: {},
+    tempJenisSurat: '',
     displayGambarAkta: null,
     isImageCardActive: false,
   }),
   async mounted() {
     this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
+
+    this.tempJenisSurat = (this.data.jenis_surat === 1 ? 'Komuni I' : 'Penguatan')
 
     this.getImage(this.data.file_akta_lahir)
   },
@@ -196,7 +208,7 @@ export default {
       snackbar = await verifySurat(this.url, this.data.id, this.data)
 
       if (snackbar.color === 'success') {
-        this.$router.push('/keluarga/ketua/surat/surat-baptis-anak')
+        this.$router.push('/keluarga/ketua/surat/surat-komuni-penguatan')
       }
 
       this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
