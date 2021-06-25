@@ -154,6 +154,12 @@ const pengurus = {
       name: 'AdminViewSuratKomuniPenguatan',
       component: importView("Pengurus/KelolaSurat/SuratKomuniPenguatan/ViewAll")
     },
+    // ===== Surat Keterangan Calon Pengantin =====
+    {
+      path: 'surat/surat-keterangan-calon-pengantin',
+      name: 'AdminViewSuratKeteranganCalonPengantin',
+      component: importView("Pengurus/KelolaSurat/SuratKeteranganCalonPengantin/ViewAll")
+    },
   ]
 }
 
