@@ -55,6 +55,7 @@
             itemText="nama"
             @changeData="changeIdUmat"
             :value="formData.nama"
+            :disable="(!isEditable)"
           ></autocomplete>
 
           <v-alert
@@ -104,6 +105,8 @@
             required
             outlined
             dense
+            :readonly="(!isEditable)"
+            :disabled="(!isEditable)"
           ></v-text-field>
 
           <label>Tempat lahir*</label>
@@ -113,6 +116,8 @@
             outlined
             dense
             :hint="`${formData.tempat_lahir_pasangan.length}/255`"
+            :readonly="(!isEditable)"
+            :disabled="(!isEditable)"
           ></v-textarea>
           
           <label>Tanggal lahir pasangan*</label>
@@ -123,6 +128,7 @@
             transition="scale-transition"
             offset-y
             min-width="auto"
+            :disabled="(!isEditable)"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
@@ -133,12 +139,13 @@
                 outlined
                 v-bind="attrs"
                 v-on="on"
+                :disabled="(!isEditable)"
               ></v-text-field>
             </template>
             <v-date-picker
               ref="picker"
-              :readonly="editable"
-              :disabled="editable"
+              :readonly="(!isEditable)"
+              :disabled="(!isEditable)"
               v-model="formData.tgl_lahir_pasangan"
               :max="new Date().toISOString().substr(0, 10)"
               @change="saveDate"
@@ -152,6 +159,8 @@
             outlined
             dense
             :hint="`${formData.alamat_pasangan.length}/255`"
+            :readonly="(!isEditable)"
+            :disabled="(!isEditable)"
           ></v-textarea>
 
           <label>No. telp pasangan*</label>
@@ -160,6 +169,8 @@
             required
             outlined
             dense
+            :readonly="(!isEditable)"
+            :disabled="(!isEditable)"
           ></v-text-field>
 
           <label>Agama pasangan*</label>
@@ -168,6 +179,8 @@
             required
             outlined
             dense
+            :readonly="(!isEditable)"
+            :disabled="(!isEditable)"
           ></v-text-field>
 
           <label>Nama ayah pasangan*</label>
@@ -176,6 +189,8 @@
             required
             outlined
             dense
+            :readonly="(!isEditable)"
+            :disabled="(!isEditable)"
           ></v-text-field>
 
           <label>Nama ibu pasangan* (nama kecil)</label>
@@ -184,6 +199,8 @@
             required
             outlined
             dense
+            :readonly="(!isEditable)"
+            :disabled="(!isEditable)"
           ></v-text-field>
 
           <label>File syarat*</label>

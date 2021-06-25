@@ -313,6 +313,17 @@ const keluarga = {
       name: 'KetuaViewSuratKomuniPenguatanDetail',
       component: importView("Keluarga/KetuaLingkungan/SuratKomuniPenguatan/Detail")
     },
+    // ===== Surat Keterangan Calon Pengantion =====
+    {
+      path: 'ketua/surat/surat-keterangan-calon-pengantin',
+      name: 'KetuaViewSuratKeteranganCalonPengantin',
+      component: importView("Keluarga/KetuaLingkungan/SuratKeteranganCalonPengantin/ViewAll")
+    },
+    {
+      path: 'ketua/surat/surat-keterangan-calon-pengantin/detail/:id',
+      name: 'KetuaViewSuratKeteranganCalonPengantinDetail',
+      component: importView("Keluarga/KetuaLingkungan/SuratKeteranganCalonPengantin/Detail")
+    },
   ]
 }
 
