@@ -178,6 +178,22 @@ const keluarga = {
       name: 'UpdateSuratKeteranganMati',
       component: importView("Keluarga/KelolaSurat/SuratKeteranganMati/Edit")
     },
+    // ===== Surat Komuni Penguatan =====
+    {
+      path: 'surat/surat-komuni-penguatan',
+      name: 'ViewSuratKomuniPenguatan',
+      component: importView("Keluarga/KelolaSurat/SuratKomuniPenguatan/ViewAll")
+    },
+    {
+      path: 'surat/surat-komuni-penguatan/tambah',
+      name: 'AddSuratKomuniPenguatan',
+      component: importView("Keluarga/KelolaSurat/SuratKomuniPenguatan/Add")
+    },
+    {
+      path: 'surat/surat-komuni-penguatan/detail/:id',
+      name: 'UpdateSuratKomuniPenguatan',
+      component: importView("Keluarga/KelolaSurat/SuratKomuniPenguatan/Edit")
+    },
     // ==========================================
     //                      =====================
     // Ketua Lingkungan     =====================
