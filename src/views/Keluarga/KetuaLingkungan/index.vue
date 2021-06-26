@@ -20,7 +20,7 @@
       <div v-for="(card, i) in filteredCards" :key="i">
         <router-link :to="card.to" class="text-decoration-none">
           <v-card
-            class="mb-6 outline-grey"
+            class="mb-6 outline-grey card-border"
             hover
             outlined
             rounded="lg"

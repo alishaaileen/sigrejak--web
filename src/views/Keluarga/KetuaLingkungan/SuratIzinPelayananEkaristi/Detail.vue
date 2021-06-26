@@ -21,17 +21,6 @@
               Chat
             </v-btn>
 
-            <v-btn
-              class="btn text-none"
-              color="blue accent-4"
-              dark
-              rounded
-              depressed
-              v-if="data.ketua_lingkungan_approval === 0"
-              @click="verify"
-            >
-              Verifikasi
-            </v-btn>
             <v-chip
               v-if="data.ketua_lingkungan_approval === 1"
               :color="data.ketua_lingkungan_approval === 1 ? 'green' : 'grey lighten-2'"
@@ -93,6 +82,20 @@
 
               <label>Nomor telepon komunitas</label>
               <p>{{ data.no_telp_komunitas }}</p>
+            </div>
+
+            <div class="d-flex align-end">
+              <v-btn
+                class="btn text-none"
+                color="blue accent-4"
+                dark
+                rounded
+                depressed
+                v-if="data.ketua_lingkungan_approval === 0"
+                @click="verify"
+              >
+                Verifikasi
+              </v-btn>
             </div>
           </v-card-text>
         </v-card>
