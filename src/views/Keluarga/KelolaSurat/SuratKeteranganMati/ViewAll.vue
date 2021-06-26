@@ -126,9 +126,6 @@ export default {
     search: '',
     headers: [
       {
-        text: 'No. surat', value: 'no_surat',
-      },
-      {
         text: 'Nama', value: 'nama',
       },
       {

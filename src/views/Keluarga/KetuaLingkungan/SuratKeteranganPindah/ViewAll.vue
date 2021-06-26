@@ -104,9 +104,6 @@ export default {
     search: '',
     headers: [
       {
-        text: 'No. surat', value: 'no_surat',
-      },
-      {
         text: 'Tgl surat', value: 'created_at',
       },
       {
