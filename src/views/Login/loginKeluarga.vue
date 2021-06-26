@@ -82,7 +82,7 @@ export default {
         let response = await axios.post(`${API_URL}/keluarga/login`, this.user)
 
         await this.$store.dispatch('keluarga/login', response.data)
-        this.$router.push("/keluarga/dashboard");
+        this.$router.push("/keluarga/anggota");
       } catch (error) {
         if(error.response.status >= 400 && error.response.status < 500 ) {
           this.errorMsg = "Username atau Password salah"

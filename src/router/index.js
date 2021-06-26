@@ -19,7 +19,7 @@ const routes = [
     component: importView("Login/loginKeluarga"),
     beforeEnter: (to,from, next) => {
       if(localStorage.getItem('appKey')) {
-        next('/keluarga/dashboard')
+        next('/keluarga/anggota')
         return
       }
     

@@ -6,11 +6,11 @@
 
       <v-chip
         class="ma-2"
-        :color="menus[3].show ? `indigo accent-2` : `blue lighten-2`"
+        :color="$store.state.keluarga.lingkunganId != null ? `indigo accent-2` : `blue lighten-2`"
       >
         <v-avatar left>
           <v-icon
-            v-if="menus[3].show"
+            v-if="$store.state.keluarga.lingkunganId != null"
             color="white"
             small
           >
@@ -24,7 +24,7 @@
             fas fa-users
           </v-icon>
         </v-avatar>
-        <span v-if="menus[3].show" class="color-white">Ketua Lingkungan</span>
+        <span v-if="$store.state.keluarga.lingkunganId != null" class="color-white">Ketua Lingkungan</span>
         <span v-else class="color-white">Keluarga</span>
       </v-chip>
 
@@ -159,13 +159,8 @@ export default {
   }),
   data() {
     return {
+      isKetuaLingkungan: false,
       menus: [
-        {
-          title: "Dashboard",
-          icon: "mdi-view-dashboard-outline",
-          to: "/keluarga/dashboard",
-          show: true,
-        },
         {
           title: "Anggota Keluarga",
           icon: "mdi-account-group-outline",
@@ -202,7 +197,7 @@ export default {
     await this.$store.dispatch('keluarga/checkUserToken')
     await this.$store.dispatch('keluarga/getUserProfile')
     await this.$store.dispatch('keluarga/checkKetuaLingkungan')
-    this.menus[3].show = this.$store.state.keluarga.lingkunganId != null ? true : false 
+    this.menus[2].show = this.$store.state.keluarga.lingkunganId != null ? true : false 
   },
   methods: {
     logout() {

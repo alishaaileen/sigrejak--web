@@ -16,14 +16,8 @@ const keluarga = {
   name: 'Keluarga',
   component: importView("Keluarga/Keluarga"),
   beforeEnter: keluargaRouteGuard,
-  // redirect: '/keluarga/dashboard',
+  // redirect: '/keluarga/anggota',
   children: [
-    // Dashboard Keluarga =========================
-    {
-      path: 'dashboard',
-      name: 'DashboardKeluarga',
-      component: importView("Keluarga/Dashboard")
-    },
     // Profile Keluarga =========================
     {
       path: 'profile',
