@@ -110,7 +110,7 @@ export default {
         text: 'E-mail', value: 'email',
       },
       {
-        text: '', value: 'action', sortable: false,
+        text: 'Aksi', value: 'action', sortable: false,
       },
     ],
     data: [],

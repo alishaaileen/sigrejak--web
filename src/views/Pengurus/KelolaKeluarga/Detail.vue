@@ -205,7 +205,7 @@ export default {
         text: '', value: 'is_dead',
       },
       {
-        text: '', value: 'action',
+        text: 'Aksi', value: 'action',
       },
     ],
     familyMembers: [],

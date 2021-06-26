@@ -132,7 +132,7 @@ export default {
         text: 'Nomor telepon', value: 'no_telp',
       },
       {
-        text: '', value: 'action', sortable: false,
+        text: 'Aksi', value: 'action', sortable: false,
       },
     ],
     pengurus: [],

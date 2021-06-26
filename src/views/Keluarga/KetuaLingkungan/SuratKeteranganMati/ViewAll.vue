@@ -122,7 +122,7 @@ export default {
         text: 'K. Lingkungan', value: 'status_ketua_lingkungan', align: 'center', sortable: false
       },
       {
-        text: '', value: 'action', sortable: false
+        text: 'Aksi', value: 'action', sortable: false
       },
     ],
     surat: [],

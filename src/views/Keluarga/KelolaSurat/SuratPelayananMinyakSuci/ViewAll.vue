@@ -167,7 +167,7 @@ export default {
         text: 'Sekretariat', value: 'status_sekretariat', align: 'center', sortable: false
       },
       {
-        text: '', value: 'action', sortable: false
+        text: 'Aksi', value: 'action', sortable: false
       },
     ],
     surat: [],

@@ -147,7 +147,7 @@ export default {
         text: 'Romo', value: 'status_romo', align: 'center', sortable: false
       },
       {
-        text: '', value: 'action', sortable: false
+        text: 'Aksi', value: 'action', sortable: false
       },
     ],
     surat: [],

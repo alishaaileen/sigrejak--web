@@ -180,7 +180,7 @@ export default {
         text: 'Imam Pemberkat', value: 'status_imam_pemberkat', align: 'center', sortable: false
       },
       {
-        text: '', value: 'action', sortable: false
+        text: 'Aksi', value: 'action', sortable: false
       },
     ],
     surat: [],

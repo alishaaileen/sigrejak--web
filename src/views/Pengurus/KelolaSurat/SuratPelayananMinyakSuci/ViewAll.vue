@@ -179,7 +179,7 @@ export default {
         text: 'Pastor Pelayan', value: 'status_pastor_pelayan', align: 'center', sortable: false
       },
       {
-        text: '', value: 'action', sortable: false
+        text: 'Aksi', value: 'action', sortable: false
       },
     ],
     surat: [],

@@ -114,7 +114,7 @@ export default {
         text: 'Telepon', value: 'no_telp',
       },
       {
-        text: '', value: 'action',
+        text: 'Aksi', value: 'action',
       },
     ],
     familyMembers: [],
