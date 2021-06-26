@@ -141,7 +141,7 @@
                     </template>
                     <v-list>
                       <v-list-item @click="goToDetail(item.id)">
-                        <v-list-item-title>Detail</v-list-item-title>
+                        <v-list-item-title>Ubah</v-list-item-title>
                       </v-list-item>
                       <v-list-item @click="openConfirmDelete(item.id)">
                         <v-list-item-title>Hapus</v-list-item-title>

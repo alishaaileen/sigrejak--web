@@ -71,7 +71,7 @@
                     <v-list-item-title>Jadikan Romo Paroki</v-list-item-title>
                   </v-list-item>
                   <v-list-item @click="goToDetail(item.id)">
-                    <v-list-item-title>Detail</v-list-item-title>
+                    <v-list-item-title>Ubah</v-list-item-title>
                   </v-list-item>
                   <v-list-item v-if="item.role != 1 && item.role != 3" @click="openConfirmDelete(item.id)">
                     <v-list-item-title>Hapus</v-list-item-title>
