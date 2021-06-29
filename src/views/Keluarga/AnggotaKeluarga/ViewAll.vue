@@ -42,6 +42,9 @@
           </template>
 
           <!-- TABLE CONTENT -->
+          <template v-slot:[`item.tglLahir`]="{ item }">
+            {{ changeDate(item.tgl_lahir) }}
+          </template>
           <template v-slot:[`item.telepon`]="{ item }">
             <p v-if="item === null">-</p>
             <p>{{ item }}</p>
@@ -91,7 +94,7 @@
 </template>
 
 <script>
-import { getData, deleteData } from '../../../utils'
+import { getData, deleteData, changeDateFormat } from '../../../utils'
 
 export default {
   data: () => ({
@@ -105,7 +108,7 @@ export default {
         text: 'Tempat lahir', value: 'tempat_lahir',
       },
       {
-        text: 'Tgl Lahir', value: 'tgl_lahir',
+        text: 'Tgl Lahir', value: 'tglLahir',
       },
       {
         text: 'Jenis kelamin', value: 'jenis_kelamin',
@@ -132,6 +135,9 @@ export default {
     this.tableLoading = false
   },
   methods: {
+    changeDate(date) {
+      return changeDateFormat(date)
+    },
     async getAllFamilyMembers() {
       try {
         let url = `/umat/keluarga/${this.$store.state.keluarga.id}`

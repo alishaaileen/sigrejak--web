@@ -44,6 +44,9 @@
           </template>
 
           <!-- TABLE CONTENT -->
+          <template v-slot:[`item.tglPelaksanaan`]="{ item }">
+            {{ changeDate(item.tgl_pelaksanaan) }}
+          </template>
           <template v-slot:[`item.waktu`]="{ item }">
             {{ `${item.waktu_mulai.substring(0, 5)}-${item.waktu_selesai.substring(0, 5)}` }}
           </template>
@@ -124,6 +127,7 @@
 </template>
 
 <script>
+import { changeDateFormat } from '../../../../utils'
 import { getData, deleteData, cetakSurat } from '../../../../utils'
 
 export default {
@@ -133,7 +137,7 @@ export default {
     search: '',
     headers: [
       {
-        text: 'Tanggal', value: 'tgl_pelaksanaan',
+        text: 'Tanggal', value: 'tglPelaksanaan',
       },
       {
         text: 'Waktu', value: 'waktu',
@@ -176,6 +180,10 @@ export default {
     this.tableLoading = false
   },
   methods: {
+    changeDate(date) {
+      console.log(date)
+      return changeDateFormat(date)
+    },
     goToDetail(id) {
       this.$router.push(`/keluarga/surat/surat-izin-ekaristi/detail/${id}`)
     },

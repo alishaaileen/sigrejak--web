@@ -94,6 +94,16 @@ export function countAge(tglLahir) {
     return age;
 }
 
+export function changeDateFormat(dateInput) {
+    let year = dateInput.substring(0, 4)
+    let month = dateInput.substring(5, 7)
+    let date = dateInput.substring(8, 10)
+
+    console.log(`${date}-${month}-${year}`)
+
+    return `${date}-${month}-${year}`
+}
+
 export const cetakSurat = async (endpoint, id) => {
     let url = `${API_URL}/cetak${endpoint}/${id}`
 

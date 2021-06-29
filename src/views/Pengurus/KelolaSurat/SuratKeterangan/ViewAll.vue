@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import { getData, getOneData, cetakSurat } from '../../../../utils'
+import { getData, getOneData, changeDateFormat, cetakSurat } from '../../../../utils'
 import { verifySurat } from '../../../../utils/pengurus'
 
 import ModalDetail from './DetailModal'
@@ -226,6 +226,7 @@ export default {
   methods: {
     async openModalDetail(data) {
       this.selectedDetail = data
+      this.selectedDetail.tgl_lahir = changeDateFormat(this.selectedDetail.tgl_lahir)
 
       if(data.id_sekretariat != null) {
         this.sekretariat = await getOneData(`/admin/${data.id_sekretariat}`)
