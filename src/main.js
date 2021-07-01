@@ -5,6 +5,18 @@ import 'vuetify/dist/vuetify.min.css'
 import router from './router'
 import Axios from 'axios'
 import Vuelidate from 'vuelidate'
+import socketio from 'socket.io-client';
+import VueSocketIO from 'vue-socket.io';
+
+export const SocketInstance = socketio('http://localhost:5000', {
+  query: {
+    token: localStorage.getItem('appKey')
+  },
+  autoConnect: false,
+});
+
+// Dev purpose
+SocketInstance.onAny((event, ...args) => { console.log(event, args)})
 
 // CSS
 import './assets/style.css';
@@ -20,6 +32,11 @@ Vue.component('btn-kembali', () => import('./components/ButtonKembali'))
 
 Vue.use(vuetify)
 Vue.use(Vuelidate)
+Vue.use(SocketInstance)
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: SocketInstance
+}))
 
 Vue.prototype.$apiUrl = 'localhost:8000/api/';
 Vue.prototype.$http = Axios;

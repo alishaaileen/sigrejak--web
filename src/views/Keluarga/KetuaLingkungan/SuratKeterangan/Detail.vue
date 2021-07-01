@@ -16,6 +16,7 @@
               dark
               depressed
               rounded
+              @click="isChatBarActive = true"
             >
               <v-icon small>mdi-chat</v-icon>
               Chat
@@ -94,29 +95,101 @@
         </v-card>    
       </v-col>
     </v-row>
+
+    <v-navigation-drawer
+      v-model="isChatBarActive"
+      absolute
+      right
+      temporary
+      width="500"
+    >
+      <template v-slot:prepend>
+        <v-list-item two-line>
+          <v-list-item-avatar>
+            <img src="https://randomuser.me/api/portraits/women/81.jpg">
+          </v-list-item-avatar>
+
+          <v-list-item-content>
+            <v-list-item-title>
+              <h3 class="mb-0">Keluarga {{ data.nama_keluarga }}</h3>
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              <p class="mb-0">lorem ipsum</p>
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+
+      <v-divider></v-divider>
+
+      <chat-right-bar></chat-right-bar>
+      
+      <v-btn
+        class="text-none"
+        @click="isChatBarActive = false"
+      >
+        close
+      </v-btn>
+    </v-navigation-drawer>
+    
     <snackbar />
   </div>
 </template>
 
 <script>
+// import { API_URL } from '../../../../constants'
+// import io from 'socket.io-client'
 import { getOneData } from '../../../../utils'
 import { verifySurat } from '../../../../utils/pengurus'
 
+import ChatRightBar from './ChatRightBar.vue'
+
 export default {
+  components: {
+    ChatRightBar,
+  },
   data: () => ({
     url: '/surat-keterangan',
     data: {},
     textChat: '',
     isAlertOrtuActive: false,
+
+    isChatBarActive: false,
+    user: '',
+    message: '',
+    messages: [],
   }),
-  async mounted() {
-    this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
-  },
+  
   computed: {
     isVerifyDisabled() {
       return this.data.ketua_lingkungan_approval ? true : false
     }
   },
+  async mounted() {
+    this.connectSocket()
+    
+    this.$socket.on('MESSAGE', (data) => {
+      this.messages = [...this.messages, data];
+      // you can also do this.messages.push(data)
+    });
+
+    this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
+  },
+
+
+  sockets: {
+    connect() {
+      console.log('connected!')
+    },
+    disconnect() {
+      console.log('disconnected!')
+    },
+    connectError(err) {
+      console.log(err)
+    },
+  },
+
+
   methods: {
     async verify() {
       let snackbar
@@ -137,6 +210,23 @@ export default {
       this.$store.dispatch('snackbar/openSnackbar', snackbar)
       this.$store.dispatch('loading/closeLoading')
     },
+
+
+    connectSocket() {
+      this.user = this.$store.state.keluarga.nama_keluarga  
+      this.$socket.auth = { username: this.user };
+      this.$socket.connect();
+    },
+    sendMessage() {
+      this.$socket.emit('SEND_MESSAGE', {
+        user: this.user,
+        message: this.message,
+      })
+      this.message = ''
+    }
+  },
+  destroyed() {
+    this.$socket.off("connect_error")
   }
 }
 </script>
