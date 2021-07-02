@@ -6,7 +6,7 @@
       scrollable
       @click:outside="close"
     >
-      <v-card>
+      <v-card class="overflow-hidden">
         <v-toolbar
           color="blue accent-4"
           dark
@@ -56,7 +56,7 @@
               </v-row>
             </v-card>
 
-            <h2 class="mt-15 mb-5">Informasi Surat Izin</h2>
+            <h2 class="mt-5 mb-5">Informasi Surat Izin</h2>
 
             <label>No. surat</label>
             <v-text-field

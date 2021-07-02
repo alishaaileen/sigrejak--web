@@ -70,6 +70,10 @@ input {
   border-width: 3px !important;
 }
 
+.overflow-hidden {
+  overflow: hidden;
+}
+
 .side-login {
   padding: 50px;
   height: 100vh !important;
