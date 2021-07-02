@@ -137,7 +137,8 @@
       :url="url"
       :sekretariat="sekretariat"
       :romoParoki="romoParoki"
-      @closeModal="closeModal"
+      @verify="sekretariatVerify"
+      @closeModal="closeModalDetail"
     ></modal-detail>
   </div>
 </template>
@@ -188,7 +189,7 @@ export default {
     jumlahData: [10, 30, 50],
     deleteId: null,
     isModalDetailActive: false,
-    selectedDetail: { waktu_mulai: '', waktu_selesai: '' },
+    selectedDetail: { tgl_pelaksanaan: '', waktu_mulai: '', waktu_selesai: '' },
     sekretariat: {},
     romoParoki: {},
     lingkunganList: [],
@@ -220,6 +221,9 @@ export default {
           }
         })
       }
+    },
+    noSuratList() {
+      return this.surat.map(e => e.no_surat)
     }
   },
   async mounted() {
@@ -241,9 +245,25 @@ export default {
 
       this.isModalDetailActive = true
     },
-    async closeModal(modalActive) {
+    async closeModalDetail(modalActive) {
       this.isModalDetailActive = modalActive
+    },
+    async sekretariatVerify(dataSurat) {
+      this.$store.dispatch('loading/openLoading')
+      this.$store.commit('snackbar/resetSnackbar')
+
+      let snackbar = {}
+      
+      dataSurat.sekretariat_approval = 1
+      dataSurat.id_sekretariat = this.$store.state.pengurus.id
+      snackbar = await verifySurat(this.url, dataSurat.id, dataSurat)
+
+      this.closeModalDetail()
+
       this.surat = await getData(`${this.url}`)
+
+      this.$store.dispatch('snackbar/openSnackbar', snackbar)
+      this.$store.dispatch('loading/closeLoading')
     },
     async romoVerify(data) {
       let snackbar
@@ -251,8 +271,10 @@ export default {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
+      let tempRomoParoki = await getOneData('/admin/role/3')
       data.romo_approval = 1
-      data.id_romo = this.$store.state.pengurus.id
+      data.id_romo = tempRomoParoki.id
+      
       snackbar = await verifySurat(this.url, data.id, data)
 
       this.surat = await getData(`${this.url}`)

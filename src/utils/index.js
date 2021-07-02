@@ -99,7 +99,7 @@ export function changeDateFormat(dateInput) {
     let month = dateInput.substring(5, 7)
     let date = dateInput.substring(8, 10)
 
-    console.log(`${date}-${month}-${year}`)
+    // console.log(`${date}-${month}-${year}`)
 
     return `${date}-${month}-${year}`
 }

@@ -59,7 +59,12 @@
             <h2 class="mt-15 mb-5">Informasi Surat Izin</h2>
 
             <label>No. surat</label>
-            <p>{{ data.no_surat }}</p>
+            <v-text-field
+              v-model="data.no_surat"
+              required
+              outlined
+              dense
+            ></v-text-field>
 
             <label>Tanggal surat</label>
             <p>{{ data.created_at }}</p>
@@ -73,7 +78,7 @@
             <p>{{ data.no_telp_kepala_keluarga }}</p>
 
             <label>Tanggal pelaksanaan • Waktu</label>
-            <p>{{ `${data.tgl_pelaksanaan} • ${data.waktu_mulai.substring(0, 5)} - ${data.waktu_selesai.substring(0, 5)}` }}</p>
+            <p>{{ changeDate(data.tgl_pelaksanaan) }} • {{ data.waktu_mulai.substring(0, 5) }} - {{ data.waktu_selesai.substring(0, 5) }}</p>
 
             <label>Ujud/intensi</label>
             <p>{{ data.intensi }}</p>
@@ -105,10 +110,9 @@
             color="primary"
             rounded
             dark
-            :disabled="data.sekretariat_approval === 1"
-            @click="sekretariatVerify(data.id)"
+            @click="sekretariatVerify(data)"
           >
-            <div class="ma-4">Verifikasi</div>
+            <div class="ma-4">{{ data.sekretariat_approval === 1 ? 'Simpan': 'Verifikasi' }}</div>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -117,7 +121,7 @@
 </template>
 
 <script>
-import { verifySurat } from '../../../../utils/pengurus'
+import { changeDateFormat } from '../../../../utils'
 export default {
   props:{
     isModalDetailActive: Boolean,
@@ -127,22 +131,14 @@ export default {
     romoParoki: Object,
   },
   methods: {
-    async sekretariatVerify() {
-      this.$store.dispatch('loading/openLoading')
-      this.$store.commit('snackbar/resetSnackbar')
-
-      this.close()
-      let snackbar = {}
-      
-      this.data.sekretariat_approval = 1
-      this.data.id_sekretariat = this.$store.state.pengurus.id
-      snackbar = await verifySurat(this.url, this.data.id, this.data)
-
-      this.$store.dispatch('snackbar/openSnackbar', snackbar)
-      this.$store.dispatch('loading/closeLoading')
+    changeDate(date) {
+      return changeDateFormat(date)
+    },
+    sekretariatVerify(dataSurat) {
+      this.$emit('verify', dataSurat)
     },
     close() {
-      this.$emit('closeModal', false)
+      this.$emit('closeModal')
     },
   }
 
