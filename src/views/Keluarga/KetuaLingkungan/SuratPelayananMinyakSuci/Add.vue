@@ -257,7 +257,7 @@ export default {
     this.formData.id_keluarga = null
     this.formData.isKetuaLingkungan = true
     this.formData.id_lingkungan = this.$store.state.keluarga.lingkunganId
-    this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_keluarga
+    this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
   },
   methods: {
     initTahun() {

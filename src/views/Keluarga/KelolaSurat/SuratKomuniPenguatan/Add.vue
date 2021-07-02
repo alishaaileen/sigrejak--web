@@ -288,7 +288,7 @@ export default {
     this.formData.id_keluarga = this.$store.state.keluarga.id
     if (this.$store.state.keluarga.lingkunganId) {
       this.formData.isKetuaLingkungan = true
-      this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_keluarga
+      this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
     }
   },
   methods: {
