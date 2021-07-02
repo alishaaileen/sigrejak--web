@@ -202,7 +202,7 @@
 </template>
 
 <script>
-import { getData, getOneData, editData } from '../../../../utils'
+import { getData, getOneData, editData, changeDateFormat } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 import ApprovalChip from '../../../../components/ApprovalChip.vue'
 import { API_URL } from '../../../../constants'
@@ -235,6 +235,7 @@ export default {
   async mounted() {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.formData = await getOneData(`/surat-keterangan-beasiswa/${this.$route.params.id}`)
+    this.formData.tgl_lahir = changeDateFormat(this.formData.tgl_lahir)
 
     // Get data sekretariat and romo if surat has been approved
     if(this.formData.id_sekretariat != null) {
@@ -260,7 +261,7 @@ export default {
       this.formData.id_siswa = temp.id
       this.formData.id_lingkungan = temp.lingkungan_id
       this.formData.tempat_lahir = temp.tempat_lahir
-      this.formData.tgl_lahir = temp.tgl_lahir
+      this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
       this.formData.alamat = temp.alamat
       this.formData.no_telp = temp.no_telp
 

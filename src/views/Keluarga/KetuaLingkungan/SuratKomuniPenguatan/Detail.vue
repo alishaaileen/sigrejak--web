@@ -159,7 +159,7 @@
 </template>
 
 <script>
-import { getOneData } from '../../../../utils'
+import { getOneData, changeDateFormat } from '../../../../utils'
 import { verifySurat } from '../../../../utils/pengurus'
 import { API_URL } from '../../../../constants'
 import DialogImage from '../../../../components/DialogImage.vue'
@@ -177,6 +177,8 @@ export default {
   }),
   async mounted() {
     this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
+    this.data.tgl_lahir = changeDateFormat(this.data.tgl_lahir)
+    this.data.tgl_krisma_wali = changeDateFormat(this.data.tgl_krisma_wali)
 
     this.tempJenisSurat = (this.data.jenis_surat === 1 ? 'Komuni I' : 'Penguatan')
 

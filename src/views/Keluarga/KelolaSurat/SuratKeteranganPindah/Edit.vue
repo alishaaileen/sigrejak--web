@@ -239,7 +239,7 @@
 </template>
 
 <script>
-import { getData, getOneData, editData } from '../../../../utils'
+import { getData, getOneData, editData, changeDateFormat } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 import ApprovalChip from '../../../../components/ApprovalChip.vue'
 
@@ -274,6 +274,7 @@ export default {
     
     // Get data surat
     this.formData = await getOneData(`/surat-keterangan-pindah/${this.$route.params.id}`)
+    this.formData.tgl_lahir = changeDateFormat(this.formData.tgl_lahir)
 
     // Mengaktifkan switch jika umat pindah ke paroki baru
     this.isNotKumetiran = this.formData.paroki_baru != 'Kumetiran' ? true : false
@@ -306,7 +307,7 @@ export default {
       this.formData.id_umat = temp.id;
       this.formData.nama = temp.nama;
       this.formData.tempat_lahir = temp.tempat_lahir
-      this.formData.tgl_lahir = temp.tgl_lahir
+      this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
       this.formData.no_telp_lama = temp.no_telp
       this.formData.alamat_lama = temp.alamat
       this.formData.lingkungan_lama = temp.nama_lingkungan

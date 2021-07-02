@@ -229,7 +229,7 @@
 </template>
 
 <script>
-import { getData, getOneData, postData } from '../../../../utils'
+import { getData, getOneData, postData, changeDateFormat } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 
 export default {
@@ -305,7 +305,7 @@ export default {
       this.formData.nama_baptis = temp.nama_baptis
       this.formData.no_telp = temp.no_telp
       this.formData.tempat_lahir = temp.tempat_lahir
-      this.formData.tgl_lahir = temp.tgl_lahir
+      this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
 
       this.isAlertNotBaptized = (temp.nama_baptis === null) ? true : false
 

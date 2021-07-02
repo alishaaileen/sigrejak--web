@@ -150,7 +150,7 @@
 </template>
 
 <script>
-import { getOneData } from '../../../../utils'
+import { getOneData, changeDateFormat } from '../../../../utils'
 import { verifySurat } from '../../../../utils/pengurus'
 import { API_URL } from '../../../../constants'
 import DialogImage from '../../../../components/DialogImage.vue'
@@ -167,6 +167,7 @@ export default {
   }),
   async mounted() {
     this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
+    this.data.tgl_lahir = changeDateFormat(this.data.tgl_lahir)
 
     this.getImage(this.data.file_akta_lahir)
   },

@@ -345,7 +345,7 @@
 </template>
 
 <script>
-import { getData, postData } from '../../../../utils'
+import { getData, getOneData, postData, changeDateFormat } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 
 export default {
@@ -419,11 +419,10 @@ export default {
       this.formData.id_umat = temp.id
       this.formData.nama_baptis = temp.nama_baptis
       this.formData.tempat_lahir = temp.tempat_lahir
-      this.formData.tgl_lahir = temp.tgl_lahir
+      this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
       this.formData.alamat = temp.alamat
 
-      let detailTemp = await getData(`/detail-umat/${temp.id}`)
-      detailTemp = detailTemp[0]
+      let detailTemp = await getOneData(`/detail-umat/${temp.id}`)
       this.setOrtu(detailTemp.id_ayah, detailTemp.id_ibu)
     },
     async setOrtu(idAyah, idIbu) {
@@ -435,11 +434,10 @@ export default {
         return
       }
       else if (idAyah != null)
-        temp = await getData(`/umat/${idAyah}`)
+        temp = await getOneData(`/umat/${idAyah}`)
       else if (idIbu != null)
-        temp = await getData(`/umat/${idIbu}`)
+        temp = await getOneData(`/umat/${idIbu}`)
       
-      temp = temp[0]
       this.formData.nama_orang_tua = temp.nama
     },
     async submit() {

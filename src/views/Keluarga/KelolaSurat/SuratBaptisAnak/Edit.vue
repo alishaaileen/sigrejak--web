@@ -292,7 +292,7 @@
 </template>
 
 <script>
-import { countAge, getData, getOneData, editData } from '../../../../utils'
+import { countAge, getData, getOneData, editData, changeDateFormat } from '../../../../utils'
 import { caraMenikahList } from '../../../../constants'
 import Autocomplete from '../../../../components/Autocomplete'
 import ApprovalChip from '../../../../components/ApprovalChip.vue'
@@ -331,6 +331,7 @@ export default {
   async mounted() {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
+    this.formData.tgl_lahir = changeDateFormat(this.formData.tgl_lahir)
 
     if(!(this.caraMenikahList.find(e => e === this.formData.cara_ortu_menikah))) {
       this.temp_cara_ortu_menikah = this.formData.cara_ortu_menikah
@@ -361,7 +362,7 @@ export default {
       this.formData.id_anak = temp.id
       this.formData.id_lingkungan = temp.lingkungan_id
       this.formData.tempat_lahir = temp.tempat_lahir
-      this.formData.tgl_lahir = temp.tgl_lahir
+      this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
 
       let umur = countAge(temp.tgl_lahir)
       this.isAlertUmurActive = (umur > 7) ? true : false

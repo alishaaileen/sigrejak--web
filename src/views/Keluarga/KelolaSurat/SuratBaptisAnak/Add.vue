@@ -240,7 +240,7 @@
 </template>
 
 <script>
-import { countAge, getData, getOneData, postData } from '../../../../utils'
+import { countAge, getData, getOneData, postData, changeDateFormat } from '../../../../utils'
 import { caraMenikahList } from '../../../../constants'
 import Autocomplete from '../../../../components/Autocomplete'
 
@@ -316,7 +316,7 @@ export default {
       this.formData.id_anak = temp.id
       this.formData.id_lingkungan = temp.lingkungan_id
       this.formData.tempat_lahir = temp.tempat_lahir
-      this.formData.tgl_lahir = temp.tgl_lahir
+      this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
 
       let umur = countAge(temp.tgl_lahir)
       this.isAlertUmurActive = (umur > 7) ? true : false

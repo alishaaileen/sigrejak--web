@@ -167,7 +167,7 @@
 </template>
 
 <script>
-import { getData, postData } from '../../../../utils'
+import { getData, postData, changeDateFormat } from '../../../../utils'
 import { caraMenikahList } from '../../../../constants'
 import Autocomplete from '../../../../components/Autocomplete'
 
@@ -247,7 +247,7 @@ export default {
       this.formData.id_lingkungan = temp.lingkungan_id
       this.formData.nama_baptis = temp.nama_baptis
       this.formData.tempat_lahir = temp.tempat_lahir
-      this.formData.tgl_lahir = temp.tgl_lahir
+      this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
       this.formData.alamat = temp.alamat
     },
     async changeIdPastor(e) {

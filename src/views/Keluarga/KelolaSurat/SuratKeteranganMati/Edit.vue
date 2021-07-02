@@ -436,7 +436,7 @@
 </template>
 
 <script>
-import { getData, editData } from '../../../../utils'
+import { getData, getOneData, editData, changeDateFormat } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 import ApprovalChip from '../../../../components/ApprovalChip.vue'
 
@@ -469,8 +469,8 @@ export default {
   async mounted() {
     this.imamList = await getData(`/admin/role/3`)
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
-    this.formData = await getData(`${this.url}/${this.$route.params.id}`)
-    this.formData = this.formData[0]
+    this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
+    this.formData.tgl_lahir = changeDateFormat(this.formData.tgl_lahir)
 
     this.setOrtu(this.formData.id_ayah, this.formData.id_ibu)
 
@@ -498,11 +498,10 @@ export default {
       this.formData.id_umat = temp.id
       this.formData.nama_baptis = temp.nama_baptis
       this.formData.tempat_lahir = temp.tempat_lahir
-      this.formData.tgl_lahir = temp.tgl_lahir
+      this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
       this.formData.alamat = temp.alamat
 
-      let detailTemp = await getData(`/detail-umat/${temp.id}`)
-      detailTemp = detailTemp[0]
+      let detailTemp = await getOneData(`/detail-umat/${temp.id}`)
       this.setOrtu(detailTemp.id_ayah, detailTemp.id_ibu)
     },
     async setOrtu(idAyah, idIbu) {
@@ -517,11 +516,10 @@ export default {
       let temp
       
       if (idAyah != null)
-        temp = await getData(`/umat/${idAyah}`)
+        temp = await getOneData(`/umat/${idAyah}`)
       else if (idIbu != null)
-        temp = await getData(`/umat/${idIbu}`)
+        temp = await getOneData(`/umat/${idIbu}`)
       
-      temp = temp[0]
       this.formData.nama_orang_tua = temp.nama
       console.log(this.formData.nama_orang_tua)
     },

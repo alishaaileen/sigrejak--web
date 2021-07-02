@@ -292,7 +292,7 @@
 
 <script>
 import { API_URL } from '../../../../constants'
-import { getData, getOneData, editData } from '../../../../utils'
+import { getData, getOneData, editData, changeDateFormat } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 import ApprovalChip from '../../../../components/ApprovalChip.vue'
 
@@ -328,6 +328,7 @@ export default {
   async mounted() {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
+    this.formData.tgl_lahir = changeDateFormat(this.formData.tgl_lahir)
 
     this.tempJenisSurat = this.formData.jenis_surat === 1 ? 'Komuni I' : 'Penguatan'
 
@@ -358,7 +359,7 @@ export default {
       this.formData.nama_baptis = temp.nama_baptis
       this.formData.no_telp = temp.no_telp
       this.formData.tempat_lahir = temp.tempat_lahir
-      this.formData.tgl_lahir = temp.tgl_lahir
+      this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
 
       this.isAlertNotBaptized = (temp.nama_baptis === null) ? true : false
 

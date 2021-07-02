@@ -172,7 +172,7 @@
 </template>
 
 <script>
-import { getData, postData } from '../../../../utils'
+import { getData, postData, changeDateFormat } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 
 export default {
@@ -239,7 +239,7 @@ export default {
       this.formData.id_umat = temp.id;
       this.formData.nama = temp.nama;
       this.formData.tempat_lahir = temp.tempat_lahir
-      this.formData.tgl_lahir = temp.tgl_lahir
+      this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
       this.formData.no_telp_lama = temp.no_telp
       this.formData.alamat_lama = temp.alamat
       this.formData.lingkungan_lama = temp.nama_lingkungan

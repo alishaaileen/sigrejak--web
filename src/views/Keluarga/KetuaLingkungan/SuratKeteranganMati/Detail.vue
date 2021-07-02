@@ -162,7 +162,7 @@
 </template>
 
 <script>
-import { getOneData } from '../../../../utils'
+import { getOneData, changeDateFormat } from '../../../../utils'
 import { verifySurat } from '../../../../utils/pengurus'
 
 export default {
@@ -174,6 +174,13 @@ export default {
   }),
   async mounted() {
     this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
+    this.data.tgl_lahir = changeDateFormat(this.data.tgl_lahir)
+    this.data.tgl_meninggal = changeDateFormat(this.data.tgl_meninggal)
+    this.data.tgl_makam_kremasi = changeDateFormat(this.data.tgl_makam_kremasi)
+    this.data.tgl_komuni = changeDateFormat(this.data.tgl_komuni)
+    this.data.tgl_pengampunan_dosa = changeDateFormat(this.data.tgl_pengampunan_dosa)
+    this.data.tgl_perminyakan = changeDateFormat(this.data.tgl_perminyakan)
+    this.data.tgl_baptis_darurat = changeDateFormat(this.data.tgl_baptis_darurat)
   },
   computed: {
     isVerifyDisabled() {

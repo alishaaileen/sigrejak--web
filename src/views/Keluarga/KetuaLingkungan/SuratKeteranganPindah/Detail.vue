@@ -74,6 +74,9 @@
 
               <v-divider></v-divider>
 
+              <label>Tanggal pertama kali domisili</label>
+              <p>{{ data.tgl_domisili_lama }}</p>
+
               <label>Alamat lama</label>
               <p>{{ data.alamat_lama }}</p>
 
@@ -111,7 +114,7 @@
 </template>
 
 <script>
-import { getOneData } from '../../../../utils'
+import { getOneData, changeDateFormat } from '../../../../utils'
 import { verifySurat } from '../../../../utils/pengurus'
 
 export default {
@@ -123,6 +126,9 @@ export default {
   }),
   async mounted() {
     this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
+    this.data.tgl_lahir = changeDateFormat(this.data.tgl_lahir)
+    this.data.tgl_domisili_lama = changeDateFormat(this.data.tgl_domisili_lama)
+    this.data.tgl_domisili_baru = changeDateFormat(this.data.tgl_domisili_baru)
   },
   computed: {
     isVerifyDisabled() {

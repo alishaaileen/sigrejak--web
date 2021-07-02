@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { getOneData } from '../../../../utils'
+import { getOneData, changeDateFormat } from '../../../../utils'
 import { verifySurat } from '../../../../utils/pengurus'
 
 export default {
@@ -121,6 +121,7 @@ export default {
   }),
   async mounted() {
     this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
+    this.data.tgl_pelaksanaan = changeDateFormat(this.data.tgl_pelaksanaan)
   },
   computed: {
     isVerifyDisabled() {
