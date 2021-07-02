@@ -85,7 +85,7 @@
                 </template>
                 <v-list>
                   <v-list-item @click="goToDetail(item.id)">
-                    <v-list-item-title>Ubah</v-list-item-title>
+                    <v-list-item-title>{{ item.ketua_lingkungan_approval === 1 ? 'Detail' : 'Ubah' }}</v-list-item-title>
                   </v-list-item>
                   <v-list-item
                     v-if="item.ketua_lingkungan_approval === 1 && item.sekretariat_approval === 1 && item.pastor_pelayan_approval === 1"
