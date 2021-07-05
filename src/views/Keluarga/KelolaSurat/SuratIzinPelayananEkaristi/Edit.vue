@@ -44,7 +44,7 @@
         <v-divider></v-divider>
 
         <v-content class="pa-6">
-          <v-form @submit.prevent="submit">
+          <v-form>
             <label>Tanggal pelaksanaan*</label>
             <v-menu
               :disabled="(!isEditable)"
@@ -192,7 +192,7 @@
             <div class="d-flex justify-end">
               <v-btn
                 class="btn text-none mt-2"
-                type="submit"
+                @click="submit"
                 color="blue accent-4"
                 dark
                 depressed

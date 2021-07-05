@@ -48,7 +48,7 @@
             elevation="2"
           >
             <span>
-              Siswa yang dipilih belum memiliki catatan orang tua.
+              Umat yang dipilih belum memiliki catatan orang tua.
               Harap lengkapi informasi di menu Anggota Keluarga.
             </span>
           </v-alert>

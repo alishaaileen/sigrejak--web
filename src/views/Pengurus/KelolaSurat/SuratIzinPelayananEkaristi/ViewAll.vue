@@ -254,9 +254,12 @@ export default {
 
       let snackbar = {}
       
-      dataSurat.sekretariat_approval = 1
-      dataSurat.id_sekretariat = this.$store.state.pengurus.id
-      snackbar = await verifySurat(this.url, dataSurat.id, dataSurat)
+      let verifikasi = {
+            role: 'sekretariat',
+            id_sekretariat: this.$store.state.pengurus.id
+          }
+
+      snackbar = await verifySurat(this.url, dataSurat.id, verifikasi)
 
       this.closeModalDetail()
 
@@ -272,10 +275,12 @@ export default {
       this.$store.commit('snackbar/resetSnackbar')
 
       let tempRomoParoki = await getOneData('/admin/role/3')
-      data.romo_approval = 1
-      data.id_romo = tempRomoParoki.id
+        , verifikasi = {
+          role: 'romo paroki',
+          id_romo: tempRomoParoki.id
+        }
       
-      snackbar = await verifySurat(this.url, data.id, data)
+      snackbar = await verifySurat(this.url, data.id, verifikasi)
 
       this.surat = await getData(`${this.url}`)
 

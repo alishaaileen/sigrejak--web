@@ -60,7 +60,7 @@
               <v-divider class="mb-5"></v-divider>
 
               <label>Tanggal pelaksanaan • Waktu</label>
-              <p>{{ `${data.tgl_pelaksanaan} • ${data.waktu_mulai.substring(0, 5)} - ${data.waktu_selesai.substring(0, 5)}` }}</p>
+              <p>{{ changeDate(this.data.tgl_pelaksanaan) }} • {{ data.waktu_mulai.substring(0, 5) }} - {{ data.waktu_selesai.substring(0, 5) }}</p>
 
               <label>Ujud/intensi</label>
               <p>{{ data.intensi }}</p>
@@ -84,20 +84,22 @@
               <p>{{ data.no_telp_komunitas }}</p>
             </div>
 
-            <div class="d-flex align-end">
-              <v-btn
-                class="btn text-none"
-                color="blue accent-4"
-                dark
-                rounded
-                depressed
-                v-if="data.ketua_lingkungan_approval === 0"
-                @click="verify"
-              >
-                Verifikasi
-              </v-btn>
-            </div>
           </v-card-text>
+
+          <v-card-actions v-if="data.ketua_lingkungan_approval === 0" class="py-3 px-5">
+            <v-spacer></v-spacer>
+            <v-btn
+              class="btn text-none"
+              color="blue accent-4"
+              dark
+              rounded
+              depressed
+              v-if="data.ketua_lingkungan_approval === 0"
+              @click="verify"
+            >
+              Verifikasi
+            </v-btn>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -121,7 +123,6 @@ export default {
   }),
   async mounted() {
     this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
-    this.data.tgl_pelaksanaan = changeDateFormat(this.data.tgl_pelaksanaan)
   },
   computed: {
     isVerifyDisabled() {
@@ -129,13 +130,16 @@ export default {
     }
   },
   methods: {
+    changeDate(date) {
+      return changeDateFormat(date)
+    },
     async verify() {
       let snackbar
       
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
-      this.data.ketua_lingkungan_approval = 1
+      this.data.role = 'ketua lingkungan'
       this.data.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
       snackbar = await verifySurat(this.url, this.data.id, this.data)
 

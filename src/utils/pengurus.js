@@ -4,7 +4,7 @@ export const verifySurat = async (url, id, data) => {
 	let snackbar = {}
 
 	try {
-		let response = await editData(url, id, data)
+		let response = await editData(`${url}/verifikasi`, id, data)
 
 		if (response.status >= 200 && response.status < 300) {
 			snackbar.color = 'success',

@@ -6,7 +6,7 @@
 
     <div class="form mt-5">
       <v-card class="pa-6 mx-auto" flat>
-        <v-form @submit.prevent="submit">
+        <v-form>
           <label>Tanggal pelaksanaan*</label>
           <v-menu
             ref="menu"
@@ -139,7 +139,7 @@
           <div class="d-flex justify-end">
             <v-btn
               class="btn text-none mt-2"
-              type="submit"
+              @click="submit"
               color="blue accent-4"
               dark
               depressed
@@ -199,10 +199,6 @@ export default {
 
     this.lingkunganList = await getData(`/lingkungan`)
     this.formData.id_keluarga = this.$store.state.keluarga.id
-    if (this.$store.state.keluarga.lingkunganId != null) {
-      this.formData.isKetuaLingkungan = true
-      this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
-    }
   },
   methods: {
     initWaktu(start, limit) {
@@ -231,6 +227,14 @@ export default {
       this.$store.commit('snackbar/resetSnackbar')
 
       this.setAllWaktu(this.waktu)
+
+      if (this.formData.id_lingkungan == this.$store.state.keluarga.lingkunganId) {
+        this.formData.isKetuaLingkungan = true
+        this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
+      } else {
+        this.formData.isKetuaLingkungan = false
+        this.formData.ketua_lingkungan = null
+      }
 
       let snackbar = {}
 
