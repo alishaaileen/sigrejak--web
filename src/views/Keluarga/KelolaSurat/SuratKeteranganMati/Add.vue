@@ -430,6 +430,7 @@ export default {
       let temp
 
       if (idAyah == null && idIbu == null) {
+        this.formData.nama_orang_tua = '-'
         this.isAlertOrtuActive = true
         return
       }
@@ -445,6 +446,14 @@ export default {
       this.$store.commit('snackbar/resetSnackbar')
 
       let snackbar = {}
+
+      if (this.formData.id_lingkungan == this.$store.state.keluarga.lingkunganId) {
+        this.formData.isKetuaLingkungan = true
+        this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
+      } else {
+        this.formData.isKetuaLingkungan = false
+        this.formData.ketua_lingkungan = null
+      }
 
       try {
         let response = await postData(`${this.url}/add`, this.formData)

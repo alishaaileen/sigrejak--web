@@ -269,7 +269,7 @@ export default {
 
       let snackbar = {}
       
-      dataSurat.sekretariat_approval = 1
+      dataSurat.role = 'sekretariat'
       dataSurat.id_sekretariat = this.$store.state.pengurus.id
       snackbar = await verifySurat(this.url, dataSurat.id, dataSurat)
       

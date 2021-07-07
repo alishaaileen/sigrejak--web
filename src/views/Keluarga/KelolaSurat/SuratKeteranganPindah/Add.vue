@@ -216,10 +216,6 @@ export default {
     this.lingkunganList = await getData(`/lingkungan`)
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.formData.id_keluarga = this.$store.state.keluarga.id
-    if (this.$store.state.keluarga.lingkunganId) {
-      this.formData.isKetuaLingkungan = true
-      this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
-    }
   },
   methods: {
     saveDate (date) {
@@ -246,21 +242,28 @@ export default {
       this.formData.id_lingkungan_lama = temp.lingkungan_id
     },
     switchParoki() {
-      if (!this.isNotKumetiran){
-        this.formData.paroki_baru = 'Kumetiran'
-        this.formData.nama_lingkungan_baru = ''
-      }
-      else {
+      if (this.isNotKumetiran){
         this.formData.id_lingkungan_baru = null
-        this.formData.nama_lingkungan_baru = ''
         this.formData.paroki_baru = ''
       }
+      else {
+        this.formData.paroki_baru = 'Kumetiran'
+      }
+      this.formData.nama_lingkungan_baru = ''
     },
     async submit() {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
       let snackbar = {}
+
+      if (this.formData.id_lingkungan == this.$store.state.keluarga.lingkunganId) {
+        this.formData.isKetuaLingkungan = true
+        this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
+      } else {
+        this.formData.isKetuaLingkungan = false
+        this.formData.ketua_lingkungan = null
+      }
 
       try {
         let response = await postData('/surat-keterangan-pindah/add', this.formData)

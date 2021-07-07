@@ -194,9 +194,11 @@ export default {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
-      this.data.ketua_lingkungan_approval = 1
-      this.data.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
-      snackbar = await verifySurat(this.url, this.data.id, this.data)
+      let verifikasi = {
+        role: 'ketua lingkungan',
+        ketua_lingkungan: this.$store.state.keluarga.nama_kepala_keluarga
+      }
+      snackbar = await verifySurat(this.url, this.data.id, verifikasi)
 
       if (snackbar.color === 'success') {
         this.$router.push('/keluarga/ketua/surat/surat-keterangan-mati')

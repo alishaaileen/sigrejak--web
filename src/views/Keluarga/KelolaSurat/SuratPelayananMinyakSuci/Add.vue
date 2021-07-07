@@ -213,10 +213,6 @@ export default {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.pastorList = await getData(`/admin/role/3`)
     this.formData.id_keluarga = this.$store.state.keluarga.id
-    if (this.$store.state.keluarga.lingkunganId) {
-      this.formData.isKetuaLingkungan = true
-      this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
-    }
   },
   methods: {
     initTahun() {
@@ -261,9 +257,19 @@ export default {
       this.$store.commit('snackbar/resetSnackbar')
 
       let snackbar = {}
+
+      if (this.formData.id_lingkungan == this.$store.state.keluarga.lingkunganId) {
+        this.formData.isKetuaLingkungan = true
+        this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
+      } else {
+        this.formData.isKetuaLingkungan = false
+        this.formData.ketua_lingkungan = null
+      }
+
       if(this.formData.status_terima_minyak === 'Belum pernah') {
         this.formData.tgl_terima_minyak = null
       }
+      
       if(this.formData.cara_ortu_menikah === 'Cara lain') {
         this.formData.cara_ortu_menikah = this.temp_cara_ortu_menikah
       }

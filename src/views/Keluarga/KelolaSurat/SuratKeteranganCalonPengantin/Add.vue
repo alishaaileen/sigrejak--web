@@ -262,10 +262,6 @@ export default {
   async mounted() {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.formData.id_keluarga = this.$store.state.keluarga.id
-    if (this.$store.state.keluarga.lingkunganId) {
-      this.formData.isKetuaLingkungan = true
-      this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
-    }
   },
   methods: {
     saveDate (date) {
@@ -290,20 +286,16 @@ export default {
     async setOrtu(idAyah, idIbu) {
       let tempOrangTua = {}
 
+      this.isAlertOrtuActive = false
       if (idAyah === null || idIbu === null) {
         this.isAlertOrtuActive = true
-        this.formData.nama_ayah = '-'
-        this.formData.nama_ibu = '-'
-        return
       }
       
-      this.isAlertOrtuActive = false
-      
       tempOrangTua = await getOneData(`/umat/${idIbu}`)
-      this.formData.nama_ibu = tempOrangTua.nama
+      this.formData.nama_ibu = tempOrangTua.nama || '-'
       
       tempOrangTua = await getOneData(`/umat/${idAyah}`)
-      this.formData.nama_ayah = tempOrangTua.nama
+      this.formData.nama_ayah = tempOrangTua.nama || '-'
     },
     async submit() {
       console.log(this.formData)
@@ -324,6 +316,14 @@ export default {
       formData.append('nama_ayah_pasangan', this.formData.nama_ayah_pasangan)
       formData.append('nama_ibu_pasangan', this.formData.nama_ibu_pasangan)
       formData.append('file_syarat', this.formData.file_syarat)
+
+      if (this.formData.id_lingkungan == this.$store.state.keluarga.lingkunganId) {
+        this.formData.isKetuaLingkungan = true
+        this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
+      } else {
+        this.formData.isKetuaLingkungan = false
+        this.formData.ketua_lingkungan = null
+      }
       formData.append('ketua_lingkungan', this.formData.ketua_lingkungan)
       formData.append('isKetuaLingkungan', this.formData.isKetuaLingkungan)
 

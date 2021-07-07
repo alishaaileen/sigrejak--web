@@ -299,10 +299,6 @@ export default {
   async mounted() {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.formData.id_keluarga = this.$store.state.keluarga.id
-    if (this.$store.state.keluarga.lingkunganId) {
-      this.formData.isKetuaLingkungan = true
-      this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
-    }
   },
   methods: {
     saveDate (date) {
@@ -332,13 +328,13 @@ export default {
 
       if (idAyah) {
         tempOrangTua = await getOneData(`/umat/${idAyah}`)
-        this.formData.nama_ayah = tempOrangTua.nama
-        this.formData.alamat_ortu = tempOrangTua.alamat
-        this.formData.no_telp_ortu = tempOrangTua.no_telp
+        this.formData.nama_ayah = tempOrangTua.nama || '-'
+        this.formData.alamat_ortu = tempOrangTua.alamat || '-'
+        this.formData.no_telp_ortu = tempOrangTua.no_telp || '-'
       }
       if (idIbu) {
         tempOrangTua = await getOneData(`/umat/${idIbu}`)
-        this.formData.nama_ibu = tempOrangTua.nama
+        this.formData.nama_ibu = tempOrangTua.nama || '-'
       }
     },
     async submit() {
@@ -360,9 +356,17 @@ export default {
       formData.append('tgl_ortu_menikah', this.formData.tgl_ortu_menikah)
       formData.append('nama_wali_baptis', this.formData.nama_wali_baptis)
       formData.append('tgl_krisma_wali_baptis', this.formData.tgl_krisma_wali_baptis)
+      formData.append('file_syarat_baptis', this.formData.file_syarat_baptis)
+
+      if (this.formData.id_lingkungan == this.$store.state.keluarga.lingkunganId) {
+        this.formData.isKetuaLingkungan = true
+        this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
+      } else {
+        this.formData.isKetuaLingkungan = false
+        this.formData.ketua_lingkungan = null
+      }
       formData.append('ketua_lingkungan', this.formData.ketua_lingkungan)
       formData.append('isKetuaLingkungan', this.formData.isKetuaLingkungan)
-      formData.append('file_syarat_baptis', this.formData.file_syarat_baptis)
 
       try {
         let response = await postData(`${this.url}/add`, formData)

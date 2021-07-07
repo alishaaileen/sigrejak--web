@@ -378,13 +378,13 @@ export default {
 
       if (idAyah) {
         tempOrangTua = await getOneData(`/umat/${idAyah}`)
-        this.formData.nama_ayah = tempOrangTua.nama
-        this.formData.alamat_ortu = tempOrangTua.alamat
-        this.formData.no_telp_ortu = tempOrangTua.no_telp
+        this.formData.nama_ayah = tempOrangTua.nama || '-'
+        this.formData.alamat_ortu = tempOrangTua.alamat || '-'
+        this.formData.no_telp_ortu = tempOrangTua.no_telp || '-'
       }
       if (idIbu) {
         tempOrangTua = await getOneData(`/umat/${idIbu}`)
-        this.formData.nama_ibu = tempOrangTua.nama
+        this.formData.nama_ibu = tempOrangTua.nama || '-'
       }
     },
     async submit() {

@@ -181,7 +181,6 @@ export default {
   },
   methods: {
     changeDate(date) {
-      console.log(date)
       return changeDateFormat(date)
     },
     goToDetail(id) {

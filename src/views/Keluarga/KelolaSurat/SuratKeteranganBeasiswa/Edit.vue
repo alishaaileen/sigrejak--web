@@ -272,26 +272,20 @@ export default {
     async setOrtu(idAyah, idIbu) {
       let tempOrangTua = {}
 
-      if (idAyah === null || idIbu === null) {
-        this.isAlertOrtuActive = true
-        this.formData.nama_ayah = '-'
-        this.formData.nama_ibu = '-'
-        this.formData.alamat_ortu = '-'
-        this.formData.pekerjaan_ayah = '-'
-        this.formData.pekerjaan_ibu = '-'
-        return
-      }
-      
       this.isAlertOrtuActive = false
       
+      if (idAyah === null || idIbu === null) {
+        this.isAlertOrtuActive = true
+      }
+      
       tempOrangTua = await getOneData(`/umat/${idIbu}`)
-      this.formData.nama_ibu = tempOrangTua.nama
-      this.formData.pekerjaan_ibu = tempOrangTua.pekerjaan
+      this.formData.nama_ibu = tempOrangTua.nama || '-'
+      this.formData.pekerjaan_ibu = tempOrangTua.pekerjaan || '-'
       
       tempOrangTua = await getOneData(`/umat/${idAyah}`)
-      this.formData.nama_ayah = tempOrangTua.nama
-      this.formData.pekerjaan_ayah = tempOrangTua.pekerjaan
-      this.formData.alamat_ortu = tempOrangTua.alamat
+      this.formData.nama_ayah = tempOrangTua.nama || '-'
+      this.formData.pekerjaan_ayah = tempOrangTua.pekerjaan || '-'
+      this.formData.alamat_ortu = tempOrangTua.alamat || '-'
     },
     async submit() {
       this.$store.dispatch('loading/openLoading')
@@ -305,7 +299,6 @@ export default {
       formData.append('id_siswa', this.formData.id_siswa)
       formData.append('sekolah', this.formData.sekolah)
       formData.append('kelas', this.formData.kelas)
-      formData.append('id_ortu', this.formData.id_ortu)
       formData.append('status_beasiswa', this.formData.status_beasiswa)
       formData.append('permohonan', this.formData.permohonan)
       if (typeof this.formData.file_syarat_beasiswa != 'string') {

@@ -374,11 +374,11 @@ export default {
 
       if (idAyah) {
         tempOrangTua = await getOneData(`/umat/${idAyah}`)
-        this.formData.nama_ayah = tempOrangTua.nama
+        this.formData.nama_ayah = tempOrangTua.nama || '-'
       }
       if (idIbu) {
         tempOrangTua = await getOneData(`/umat/${idIbu}`)
-        this.formData.nama_ibu = tempOrangTua.nama
+        this.formData.nama_ibu = tempOrangTua.nama || '-'
       }
     },
     async submit() {
@@ -387,6 +387,7 @@ export default {
 
       let snackbar = {}
         , formData = new FormData()
+      
       if(this.formData.cara_ortu_menikah === 'Cara lain') {
         this.formData.cara_ortu_menikah = this.temp_cara_ortu_menikah
       }

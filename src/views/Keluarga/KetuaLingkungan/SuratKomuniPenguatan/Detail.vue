@@ -205,7 +205,7 @@ export default {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
-      this.data.ketua_lingkungan_approval = 1
+      this.data.role = 'ketua lingkungan'
       this.data.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
       snackbar = await verifySurat(this.url, this.data.id, this.data)
 

@@ -286,10 +286,6 @@ export default {
   async mounted() {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.formData.id_keluarga = this.$store.state.keluarga.id
-    if (this.$store.state.keluarga.lingkunganId) {
-      this.formData.isKetuaLingkungan = true
-      this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
-    }
   },
   methods: {
     saveDate (date) {
@@ -302,7 +298,7 @@ export default {
       })
       this.formData.id_umat = temp.id
       this.formData.id_lingkungan = temp.lingkungan_id
-      this.formData.nama_baptis = temp.nama_baptis
+      this.formData.nama_baptis = temp.nama_baptis || '-'
       this.formData.no_telp = temp.no_telp
       this.formData.tempat_lahir = temp.tempat_lahir
       this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
@@ -320,11 +316,11 @@ export default {
 
       if (idAyah) {
         tempOrangTua = await getOneData(`/umat/${idAyah}`)
-        this.formData.nama_ayah = tempOrangTua.nama
+        this.formData.nama_ayah = tempOrangTua.nama || '-'
       }
       if (idIbu) {
         tempOrangTua = await getOneData(`/umat/${idIbu}`)
-        this.formData.nama_ibu = tempOrangTua.nama
+        this.formData.nama_ibu = tempOrangTua.nama || '-'
       }
     },
     async submit() {
@@ -348,9 +344,17 @@ export default {
       formData.append('nama_pelindung', this.formData.nama_pelindung)
       formData.append('nama_wali_penguatan', this.formData.nama_wali_penguatan)
       formData.append('tgl_krisma_wali', this.formData.tgl_krisma_wali)
+      formData.append('file_syarat', this.formData.file_syarat)
+      
+      if (this.formData.id_lingkungan == this.$store.state.keluarga.lingkunganId) {
+        this.formData.isKetuaLingkungan = true
+        this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
+      } else {
+        this.formData.isKetuaLingkungan = false
+        this.formData.ketua_lingkungan = null
+      }
       formData.append('ketua_lingkungan', this.formData.ketua_lingkungan)
       formData.append('isKetuaLingkungan', this.formData.isKetuaLingkungan)
-      formData.append('file_syarat', this.formData.file_syarat)
 
       try {
         let response = await postData(`${this.url}/add`, formData)

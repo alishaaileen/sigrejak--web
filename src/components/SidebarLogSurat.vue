@@ -1,0 +1,74 @@
+<template>
+  <v-navigation-drawer
+    v-model="isSidebarActive"
+    app
+    right
+    temporary
+    width="550"
+  >
+    <div class="pa-4 d-flex">
+      <v-btn
+        @click="closeSidebar"
+        text
+        color="blue"
+        icon
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+      <h2 class="ml-2">Log Surat</h2>
+    </div>
+
+    <v-divider></v-divider>
+
+    <v-card class="ma-4" flat outlined>
+      <v-simple-table dense>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">
+                Kejadian
+              </th>
+              <th class="text-left">
+                Waktu
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(log, i) in logList"
+              :key="i"
+            >
+              <td>{{ log.kejadian }} oleh {{ log.role_pelaku }}</td>
+              <td>{{ convertDateTime(log.waktu) }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </v-card>
+  </v-navigation-drawer>
+</template>
+
+<script>
+import { changeDateFormat } from '../utils'
+export default {
+  props: {
+    isSidebarActive: Boolean,
+    logList: Array,
+  },
+  methods: {
+    closeSidebar() {
+      this.$emit('closeSidebar')
+    },
+    convertDateTime(dateTime) {
+      let tanggal = changeDateFormat(dateTime.substring(0, 11))
+        , waktu = dateTime.substring(11, 16)
+
+      return `${tanggal} || ${waktu}`
+    }
+  }
+}
+</script>
+
+<style>
+
+</style>

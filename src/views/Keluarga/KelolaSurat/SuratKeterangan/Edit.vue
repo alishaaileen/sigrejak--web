@@ -210,21 +210,17 @@ export default {
     async setOrtu(idAyah, idIbu) {
       let tempOrangTua = {}
 
-      if (idAyah === null) {
-        if (idIbu === null) {
-          this.isAlertOrtuActive = true
-          this.formData.id_ortu = null
-          this.formData.nama_ortu = null
-          this.formData.alamat_ortu = null
-
-          return
-        } else {
-          tempOrangTua = await getOneData(`/umat/${idIbu}`)
-        }
-      } else {
-        tempOrangTua = await getOneData(`/umat/${idAyah}`)
+      if (idAyah === null && idIbu === null) {
+        this.isAlertOrtuActive = true
+        this.formData.id_ortu = null
+        this.formData.nama_ortu = '-'
+        this.formData.alamat_ortu = '-'
+        return
       }
       this.isAlertOrtuActive = false
+
+      tempOrangTua = await getOneData(`/umat/${idAyah === null ? idIbu : idAyah}`)
+      
       this.formData.id_ortu = tempOrangTua.id
       this.formData.nama_ortu = tempOrangTua.nama
       this.formData.alamat_ortu = tempOrangTua.alamat
@@ -234,11 +230,6 @@ export default {
       this.$store.commit('snackbar/resetSnackbar')
 
       let snackbar = {}
-
-      if(this.formData.ketua_lingkungan_approval === 1) {
-        alert('tidak bisa edit karna sudah diapprove ketua lingkungan')
-        return
-      }
 
       try {
         let response = await editData('/surat-keterangan', this.formData.id, this.formData)

@@ -83,13 +83,19 @@
 
             <h2 class="mt-15 mb-5">Informasi Orang tua</h2>
 
-            <label>Nama orang tua*</label>
-            <p>{{ data.nama_ortu }}</p>
+            <label>Nama ayah</label>
+            <p>{{ data.nama_ayah }}</p>
 
-            <label>No. telepon orang tua*</label>
-            <p>{{ data.no_telp_ortu }}</p>
+            <label>Pekerjaan ayah</label>
+            <p>{{ data.pekerjaan_ayah }}</p>
 
-            <label>Alamat orang tua*</label>
+            <label>Nama ibu</label>
+            <p>{{ data.nama_ibu }}</p>
+
+            <label>Pekerjaan ibu</label>
+            <p>{{ data.pekerjaan_ibu }}</p>
+
+            <label>Alamat</label>
             <p>{{ data.alamat_ortu }}</p>
 
             <h2 class="mt-15 mb-5">Keterangan Beasiswa</h2>

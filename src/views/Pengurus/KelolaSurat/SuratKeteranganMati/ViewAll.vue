@@ -252,7 +252,7 @@ export default {
 
       let snackbar = {}
       
-      dataSurat.sekretariat_approval = 1
+      dataSurat.role = 'sekretariat'
       dataSurat.id_sekretariat = this.$store.state.pengurus.id
       snackbar = await verifySurat(this.url, dataSurat.id, dataSurat)
       
@@ -269,9 +269,7 @@ export default {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
-      let tempImamPemberkat = await getOneData('/admin/role/3')
-      data.imam_pemberkat_approval = 1
-      data.id_imam_pemberkat = tempImamPemberkat.id
+      data.role = 'imam'
       
       snackbar = await verifySurat(this.url, data.id, data)
 

@@ -81,6 +81,18 @@ export async function editData(endpoint, id, data) {
     }
 }
 
+export async function getLogSuratByNoSurat(noSurat) {
+    let url = `${API_URL}/log-surat/${noSurat}`
+    
+    try {
+        let response = await axios.get(url)
+
+        return response.data.result
+    } catch (error) {
+        return error
+    }
+}
+
 export function countAge(tglLahir) {
     let today = new Date(),
     birthDate = new Date(tglLahir),

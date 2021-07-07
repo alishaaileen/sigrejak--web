@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import { getData, postData, changeDateFormat } from '../../../../utils'
+import { getData, getOneData, postData, changeDateFormat } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 
 export default {
@@ -128,10 +128,6 @@ export default {
   async mounted() {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.formData.id_keluarga = this.$store.state.keluarga.id
-    if (this.$store.state.keluarga.lingkunganId) {
-      this.formData.isKetuaLingkungan = true
-      this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
-    }
   },
   methods: {
     async changeIdUmat(e) {
@@ -145,30 +141,24 @@ export default {
       this.formData.alamat = temp.alamat
       this.formData.pekerjaan = temp.pekerjaan
 
-      let detailTemp = await getData(`/detail-umat/${temp.id}`)
-      detailTemp = detailTemp[0]
+      let detailTemp = await getOneData(`/detail-umat/${temp.id}`)
 
       await this.setOrtu(detailTemp.id_ayah, detailTemp.id_ibu)
     },
     async setOrtu(idAyah, idIbu) {
       let tempOrangTua = {}
 
-      if (idAyah === null) {
-        if (idIbu === null) {
-          this.isAlertOrtuActive = true
-          this.formData.id_ortu = null
-          this.formData.nama_ortu = '-'
-          this.formData.alamat_ortu = '-'
-
-          return
-        } else {
-          tempOrangTua = await getData(`/umat/${idIbu}`)
-        }
-      } else {
-        tempOrangTua = await getData(`/umat/${idAyah}`)
+      if (idAyah === null && idIbu === null) {
+        this.isAlertOrtuActive = true
+        this.formData.id_ortu = null
+        this.formData.nama_ortu = '-'
+        this.formData.alamat_ortu = '-'
+        return
       }
       this.isAlertOrtuActive = false
-      tempOrangTua = tempOrangTua[0]
+
+      tempOrangTua = await getOneData(`/umat/${idAyah === null ? idIbu : idAyah}`)
+      
       this.formData.id_ortu = tempOrangTua.id
       this.formData.nama_ortu = tempOrangTua.nama
       this.formData.alamat_ortu = tempOrangTua.alamat
@@ -178,6 +168,14 @@ export default {
       this.$store.commit('snackbar/resetSnackbar')
 
       let snackbar = {}
+
+      if (this.formData.id_lingkungan == this.$store.state.keluarga.lingkunganId) {
+        this.formData.isKetuaLingkungan = true
+        this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
+      } else {
+        this.formData.isKetuaLingkungan = false
+        this.formData.ketua_lingkungan = null
+      }
 
       try {
         let response = await postData('/surat-keterangan/add', this.formData)

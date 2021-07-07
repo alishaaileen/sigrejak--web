@@ -20,17 +20,6 @@
               <v-icon small>mdi-chat</v-icon>
               Chat
             </v-btn>
-            <v-btn
-              class="btn text-none"
-              color="blue accent-4"
-              dark
-              rounded
-              depressed
-              v-if="data.ketua_lingkungan_approval === 0"
-              @click="verify"
-            >
-              Verifikasi
-            </v-btn>
             <v-chip
               v-if="data.ketua_lingkungan_approval === 1"
               :color="data.ketua_lingkungan_approval === 1 ? 'green' : 'grey lighten-2'"
@@ -82,11 +71,17 @@
               
               <v-divider class="mb-5"></v-divider>
 
-              <label>Nama orang tua</label>
-              <p>{{ data.nama_ortu }}</p>
+              <label>Nama ayah</label>
+              <p>{{ data.nama_ayah }}</p>
 
-              <label>Nomor telepon</label>
-              <p>{{ data.no_telp_ortu }}</p>
+              <label>Pekerjaan ayah</label>
+              <p>{{ data.pekerjaan_ayah }}</p>
+
+              <label>Nama ibu</label>
+              <p>{{ data.nama_ibu }}</p>
+
+              <label>Pekerjaan ibu</label>
+              <p>{{ data.pekerjaan_ibu }}</p>
 
               <label>Alamat</label>
               <p>{{ data.alamat_ortu }}</p>
@@ -115,6 +110,20 @@
               </v-btn>
             </div>
           </v-card-text>
+
+          <v-card-actions v-if="data.ketua_lingkungan_approval === 0" class="py-3 px-5">
+            <v-spacer></v-spacer>
+            <v-btn
+              class="btn text-none"
+              color="blue accent-4"
+              dark
+              depressed
+              v-if="data.ketua_lingkungan_approval === 0"
+              @click="verify"
+            >
+              Verifikasi
+            </v-btn>
+          </v-card-actions>
         </v-card>    
       </v-col>
     </v-row>
@@ -153,7 +162,7 @@ export default {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
-      this.data.ketua_lingkungan_approval = 1
+      this.data.role = 'ketua lingkungan'
       this.data.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
       snackbar = await verifySurat(this.url, this.data.id, this.data)
 

@@ -505,23 +505,20 @@ export default {
       this.setOrtu(detailTemp.id_ayah, detailTemp.id_ibu)
     },
     async setOrtu(idAyah, idIbu) {
-      this.formData.nama_orang_tua = '-'
       this.isAlertOrtuActive = false
+      let temp
 
       if (idAyah == null && idIbu == null) {
+        this.formData.nama_orang_tua = '-'
         this.isAlertOrtuActive = true
         return
       }
-
-      let temp
-      
-      if (idAyah != null)
+      else if (idAyah != null)
         temp = await getOneData(`/umat/${idAyah}`)
       else if (idIbu != null)
         temp = await getOneData(`/umat/${idIbu}`)
       
       this.formData.nama_orang_tua = temp.nama
-      console.log(this.formData.nama_orang_tua)
     },
     async submit() {
       this.$store.dispatch('loading/openLoading')

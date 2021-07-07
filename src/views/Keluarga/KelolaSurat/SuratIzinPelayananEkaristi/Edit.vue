@@ -4,7 +4,7 @@
 
     <h1>Detail Surat Izin Pelayanan Ekaristi</h1>
 
-    <div class="form mt-5">
+    <div class="mt-5 d-flex">
       <v-card class="mx-auto" flat>
         <v-card-title>
           <h3>Detail Informasi</h3>
@@ -44,6 +44,23 @@
         <v-divider></v-divider>
 
         <v-content class="pa-6">
+          <div class="mb-15">
+            <label>No. surat</label>
+            <p>
+              {{ formData.no_surat }}
+            </p>
+            <v-btn
+              class="text-none"
+              depressed
+              color="blue"
+              text
+              outlined
+              @click="isSidebarLogActive = true"
+            >
+              Log surat
+            </v-btn>
+          </div>
+
           <v-form>
             <label>Tanggal pelaksanaan*</label>
             <v-menu
@@ -203,21 +220,29 @@
             </div>
           </v-form>
         </v-content>
-      </v-card>     
+      </v-card>
     </div>
     <snackbar />
+
+    <sidebar-log-surat
+      :logList="logList"
+      :isSidebarActive="isSidebarLogActive"
+      @closeSidebar="isSidebarLogActive = false"
+    ></sidebar-log-surat>
   </div>
 </template>
 
 <script>
-import { getData, getOneData, editData } from '../../../../utils'
+import { getData, getOneData, getLogSuratByNoSurat, editData } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 import ApprovalChip from '../../../../components/ApprovalChip.vue'
+import SidebarLogSurat from '../../../../components/SidebarLogSurat.vue'
 
 export default {
   components: {
     Autocomplete,
     ApprovalChip,
+    SidebarLogSurat,
   },
   data: () => ({
     url: '/surat-izin-pelayanan-ekaristi',
@@ -233,6 +258,8 @@ export default {
     formData: {},
     sekretariat: { nama: '' },
     romoParoki: { nama: '' },
+    logList: [],
+    isSidebarLogActive: false,
   }),
   async mounted() {
     // Inisialisasi array jam
@@ -244,6 +271,9 @@ export default {
     
     // Get data surat
     this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
+
+    // Get Log surat
+    this.logList = await getLogSuratByNoSurat(this.formData.id)
 
     // Get data sekretariat and romo if surat has been approved
     if(this.formData.id_sekretariat != null) {
@@ -291,7 +321,6 @@ export default {
       this.$refs.menu.save(date)
     },
     async submit() {
-      console.log(this.formData)
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 

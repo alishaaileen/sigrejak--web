@@ -296,7 +296,7 @@ export default {
       this.$store.commit('snackbar/resetSnackbar')
 
       if(this.formData.status_terima_minyak === 'Belum pernah') {
-        this.fotmData.tgl_terima_minyak = null
+        this.formData.tgl_terima_minyak = null
       }
 
       let snackbar = {}

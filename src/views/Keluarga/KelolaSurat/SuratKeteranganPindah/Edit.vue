@@ -314,15 +314,14 @@ export default {
       this.formData.id_lingkungan_lama = temp.lingkungan_id
     },
     switchParoki() {
-      if (!this.isNotKumetiran){
-        this.formData.paroki_baru = 'Kumetiran'
-        this.formData.nama_lingkungan_baru = ''
-      }
-      else {
+      if (this.isNotKumetiran){
         this.formData.id_lingkungan_baru = null
-        this.formData.nama_lingkungan_baru = ''
         this.formData.paroki_baru = ''
       }
+      else {
+        this.formData.paroki_baru = 'Kumetiran'
+      }
+      this.formData.nama_lingkungan_baru = ''
     },
     async submit() {
       console.log(this.formData)

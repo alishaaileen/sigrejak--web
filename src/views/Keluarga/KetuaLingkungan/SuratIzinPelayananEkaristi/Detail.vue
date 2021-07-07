@@ -92,7 +92,6 @@
               class="btn text-none"
               color="blue accent-4"
               dark
-              rounded
               depressed
               v-if="data.ketua_lingkungan_approval === 0"
               @click="verify"
