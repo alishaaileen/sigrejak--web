@@ -56,6 +56,10 @@ input {
   width: fit-content;
 }
 
+.chat-text-break {
+  white-space: pre-wrap !important;
+}
+
 .chat-balloon-left {
   background-color: #ebebeb;
 }

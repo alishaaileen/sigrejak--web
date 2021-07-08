@@ -230,6 +230,11 @@ const keluarga = {
       name: 'KetuaViewSuratIzinEkaristiDetail',
       component: importView("Keluarga/KetuaLingkungan/SuratIzinPelayananEkaristi/Detail")
     },
+    {
+      path: 'ketua/surat/surat-izin-ekaristi/chat/:id',
+      name: 'ChatSuratIzinEkaristiDetail',
+      component: importView("Keluarga/Chat")
+    },
     // ===== Surat Keterangan Beasiswa =====
     {
       path: 'ketua/surat/surat-keterangan-beasiswa',

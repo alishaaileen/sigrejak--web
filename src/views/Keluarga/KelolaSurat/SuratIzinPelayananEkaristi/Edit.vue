@@ -17,7 +17,7 @@
             dark
             depressed
             rounded
-            @click="$router.push(`/keluarga/surat/surat-izin-ekaristi/chat/${formData.id}`)"
+            @click="goToChat"
           >
             <v-icon small>mdi-chat</v-icon>
             Chat
@@ -320,6 +320,13 @@ export default {
     },
     saveDate (date) {
       this.$refs.menu.save(date)
+    },
+    goToChat() {
+      this.$store.dispatch('chat/setChat', {
+        detailPageUrl: `/keluarga/surat/surat-izin-ekaristi/detail/${this.formData.id}`,
+        endpointUrl: this.url
+      })
+      this.$router.push(`/keluarga/surat/surat-izin-ekaristi/chat/${this.formData.id}`)
     },
     async submit() {
       this.$store.dispatch('loading/openLoading')

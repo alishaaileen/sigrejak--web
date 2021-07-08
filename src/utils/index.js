@@ -116,6 +116,13 @@ export function changeDateFormat(dateInput) {
     return `${date}-${month}-${year}`
 }
 
+export function convertDateTime(dateTime) {
+    let tanggal = changeDateFormat(dateTime.substring(0, 11))
+      , waktu = dateTime.substring(11, 16)
+
+    return `${tanggal} • ${waktu}`
+}
+
 export const cetakSurat = async (endpoint, id) => {
     let url = `${API_URL}/cetak${endpoint}/${id}`
 

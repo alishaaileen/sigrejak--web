@@ -16,6 +16,7 @@
               dark
               depressed
               rounded
+              @click="goToChat"
             >
               <v-icon small>mdi-chat</v-icon>
               Chat
@@ -151,6 +152,13 @@ export default {
       this.$store.dispatch('snackbar/openSnackbar', snackbar)
       this.$store.dispatch('loading/closeLoading')
     },
+    goToChat() {
+      this.$store.dispatch('chat/setChat', {
+        detailPageUrl: `/keluarga/ketua/surat/surat-izin-ekaristi/detail/${this.data.id}`,
+        endpointUrl: this.url
+      })
+      this.$router.push(`/keluarga/ketua/surat/surat-izin-ekaristi/chat/${this.data.id}`)
+    }
   }
 }
 </script>

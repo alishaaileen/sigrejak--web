@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { changeDateFormat } from '../utils'
+import { convertDateTime } from '../utils'
 export default {
   props: {
     isSidebarActive: Boolean,
@@ -59,11 +59,8 @@ export default {
     closeSidebar() {
       this.$emit('closeSidebar')
     },
-    convertDateTime(dateTime) {
-      let tanggal = changeDateFormat(dateTime.substring(0, 11))
-        , waktu = dateTime.substring(11, 16)
-
-      return `${tanggal} • ${waktu}`
+    changeDateTime(dateTime) {
+      return convertDateTime(dateTime)
     }
   }
 }
