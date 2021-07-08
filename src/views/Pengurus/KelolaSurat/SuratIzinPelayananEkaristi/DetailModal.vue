@@ -59,12 +59,7 @@
             <h2 class="mt-5 mb-5">Informasi Surat Izin</h2>
 
             <label>No. surat</label>
-            <v-text-field
-              v-model="data.no_surat"
-              required
-              outlined
-              dense
-            ></v-text-field>
+            <p>{{ data.no_surat }}</p>
 
             <label>Tanggal surat</label>
             <p>{{ data.created_at }}</p>
@@ -103,7 +98,7 @@
 
           </div>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions v-if="data.sekretariat_approval != 1">
           <v-spacer></v-spacer>
           <v-btn
             class="text-none"
@@ -112,7 +107,7 @@
             dark
             @click="sekretariatVerify(data)"
           >
-            <div class="ma-4">{{ data.sekretariat_approval === 1 ? 'Simpan': 'Verifikasi' }}</div>
+            <div class="ma-4">Verifikasi</div>
           </v-btn>
         </v-card-actions>
       </v-card>

@@ -39,7 +39,7 @@
               :key="i"
             >
               <td>{{ log.kejadian }} oleh {{ log.role_pelaku }}</td>
-              <td>{{ convertDateTime(log.waktu) }}</td>
+              <td>{{ changeDateTime(log.waktu) }}</td>
             </tr>
           </tbody>
         </template>
