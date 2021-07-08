@@ -63,7 +63,7 @@ export default {
       let tanggal = changeDateFormat(dateTime.substring(0, 11))
         , waktu = dateTime.substring(11, 16)
 
-      return `${tanggal} || ${waktu}`
+      return `${tanggal} • ${waktu}`
     }
   }
 }
