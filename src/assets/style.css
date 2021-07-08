@@ -44,6 +44,29 @@ input {
   width: 300px;
 }
 
+.chat-container {
+  height: 500px;
+  overflow-y: scroll;
+}
+
+.chat-balloon {
+  border-radius: 5px;
+  padding: 5px;
+  position: relative;
+  width: fit-content;
+}
+
+.chat-balloon-left {
+  background-color: #ebebeb;
+}
+
+.chat-balloon-right {
+  position: absolute;
+  right: 21px;
+  color: #fff;
+  background-color: #2196F3;
+}
+
 .login-keluarga {
   background-image: url("../assets/bg.jpg");
   background-position: center;

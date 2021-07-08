@@ -17,6 +17,7 @@
             dark
             depressed
             rounded
+            @click="$router.push(`/keluarga/surat/surat-izin-ekaristi/chat/${formData.id}`)"
           >
             <v-icon small>mdi-chat</v-icon>
             Chat

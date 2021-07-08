@@ -124,6 +124,11 @@ const keluarga = {
       name: 'UpdateSuratIzinEkaristi',
       component: importView("Keluarga/KelolaSurat/SuratIzinPelayananEkaristi/Edit")
     },
+    {
+      path: 'surat/surat-izin-ekaristi/chat/:id',
+      name: 'ChatSuratIzinEkaristi',
+      component: importView("Keluarga/Chat")
+    },
     // ===== Surat Baptis Anak =====
     {
       path: 'surat/surat-baptis-anak',
