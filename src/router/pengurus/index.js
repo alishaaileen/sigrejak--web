@@ -148,6 +148,11 @@ const pengurus = {
       name: 'AdminViewSuratBaptisAnak',
       component: importView("Pengurus/KelolaSurat/SuratBaptisAnak/ViewAll")
     },
+    {
+      path: 'surat/surat-baptis-anak/atur-jadwal/:id',
+      name: 'AdminSetJadwalBaptisAnak',
+      component: importView("Pengurus/KelolaSurat/SuratBaptisAnak/SetJadwalBaptis")
+    },
     // ===== Surat Komuni Penguatan =====
     {
       path: 'surat/surat-komuni-penguatan',

@@ -55,10 +55,10 @@
             <p>{{ data.created_at }}</p>
 
             <label>Romo Pembaptis</label>
-            <p>{{ data.nama_romo_pembaptis === null ? '-' : data.nama_romo_pembaptis }}</p>
+            <p>{{ romoPembaptis.nama === null ? '-' : romoPembaptis.nama }}</p>
 
             <label>Jadwal pembaptisan</label>
-            <p>{{ data.tgl_baptis === null ? 'Belum ditetapkan' : data.tgl_baptis }}</p>
+            <p>{{ data.jadwal_baptis === null ? 'Belum ditetapkan' : changeDateTime(data.jadwal_baptis) }}</p>
 
             <h2 class="mt-15 mb-5">Informasi Anak</h2>
 
@@ -133,10 +133,9 @@
             color="primary"
             rounded
             dark
-            :disabled="data.sekretariat_approval === 1"
-            @click="sekretariatVerify(data)"
+            @click="$router.push(`/pengurus/surat/surat-baptis-anak/atur-jadwal/${data.id}`)"
           >
-            <div class="ma-4">Verifikasi</div>
+            <p class="ma-4">Atur jadwal</p>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -146,6 +145,7 @@
 
 <script>
 import { API_URL } from '../../../../constants'
+import { convertDateTime } from '../../../../utils'
 
 export default {
   props:{
@@ -156,14 +156,14 @@ export default {
     romoPembaptis: Object,
   },
   methods: {
+    changeDateTime(dateTime) {
+      return convertDateTime(dateTime)
+    },
     openImage() {
       this.$emit('openImage', true, this.data.file_akta_lahir)
     },
     async downloadFile(fileName) {
       window.open(`${API_URL}/files/${fileName}`, '_blank')
-    },
-    sekretariatVerify(dataSurat) {
-      this.$emit('verify', dataSurat)
     },
     close() {
       this.$emit('closeModal')

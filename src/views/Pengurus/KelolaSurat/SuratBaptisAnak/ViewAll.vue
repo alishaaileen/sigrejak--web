@@ -67,10 +67,10 @@
           <!-- TABLE CONTENT -->
           <template v-slot:[`item.jadwal_baptis`]="{ item }">
               <v-chip
-                v-if="item.tgl_baptis != null"
+                v-if="item.jadwal_baptis != null"
                 color="green"
               >
-                {{ item.tgl_baptis }}
+                <span class="color-white">{{ changeDateTime(item.jadwal_baptis) }}</span>
               </v-chip>
               <v-chip v-else>
                 Belum ada
@@ -131,7 +131,6 @@
       :url="url"
       :sekretariat="sekretariat"
       :romoPembaptis="romoPembaptis"
-      @verify="sekretariatVerify"
       @openImage="openCloseModal"
       @closeModal="closeModalDetail"
     ></modal-detail>
@@ -146,8 +145,7 @@
 
 <script>
 import { API_URL } from '../../../../constants'
-import { getData, getOneData, cetakSurat } from '../../../../utils'
-import { verifySurat } from '../../../../utils/pengurus'
+import { convertDateTime, getData, getOneData, cetakSurat } from '../../../../utils'
 
 import ModalDetail from './DetailModal'
 import DialogImage from '../../../../components/DialogImage.vue'
@@ -197,7 +195,7 @@ export default {
     deleteId: null,
 
     isModalDetailActive: false,
-    selectedDetail: {},
+    selectedDetail: { jadwal_baptis: null },
     sekretariat: {},
     romoPembaptis: {},
     lingkunganList: [],
@@ -241,6 +239,9 @@ export default {
     this.tableLoading = false
   },
   methods: {
+    changeDateTime(dateTime) {
+      return convertDateTime(dateTime)
+    },
     openCloseModal(bool, fileName = null) {
       if(bool === true) {
         this.displayGambarAkta = `${API_URL}/files/${fileName}`
@@ -262,23 +263,6 @@ export default {
     },
     async closeModalDetail() {
       this.isModalDetailActive = false
-    },
-    async sekretariatVerify(dataSurat) {
-      this.$store.dispatch('loading/openLoading')
-      this.$store.commit('snackbar/resetSnackbar')
-
-      let snackbar = {}
-      
-      dataSurat.role = 'sekretariat'
-      dataSurat.id_sekretariat = this.$store.state.pengurus.id
-      snackbar = await verifySurat(this.url, dataSurat.id, dataSurat)
-      
-      this.surat = await getData(this.url)
-      
-      this.closeModalDetail()
-      
-      this.$store.dispatch('snackbar/openSnackbar', snackbar)
-      this.$store.dispatch('loading/closeLoading')
     },
     async cetak(id) {
       this.$store.dispatch('loading/openLoading')
