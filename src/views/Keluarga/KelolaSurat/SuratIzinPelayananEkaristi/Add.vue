@@ -174,6 +174,7 @@ export default {
     lingkunganList: [],
     formData: {
       id_lingkungan: null,
+      kode_lingkungan: '',
       id_keluarga: null,
 
       tgl_pelaksanaan: '',
@@ -214,6 +215,7 @@ export default {
       let temp = this.lingkunganList.find((_) => { return _.nama_lingkungan === e })
 
       this.formData.id_lingkungan = temp.id
+      this.formData.kode_lingkungan = temp.kode
     },
     setAllWaktu(waktu) {
       this.formData.waktu_mulai = `${waktu.mulai.jam}:${waktu.mulai.menit}`

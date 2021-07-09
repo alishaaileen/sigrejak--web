@@ -1,5 +1,7 @@
 <template>
   <div>
+    <btn-kembali path="/pengurus/keluarga" />
+    
     <h1>Tambah Keluarga</h1>
 
     <div class="form mt-5" @submit.prevent="submit">
@@ -24,6 +26,22 @@
           <label>Email*</label>
           <v-text-field
             v-model="formData.email"
+            required
+            outlined
+            dense
+          ></v-text-field>
+
+          <label>Nama kepala keluarga*</label>
+          <v-text-field
+            v-model="formData.nama_kepala_keluarga"
+            required
+            outlined
+            dense
+          ></v-text-field>
+
+          <label>No. telepon kepala keluarga*</label>
+          <v-text-field
+            v-model="formData.no_telp_kepala_keluarga"
             required
             outlined
             dense

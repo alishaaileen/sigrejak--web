@@ -1,5 +1,7 @@
 <template>
   <div>
+    <btn-kembali path="/pengurus/lingkungan" />
+
     <h1>Tambah Lingkungan</h1>
 
     <div class="form mt-5" @submit.prevent="submit">
@@ -26,6 +28,15 @@
             itemText="nama_keluarga"
             @changeData="changeIdKeluarga"
           ></autocomplete>
+
+          <label>Nama kepala keluarga</label>
+          <p>{{ selectedKeluarga.nama_keluarga }}</p>
+
+          <label>Nama kepala keluarga</label>
+          <p>{{ selectedKeluarga.nama_kepala_keluarga }}</p>
+
+          <label>No. telepon kepala keluarga</label>
+          <p>{{ selectedKeluarga.no_telp_kepala_keluarga }}</p>
 
           <div class="d-flex justify-end">
             <v-btn
@@ -60,6 +71,11 @@ export default {
       paroki_id: null,
       ketua_lingkungan_id: null,
     },
+    selectedKeluarga: {
+      nama_keluarga: '-',
+      nama_kepala_keluarga: '-',
+      no_telp_kepala_keluarga: '-'
+    },
     paroki: {},
     keluargaList: [],
   }),
@@ -79,12 +95,8 @@ export default {
     //   })
     // },
     changeIdKeluarga(e) {
-      this.keluargaList.map((_) => {
-        if (_.nama_keluarga == e) {
-          this.formData.ketua_lingkungan_id = _.id;
-          return
-        }
-      })
+      this.selectedKeluarga = this.keluargaList.find(_ => _.nama_keluarga === e)
+      this.formData.ketua_lingkungan_id = this.selectedKeluarga.id;
     },
     async submit() {
       this.$store.dispatch('loading/openLoading')

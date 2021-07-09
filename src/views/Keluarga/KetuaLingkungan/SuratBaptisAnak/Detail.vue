@@ -200,8 +200,6 @@ export default {
         this.$router.push('/keluarga/ketua/surat/surat-baptis-anak')
       }
 
-      this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
-
       this.$store.dispatch('snackbar/openSnackbar', snackbar)
       this.$store.dispatch('loading/closeLoading')
     },

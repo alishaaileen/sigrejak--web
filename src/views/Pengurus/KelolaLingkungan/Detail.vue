@@ -1,5 +1,7 @@
 <template>
   <div>
+    <btn-kembali path="/pengurus/lingkungan" />
+    
     <h1>Detail Lingkungan</h1>
 
     <div class="form mt-5">
@@ -15,12 +17,21 @@
             ></v-text-field>
 
             <autocomplete
-              :value="lingkungan.ketua_lingkungan"
-              label="Keluarga ketua lingkungan*"
+              :value="lingkungan.nama_keluarga"
+              label="Ketua lingkungan*"
               :suggestionList="keluargaList"
               itemText="nama_keluarga"
               @changeData="changeIdKeluarga"
             ></autocomplete>
+
+            <label>Nama kepala keluarga</label>
+            <p>{{ selectedKeluarga.nama_keluarga }}</p>
+
+            <label>Nama kepala keluarga</label>
+            <p>{{ selectedKeluarga.nama_kepala_keluarga }}</p>
+
+            <label>No. telepon kepala keluarga</label>
+            <p>{{ selectedKeluarga.no_telp_kepala_keluarga }}</p>
 
             <div class="d-flex justify-end">
               <v-btn
@@ -43,7 +54,7 @@
 </template>
 
 <script>
-import { getData, editData } from '../../../utils'
+import { getData, getOneData, editData } from '../../../utils'
 
 import Autocomplete from '../../../components/Autocomplete'
 
@@ -54,24 +65,23 @@ export default {
   data: () => ({
     lingkungan: {},
     keluargaList: [],
+    selectedKeluarga: { id: '' },
   }),
   async mounted() {
     this.tableLoading = true
 
-    this.lingkungan = await getData(`/lingkungan/${this.$route.params.id}`)
-    this.lingkungan = this.lingkungan[0]
+    this.lingkungan = await getOneData(`/lingkungan/${this.$route.params.id}`)
+    
     this.keluargaList = await getData(`/keluarga`)
+    
+    this.selectedKeluarga = await getOneData(`/keluarga/${this.lingkungan.ketua_lingkungan_id}`)
     
     this.tableLoading = false
   },
   methods: {
     changeIdKeluarga(e) {
-      this.keluargaList.map((_) => {
-        if (_.nama_keluarga == e) {
-          this.lingkungan.ketua_lingkungan_id = _.id;
-          return
-        }
-      })
+      this.selectedKeluarga = this.keluargaList.find(_ => _.nama_keluarga === e)
+      this.formData.ketua_lingkungan_id = this.selectedKeluarga.id;
     },
     async save() {
       this.$store.dispatch('loading/openLoading')
