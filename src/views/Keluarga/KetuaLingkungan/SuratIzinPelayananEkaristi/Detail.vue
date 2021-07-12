@@ -10,17 +10,26 @@
           <v-card-title>
             <h3>Detail Informasi</h3>
             <v-spacer></v-spacer>
-            <v-btn
-              class="btn text-none mr-3"
-              color="yellow accent-4"
+            <v-badge
               dark
-              depressed
-              rounded
-              @click="goToChat"
+              color="orange"
+              overlap
+              :value="countChatUnread > 0"
+              :content="countChatUnread"
             >
-              <v-icon small>mdi-chat</v-icon>
-              Chat
-            </v-btn>
+              <v-btn
+                class="btn text-none mr-3"
+                color="yellow accent-4"
+                dark
+                depressed
+                rounded
+                @click="goToChat"
+              >
+                <v-icon small>mdi-chat</v-icon>
+                Chat
+              </v-btn>
+            </v-badge>
+            
 
             <v-chip
               v-if="data.ketua_lingkungan_approval === 1"
@@ -118,11 +127,15 @@ export default {
       waktu_mulai: '',
       waktu_selesai: '',
     },
-    textChat: '',
+    countChatUnread: 0,
     isAlertOrtuActive: false,
   }),
   async mounted() {
     this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
+
+    // Get jumlah chat yg belum read
+    this.countChatUnread = await getOneData(`/chat/count-unread/${this.$route.params.id}`)
+    this.countChatUnread = this.countChatUnread.count_unread
   },
   computed: {
     isVerifyDisabled() {

@@ -69,7 +69,7 @@ export async function deleteData(endpoint, id) {
     }
 }
 
-export async function editData(endpoint, id, data) {
+export async function editData(endpoint, id, data = {}) {
     let url = `${API_URL}${endpoint}/${id}`
 
     try {

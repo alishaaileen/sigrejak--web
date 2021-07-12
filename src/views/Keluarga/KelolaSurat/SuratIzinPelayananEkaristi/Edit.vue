@@ -11,18 +11,6 @@
           
           <v-spacer></v-spacer>
 
-          <v-btn
-            class="btn text-none mr-3"
-            color="yellow accent-4"
-            dark
-            depressed
-            rounded
-            @click="goToChat"
-          >
-            <v-icon small>mdi-chat</v-icon>
-            Chat
-          </v-btn>
-
           <approval-chip
             :approval="formData.ketua_lingkungan_approval"
             role="Ketua Lingkungan"
@@ -40,6 +28,26 @@
             role="Romo"
             :nama="romoParoki.nama"
           ></approval-chip>
+
+          <v-badge
+            dark
+            color="orange"
+            overlap
+            :value="countChatUnread > 0"
+            :content="countChatUnread"
+          >
+            <v-btn
+              class="btn text-none"
+              color="yellow accent-4"
+              dark
+              depressed
+              rounded
+              @click="goToChat"
+            >
+              <v-icon small>mdi-chat</v-icon>
+              Chat
+            </v-btn>
+          </v-badge>
         </v-card-title>
 
         <v-divider></v-divider>
@@ -261,6 +269,7 @@ export default {
     romoParoki: { nama: '' },
     logList: [],
     isSidebarLogActive: false,
+    countChatUnread: 0,
   }),
   async mounted() {
     // Inisialisasi array jam
@@ -293,6 +302,10 @@ export default {
     this.waktu.mulai.menit = this.formData.waktu_mulai.substring(3,5)
     this.waktu.selesai.jam = this.formData.waktu_selesai.substring(0,2)
     this.waktu.selesai.menit = this.formData.waktu_selesai.substring(3,5)
+
+    // Get jumlah chat yg belum read
+    this.countChatUnread = await getOneData(`/chat/count-unread/${this.$route.params.id}`)
+    this.countChatUnread = this.countChatUnread.count_unread
   },
   computed: {
     isSubmitDisabled() {

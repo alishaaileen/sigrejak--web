@@ -109,6 +109,10 @@ export default {
   async mounted() {
     this.lingkungan = await getData(`/lingkungan/${this.$store.state.keluarga.lingkunganId}`)
     this.lingkungan = this.lingkungan[0]
+
+    // this.card.map(card => {
+    //   card.suratNotApprovedCount = await getData(`${card.link}/not-approved/:jenisSurat/:approval`)
+    // })
   }
 }
 </script>

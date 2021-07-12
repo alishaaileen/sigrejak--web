@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { convertDateTime, getData, getOneData, postData } from '../../utils'
+import { convertDateTime, getData, getOneData, postData, editData } from '../../utils'
 import ApprovalChip from '../../components/ApprovalChip.vue'
 
 export default {
@@ -118,6 +118,9 @@ export default {
 
     this.chat.id_surat = this.$route.params.id
     this.chat.pengirim = parseInt(this.$store.state.keluarga.lingkunganId === null ? 0 : 1)
+
+    // Read all chat
+    await editData(`/chat/read`, this.$route.params.id)
 
     // Scroll to bottom of chat
     this.scrollToEnd()
