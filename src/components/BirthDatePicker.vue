@@ -1,35 +1,33 @@
 <template>
   <div>
     <v-menu
-      ref="dateMenu"
-      v-model="dateMenu"
-      :close-on-content-click="false"
-      transition="scale-transition"
-      offset-y
-      min-width="auto"
-    >
-      <template v-slot:activator="{ on, attrs }">
-        <v-text-field
-          v-model="birthDate"
-          prepend-inner-icon="mdi-calendar"
-          :value="birthDate"
-          dense
-          readonly
-          outlined
-          v-bind="attrs"
-          v-on="on"
-        ></v-text-field>
-      </template>
-      <v-date-picker
-        ref="picker"
-        :value="birthDate"
-        :readonly="editable"
-        :disabled="editable"
-        v-model="birthDate"
-        :max="new Date().toISOString().substr(0, 10)"
-        @change="saveDate"
-      ></v-date-picker>
-    </v-menu>
+    ref="dateMenu"
+    v-model="dateMenu"
+    :close-on-content-click="false"
+    transition="scale-transition"
+    offset-y
+    min-width="auto"
+  >
+    <template v-slot:activator="{ on, attrs }">
+      <v-text-field
+        :value="tgl"
+        prepend-inner-icon="mdi-calendar"
+        dense
+        readonly
+        outlined
+        v-bind="attrs"
+        v-on="on"
+      ></v-text-field>
+    </template>
+    <v-date-picker
+      ref="picker"
+      :value="tgl"
+      :readonly="editable"
+      :disabled="editable"
+      :max="new Date().toISOString().substr(0, 10)"
+      @change="saveDate"
+    ></v-date-picker>
+  </v-menu>
   </div>
 </template>
 
@@ -47,9 +45,9 @@ export default {
     dateMenu (val) {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
     },
-  },
-  mounted() {
-    if(this.tgl != null) this.birthDate = new Date(this.tgl).toISOString().substr(0, 10)
+    birthDate() {
+      return this.tgl != null ? this.tgl : ''
+    }
   },
   methods: {
     saveDate (date) {

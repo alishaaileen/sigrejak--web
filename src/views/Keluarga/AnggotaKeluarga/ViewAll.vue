@@ -6,7 +6,7 @@
       <v-card flat>
         <v-data-table
           :headers="headers"
-          :items="familyMembers"
+          :items="familyMembersNotDeleted"
           :search="search"
           :page.sync="page"
           :items-per-page="selectedJumlahData"
@@ -134,6 +134,11 @@ export default {
     
     this.tableLoading = false
   },
+  computed: {
+    familyMembersNotDeleted() {
+      return this.familyMembers.filter(member => member.deleted_at === null)
+    }
+  },
   methods: {
     changeDate(date) {
       return changeDateFormat(date)
@@ -170,24 +175,16 @@ export default {
           let response = await deleteData('/umat', this.deleteId)
           
           if (response.status === 200) {
-            snackbar = {
-              active: true,
-              color: 'success',
-              text: 'Data berhasil dihapus',
-            }
+            snackbar.color = 'success'
+            snackbar.text = 'Data berhasil dihapus'
+            this.familyMembers = await this.getAllFamilyMembers()
           } else {
-            snackbar = {
-              active: true,
-              color: 'error',
-              text: 'Terjadi kesalahan. Silahkan refresh dan coba lagi',
-            }
+            snackbar.color = 'error'
+            snackbar.text = 'Terjadi kesalahan. Silahkan refresh dan coba lagi'
           }
         } catch (error) {
-          snackbar = {
-            active: true,
-            color: 'error',
-            text: error,
-          }
+          snackbar.color = 'error'
+          snackbar.text = error
           console.error(error)
         }
         this.$store.dispatch('snackbar/openSnackbar', snackbar)
