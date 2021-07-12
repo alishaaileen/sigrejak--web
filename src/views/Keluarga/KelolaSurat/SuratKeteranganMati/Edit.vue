@@ -2,7 +2,7 @@
   <div>
     <btn-kembali path="/keluarga/surat/surat-keterangan-mati" />
 
-    <h1>Edit Surat Keterangan Mati</h1>
+    <h1>Edit Surat Keterangan Kematian</h1>
 
     <div class="form mt-5">
       <v-card class="mx-auto" flat>
@@ -10,17 +10,6 @@
           <h3>Detail Informasi</h3>
           
           <v-spacer></v-spacer>
-
-          <v-btn
-            class="btn text-none mr-3"
-            color="yellow accent-4"
-            dark
-            depressed
-            rounded
-          >
-            <v-icon small>mdi-chat</v-icon>
-            Chat
-          </v-btn>
 
           <approval-chip
             :approval="formData.ketua_lingkungan_approval"
@@ -39,11 +28,35 @@
             role="Romo"
             :nama="romoParoki.nama"
           ></approval-chip>
+
+          <button-chat
+            :countChatUnread="countChatUnread"
+            :chatPageUrl="`/keluarga/surat/surat-keterangan-mati/chat/${formData.id}`"
+            :detailPageUrl="`/keluarga/surat/surat-keterangan-mati/detail/${formData.id}`"
+            :endpointUrl="url"
+          ></button-chat>
         </v-card-title>
 
         <v-divider></v-divider>
 
         <v-form class="pa-6" @submit.prevent="submit">
+          <div class="mb-15">
+            <label>No. surat</label>
+            <p>
+              {{ formData.no_surat }}
+            </p>
+            <v-btn
+              class="text-none"
+              depressed
+              color="blue"
+              text
+              outlined
+              @click="isSidebarLogActive = true"
+            >
+              Log surat
+            </v-btn>
+          </div>
+
           <v-alert type="info" text icon="fas fa-info-circle">
             <p class="ma-0">
               Data dapat diedit jika belum disetujui Ketua Lingkungan
@@ -228,6 +241,7 @@
               <label>Nama pelayan sakramen*</label>
               <v-text-field
                 v-model="formData.pelayan_komuni"
+                prefix="Romo"
                 required
                 outlined
                 dense
@@ -274,6 +288,7 @@
               <label>Nama pelayan sakramen*</label>
               <v-text-field
                 v-model="formData.pelayan_pengampunan_dosa"
+                prefix="Romo"
                 required
                 outlined
                 dense
@@ -320,6 +335,7 @@
               <label>Nama pelayan sakramen*</label>
               <v-text-field
                 v-model="formData.pelayan_perminyakan"
+                prefix="Romo"
                 required
                 outlined
                 dense
@@ -366,6 +382,7 @@
               <label>Nama pelayan sakramen*</label>
               <v-text-field
                 v-model="formData.pelayan_baptis_darurat"
+                prefix="Romo"
                 required
                 outlined
                 dense
@@ -432,18 +449,28 @@
       </v-card>     
     </div>
     <snackbar />
+
+    <sidebar-log-surat
+      :logList="logList"
+      :isSidebarActive="isSidebarLogActive"
+      @closeSidebar="isSidebarLogActive = false"
+    ></sidebar-log-surat>
   </div>
 </template>
 
 <script>
-import { getData, getOneData, editData, changeDateFormat } from '../../../../utils'
+import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 import ApprovalChip from '../../../../components/ApprovalChip.vue'
+import SidebarLogSurat from '../../../../components/SidebarLogSurat.vue'
+import ButtonChat from '../../../../components/ButtonChat.vue'
 
 export default {
   components: {
     Autocomplete,
-    ApprovalChip
+    ApprovalChip,
+    SidebarLogSurat,
+    ButtonChat,
   },
   data: () => ({
     url: '/surat-keterangan-mati',
@@ -460,6 +487,9 @@ export default {
     imamList: [],
     sekretariat: { nama: '' },
     romoParoki: { nama: '' },
+    logList: [],
+    isSidebarLogActive: false,
+    countChatUnread: 0,
   }),
   computed: {
     isSubmitDisabled() {
@@ -467,15 +497,22 @@ export default {
     }
   },
   async mounted() {
-    this.imamList = await getData(`/admin/role/3`)
+    this.imamList = await getData(`/admin/role/4`)
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
     this.formData.tgl_lahir = changeDateFormat(this.formData.tgl_lahir)
 
     this.setOrtu(this.formData.id_ayah, this.formData.id_ibu)
 
+    // Get Log surat
+    this.logList = await getLogSuratByNoSurat(this.formData.id)
+
     // Set editable boolean to true if ketua lingkungan have not approved
     this.isEditable = this.formData.ketua_lingkungan_approval === 1 ? false : true
+
+    // Get jumlah chat yg belum read
+    this.countChatUnread = await getOneData(`/chat/count-unread/${this.$route.params.id}`)
+    this.countChatUnread = this.countChatUnread.count_unread
   },
   methods: {
     saveDate(date) {

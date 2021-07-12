@@ -2,7 +2,7 @@
   <div>
     <btn-kembali path="/keluarga/surat/surat-keterangan-mati" />
     
-    <h1>Tambah Surat Keterangan Mati</h1>
+    <h1>Tambah Surat Keterangan Kematian</h1>
 
     <div class="form mt-5" @submit.prevent="submit">
       <v-card class="pa-6 mx-auto" flat>
@@ -165,6 +165,7 @@
               <label>Nama pelayan sakramen*</label>
               <v-text-field
                 v-model="formData.pelayan_komuni"
+                prefix="Romo"
                 required
                 outlined
                 dense
@@ -205,6 +206,7 @@
               <label>Nama pelayan sakramen*</label>
               <v-text-field
                 v-model="formData.pelayan_pengampunan_dosa"
+                prefix="Romo"
                 required
                 outlined
                 dense
@@ -245,6 +247,7 @@
               <label>Nama pelayan sakramen*</label>
               <v-text-field
                 v-model="formData.pelayan_perminyakan"
+                prefix="Romo"
                 required
                 outlined
                 dense
@@ -285,6 +288,7 @@
               <label>Nama pelayan sakramen*</label>
               <v-text-field
                 v-model="formData.pelayan_baptis_darurat"
+                prefix="Romo"
                 required
                 outlined
                 dense
@@ -390,7 +394,7 @@ export default {
     }
   },
   async mounted() {
-    this.imamList = await getData(`/admin/role/3`)
+    this.imamList = await getData(`/admin/role/4`)
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.formData.id_keluarga = this.$store.state.keluarga.id
     if (this.$store.state.keluarga.lingkunganId) {

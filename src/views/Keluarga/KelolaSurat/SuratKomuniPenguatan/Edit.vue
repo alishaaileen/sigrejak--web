@@ -2,7 +2,7 @@
   <div>
     <btn-kembali path="/keluarga/surat/surat-komuni-penguatan" />
 
-    <h1>Edit Surat Komuni I/Penguatan</h1>
+    <h1>Edit Surat {{ formData.jenis_surat === 1 ? 'Komuni I' : 'Penguatan' }}</h1>
 
     <div class="form mt-5">
       <v-card class="mx-auto" flat>
@@ -10,17 +10,6 @@
           <h3>Detail Informasi</h3>
           
           <v-spacer></v-spacer>
-
-          <v-btn
-            class="btn text-none mr-3"
-            color="yellow accent-4"
-            dark
-            depressed
-            rounded
-          >
-            <v-icon small>mdi-chat</v-icon>
-            Chat
-          </v-btn>
 
           <approval-chip
             :approval="formData.ketua_lingkungan_approval"
@@ -33,20 +22,40 @@
             role="Sekretariat"
             :nama="sekretariat.nama"
           ></approval-chip>
+
+          <button-chat
+            :countChatUnread="countChatUnread"
+            :chatPageUrl="`/keluarga/surat/surat-komuni-penguatan/chat/${formData.id}`"
+            :detailPageUrl="`/keluarga/surat/surat-komuni-penguatan/detail/${formData.id}`"
+            :endpointUrl="url"
+          ></button-chat>
         </v-card-title>
 
         <v-divider></v-divider>
 
         <v-form class="pa-6" @submit.prevent="submit">
-          <label>Pilih surat</label>
-          <v-select
-            :items="[ 'Komuni I', 'Penguatan' ]"
-            v-model="tempJenisSurat"
-            outlined
-            dense
-            :disabled="(!isEditable)"
-            :readonly="(!isEditable)"
-          ></v-select>
+          <div class="mb-15">
+            <label>No. surat</label>
+            <p>
+              {{ formData.no_surat }}
+            </p>
+
+            <label>Jenis surat</label>
+            <p>
+              {{ formData.jenis_surat === 1 ? 'Komuni I' : 'Penguatan' }}
+            </p>
+
+            <v-btn
+              class="text-none"
+              depressed
+              color="blue"
+              text
+              outlined
+              @click="isSidebarLogActive = true"
+            >
+              Log surat
+            </v-btn>
+          </div>
           
           <h3 class="mb-5">Informasi Umat</h3>
 
@@ -287,31 +296,43 @@
       </v-card>     
     </div>
     <snackbar />
+
+    <sidebar-log-surat
+      :logList="logList"
+      :isSidebarActive="isSidebarLogActive"
+      @closeSidebar="isSidebarLogActive = false"
+    ></sidebar-log-surat>
   </div>
 </template>
 
 <script>
 import { API_URL } from '../../../../constants'
-import { getData, getOneData, editData, changeDateFormat } from '../../../../utils'
+import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 import ApprovalChip from '../../../../components/ApprovalChip.vue'
+import SidebarLogSurat from '../../../../components/SidebarLogSurat.vue'
+import ButtonChat from '../../../../components/ButtonChat.vue'
 
 export default {
   components: {
     Autocomplete,
     ApprovalChip,
+    SidebarLogSurat,
+    ButtonChat,
   },
   data: () => ({
     url: '/surat-komuni-penguatan',
     isEditable: false,
     isDatePickerTglBaptisActive: false,
     isDatePickerTglKrismaWaliActive: false,
-    tempJenisSurat: 'Komuni I',
     formData: { file_syarat: {size: 0}},
     anggotaKeluarga: [],
     isAlertNotBaptized: false,
     isAlertOrtuActive: false,
     sekretariat: { nama: '' },
+    logList: [],
+    isSidebarLogActive: false,
+    countChatUnread: 0,
   }),
   computed: {
     isSubmitDisabled() {
@@ -332,6 +353,9 @@ export default {
 
     this.tempJenisSurat = this.formData.jenis_surat === 1 ? 'Komuni I' : 'Penguatan'
 
+    // Get Log surat
+    this.logList = await getLogSuratByNoSurat(this.formData.id)
+
     // Get data sekretariat and romo if surat has been approved
     if(this.formData.id_sekretariat != null) {
       this.sekretariat = await getOneData(`/admin/${this.formData.id_sekretariat}`)
@@ -339,6 +363,10 @@ export default {
 
     // Set editable boolean to true if ketua lingkungan have not approved
     this.isEditable = this.formData.ketua_lingkungan_approval === 1 ? false : true
+
+    // Get jumlah chat yg belum read
+    this.countChatUnread = await getOneData(`/chat/count-unread/${this.$route.params.id}`)
+    this.countChatUnread = this.countChatUnread.count_unread
   },
   methods: {
     async downloadFile(fileName) {

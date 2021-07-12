@@ -29,25 +29,12 @@
             :nama="romoParoki.nama"
           ></approval-chip>
 
-          <v-badge
-            dark
-            color="orange"
-            overlap
-            :value="countChatUnread > 0"
-            :content="countChatUnread"
-          >
-            <v-btn
-              class="btn text-none"
-              color="yellow accent-4"
-              dark
-              depressed
-              rounded
-              @click="goToChat"
-            >
-              <v-icon small>mdi-chat</v-icon>
-              Chat
-            </v-btn>
-          </v-badge>
+          <button-chat
+            :countChatUnread="countChatUnread"
+            :chatPageUrl="`/keluarga/surat/surat-izin-ekaristi/chat/${formData.id}`"
+            :detailPageUrl="`/keluarga/surat/surat-izin-ekaristi/detail/${formData.id}`"
+            :endpointUrl="url"
+          ></button-chat>
         </v-card-title>
 
         <v-divider></v-divider>
@@ -246,12 +233,14 @@ import { getData, getOneData, getLogSuratByNoSurat, editData } from '../../../..
 import Autocomplete from '../../../../components/Autocomplete'
 import ApprovalChip from '../../../../components/ApprovalChip.vue'
 import SidebarLogSurat from '../../../../components/SidebarLogSurat.vue'
+import ButtonChat from '../../../../components/ButtonChat.vue'
 
 export default {
   components: {
     Autocomplete,
     ApprovalChip,
     SidebarLogSurat,
+    ButtonChat,
   },
   data: () => ({
     url: '/surat-izin-pelayanan-ekaristi',
@@ -333,13 +322,6 @@ export default {
     },
     saveDate (date) {
       this.$refs.menu.save(date)
-    },
-    goToChat() {
-      this.$store.dispatch('chat/setChat', {
-        detailPageUrl: `/keluarga/surat/surat-izin-ekaristi/detail/${this.formData.id}`,
-        endpointUrl: this.url
-      })
-      this.$router.push(`/keluarga/surat/surat-izin-ekaristi/chat/${this.formData.id}`)
     },
     async submit() {
       this.$store.dispatch('loading/openLoading')

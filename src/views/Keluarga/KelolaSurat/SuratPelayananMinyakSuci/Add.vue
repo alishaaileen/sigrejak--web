@@ -23,7 +23,7 @@
           <p>{{ formData.tempat_lahir }}</p>
 
           <label>Tanggal lahir</label>
-          <p>{{ formData.tgl_lahir }}</p>
+          <p>{{ changeDate(formData.tgl_lahir) }}</p>
 
           <label>Alamat</label>
           <p>{{ formData.alamat }}</p>
@@ -211,7 +211,7 @@ export default {
   async mounted() {
     this.initTahun()
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
-    this.pastorList = await getData(`/admin/role/3`)
+    this.pastorList = await getData(`/admin/role/4`)
     this.formData.id_keluarga = this.$store.state.keluarga.id
   },
   methods: {
@@ -228,6 +228,9 @@ export default {
     saveDate (date) {
       this.$refs.menu.save(date)
     },
+    changeDate(date) {
+      return changeDateFormat(date)
+    },
     changePasangan() {
       if (!this.isPunyaPasangan) {
         this.formData.nama_pasangan = null
@@ -243,7 +246,7 @@ export default {
       this.formData.id_lingkungan = temp.lingkungan_id
       this.formData.nama_baptis = temp.nama_baptis
       this.formData.tempat_lahir = temp.tempat_lahir
-      this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
+      this.formData.tgl_lahir = temp.tgl_lahir
       this.formData.alamat = temp.alamat
     },
     async changeIdPastor(e) {

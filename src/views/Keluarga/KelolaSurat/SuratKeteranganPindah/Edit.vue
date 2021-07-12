@@ -11,17 +11,6 @@
           
           <v-spacer></v-spacer>
 
-          <v-btn
-            class="btn text-none mr-3"
-            color="yellow accent-4"
-            dark
-            depressed
-            rounded
-          >
-            <v-icon small>mdi-chat</v-icon>
-            Chat
-          </v-btn>
-
           <approval-chip
             :approval="formData.ketua_lingkungan_approval"
             role="Ketua Lingkungan"
@@ -39,11 +28,35 @@
             role="Romo"
             :nama="romoParoki.nama"
           ></approval-chip>
+
+          <button-chat
+            :countChatUnread="countChatUnread"
+            :chatPageUrl="`/keluarga/surat/surat-izin-ekaristi/chat/${formData.id}`"
+            :detailPageUrl="`/keluarga/surat/surat-izin-ekaristi/detail/${formData.id}`"
+            :endpointUrl="url"
+          ></button-chat>
         </v-card-title>
 
         <v-divider></v-divider>
 
         <v-form class="pa-6" @submit.prevent="submit">
+          <div class="mb-15">
+            <label>No. surat</label>
+            <p>
+              {{ formData.no_surat }}
+            </p>
+            <v-btn
+              class="text-none"
+              depressed
+              color="blue"
+              text
+              outlined
+              @click="isSidebarLogActive = true"
+            >
+              Log surat
+            </v-btn>
+          </div>
+
           <v-alert type="info" text icon="fas fa-info-circle">
             <p class="ma-0">
               Data dapat diedit jika belum disetujui Ketua Lingkungan
@@ -73,8 +86,8 @@
 
           <label>Tanggal pertama kali tinggal di domisili lama*</label>
           <v-menu
-            ref="menu"
-            v-model="isDatePickerActive"
+            ref="datePickerTglLama"
+            v-model="isDatePickerTglLamaActive"
             :close-on-content-click="false"
             transition="scale-transition"
             offset-y
@@ -95,7 +108,6 @@
             </template>
             <v-date-picker
               v-model="formData.tgl_domisili_lama"
-              :min="new Date().toISOString().substr(0, 10)"
               @change="saveDate"
               :disabled="(!isEditable)"
               :readonly="(!isEditable)"
@@ -133,8 +145,8 @@
           
           <label>Tanggal mulai domisili baru*</label>
           <v-menu
-            ref="menu"
-            v-model="isDatePickerActive"
+            ref="datePickerTglBaru"
+            v-model="isDatePickerTglBaruActive"
             :close-on-content-click="false"
             transition="scale-transition"
             offset-y
@@ -155,7 +167,6 @@
             </template>
             <v-date-picker
               v-model="formData.tgl_domisili_baru"
-              :min="new Date().toISOString().substr(0, 10)"
               @change="saveDate"
               :disabled="(!isEditable)"
               :readonly="(!isEditable)"
@@ -235,20 +246,31 @@
       </v-card>     
     </div>
     <snackbar />
+
+    <sidebar-log-surat
+      :logList="logList"
+      :isSidebarActive="isSidebarLogActive"
+      @closeSidebar="isSidebarLogActive = false"
+    ></sidebar-log-surat>
   </div>
 </template>
 
 <script>
-import { getData, getOneData, editData, changeDateFormat } from '../../../../utils'
+import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 import ApprovalChip from '../../../../components/ApprovalChip.vue'
+import SidebarLogSurat from '../../../../components/SidebarLogSurat.vue'
+import ButtonChat from '../../../../components/ButtonChat.vue'
 
 export default {
   components: {
     Autocomplete,
     ApprovalChip,
+    SidebarLogSurat,
+    ButtonChat,
   },
   data: () => ({
+    url: '/surat-keterangan-pindah',
     formData: {
       paroki_lama: 'Kumetiran',
       paroki_baru: 'Kumetiran',
@@ -259,9 +281,13 @@ export default {
     parokiList: [],
     lingkunganList: [],
     umat: {},
-    isDatePickerActive: false,
+    isDatePickerTglLamaActive: false,
+    isDatePickerTglBaruActive: false,
     sekretariat: { nama: '' },
     romoParoki: { nama: '' },
+    logList: [],
+    isSidebarLogActive: false,
+    countChatUnread: 0,
   }),
   computed: {
     isSubmitDisabled() {
@@ -273,11 +299,14 @@ export default {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     
     // Get data surat
-    this.formData = await getOneData(`/surat-keterangan-pindah/${this.$route.params.id}`)
+    this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
     this.formData.tgl_lahir = changeDateFormat(this.formData.tgl_lahir)
 
     // Mengaktifkan switch jika umat pindah ke paroki baru
     this.isNotKumetiran = this.formData.paroki_baru != 'Kumetiran' ? true : false
+
+    // Get Log surat
+    this.logList = await getLogSuratByNoSurat(this.formData.id)
 
     // Get data sekretariat and romo if surat has been approved
     if(this.formData.id_sekretariat != null) {
@@ -289,10 +318,15 @@ export default {
 
     // Set editable boolean to true if ketua lingkungan have not approved
     this.isEditable = this.formData.ketua_lingkungan_approval === 1 ? false : true
-  },
+
+    // Get jumlah chat yg belum read
+    this.countChatUnread = await getOneData(`/chat/count-unread/${this.$route.params.id}`)
+    this.countChatUnread = this.countChatUnread.count_unread
+   },
   methods: {
     saveDate (date) {
-      this.$refs.menu.save(date)
+      this.$refs.datePickerTglLama.save(date)
+      this.$refs.datePickerTglBaru.save(date)
     },
     changeIdLingkungan(e) {
       let temp = this.lingkunganList.find((_) => { return _.nama_lingkungan === e })
@@ -331,7 +365,7 @@ export default {
       let snackbar = {}
 
       try {
-        let response = await editData('/surat-keterangan-pindah', this.formData.id, this.formData)
+        let response = await editData(this.url, this.formData.id, this.formData)
 
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',

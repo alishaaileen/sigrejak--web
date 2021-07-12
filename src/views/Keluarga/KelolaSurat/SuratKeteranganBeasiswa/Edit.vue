@@ -11,17 +11,6 @@
           
           <v-spacer></v-spacer>
 
-          <v-btn
-            class="btn text-none mr-3"
-            color="yellow accent-4"
-            dark
-            depressed
-            rounded
-          >
-            <v-icon small>mdi-chat</v-icon>
-            Chat
-          </v-btn>
-
           <approval-chip
             :approval="formData.ketua_lingkungan_approval"
             role="Ketua Lingkungan"
@@ -39,11 +28,35 @@
             role="Romo"
             :nama="romoParoki.nama"
           ></approval-chip>
+
+          <button-chat
+            :countChatUnread="countChatUnread"
+            :chatPageUrl="`/keluarga/surat/surat-keterangan-beasiswa/chat/${formData.id}`"
+            :detailPageUrl="`/keluarga/surat/surat-keterangan-beasiswa/detail/${formData.id}`"
+            :endpointUrl="url"
+          ></button-chat>
         </v-card-title>
 
         <v-divider></v-divider>
 
         <v-form class="pa-6" @submit.prevent="submit">
+          <div class="mb-15">
+            <label>No. surat</label>
+            <p>
+              {{ formData.no_surat }}
+            </p>
+            <v-btn
+              class="text-none"
+              depressed
+              color="blue"
+              text
+              outlined
+              @click="isSidebarLogActive = true"
+            >
+              Log surat
+            </v-btn>
+          </div>
+
           <v-alert type="info" text icon="fas fa-info-circle">
             <p class="ma-0">
               Data dapat diedit jika belum disetujui Ketua Lingkungan
@@ -198,27 +211,41 @@
       </v-card>     
     </div>
     <snackbar />
+
+    <sidebar-log-surat
+      :logList="logList"
+      :isSidebarActive="isSidebarLogActive"
+      @closeSidebar="isSidebarLogActive = false"
+    ></sidebar-log-surat>
   </div>
 </template>
 
 <script>
-import { getData, getOneData, editData, changeDateFormat } from '../../../../utils'
+import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '../../../../utils'
 import Autocomplete from '../../../../components/Autocomplete'
 import ApprovalChip from '../../../../components/ApprovalChip.vue'
 import { API_URL } from '../../../../constants'
+import SidebarLogSurat from '../../../../components/SidebarLogSurat.vue'
+import ButtonChat from '../../../../components/ButtonChat.vue'
 
 export default {
   components: {
     Autocomplete,
     ApprovalChip,
+    SidebarLogSurat,
+    ButtonChat,
   },
   data: () => ({
+    url: '/surat-keterangan-beasiswa',
     formData: { file_syarat_beasiswa: {size: 0}},
     isEditable: false,
     anggotaKeluarga: [],
     isAlertOrtuActive: false,
     sekretariat: { nama: '' },
     romoParoki: { nama: '' },
+    countChatUnread: 0,
+    isSidebarLogActive: false,
+    logList: [],
   }),
   computed: {
     isSubmitDisabled() {
@@ -234,8 +261,11 @@ export default {
   },
   async mounted() {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
-    this.formData = await getOneData(`/surat-keterangan-beasiswa/${this.$route.params.id}`)
+    this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
     this.formData.tgl_lahir = changeDateFormat(this.formData.tgl_lahir)
+
+    // Get Log surat
+    this.logList = await getLogSuratByNoSurat(this.formData.id)
 
     // Get data sekretariat and romo if surat has been approved
     if(this.formData.id_sekretariat != null) {
@@ -247,6 +277,10 @@ export default {
 
     // Set editable boolean to true if ketua lingkungan have not approved
     this.isEditable = this.formData.ketua_lingkungan_approval === 1 ? false : true
+
+    // Get jumlah chat yg belum read
+    this.countChatUnread = await getOneData(`/chat/count-unread/${this.$route.params.id}`)
+    this.countChatUnread = this.countChatUnread.count_unread
   },
   methods: {
     async downloadFile(fileName) {

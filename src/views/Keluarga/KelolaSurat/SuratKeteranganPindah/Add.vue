@@ -28,7 +28,7 @@
 
           <label>Tanggal pertama kali tinggal di domisili lama*</label>
           <v-menu
-            ref="menu"
+            ref="datePickerTglBaru"
             v-model="isDatePickerTglLamaActive"
             :close-on-content-click="false"
             transition="scale-transition"
@@ -219,8 +219,8 @@ export default {
   },
   methods: {
     saveDate (date) {
-      this.$refs.menu.save(date)
       this.$refs.datePickerTglLama.save(date)
+      this.$refs.datePickerTglBaru.save(date)
     },
     changeIdLingkungan(e) {
       let temp = this.lingkunganList.find((_) => { return _.nama_lingkungan === e })

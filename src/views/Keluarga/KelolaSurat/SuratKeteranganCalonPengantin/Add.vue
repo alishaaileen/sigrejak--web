@@ -125,12 +125,12 @@
           ></v-text-field>
 
           <label>Agama pasangan*</label>
-          <v-text-field
+          <v-select
+            :items="[ 'Katolik', 'Kristen', 'Islam', 'Hindu', 'Buddha', 'Konghucu' ]"
             v-model="formData.agama_pasangan"
-            required
             outlined
             dense
-          ></v-text-field>
+          ></v-select>
 
           <label>Nama ayah pasangan*</label>
           <v-text-field

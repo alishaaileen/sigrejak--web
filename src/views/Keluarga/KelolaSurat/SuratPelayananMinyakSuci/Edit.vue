@@ -11,17 +11,6 @@
           
           <v-spacer></v-spacer>
 
-          <v-btn
-            class="btn text-none mr-3"
-            color="yellow accent-4"
-            dark
-            depressed
-            rounded
-          >
-            <v-icon small>mdi-chat</v-icon>
-            Chat
-          </v-btn>
-
           <approval-chip
             :approval="formData.ketua_lingkungan_approval"
             role="Ketua Lingkungan"
@@ -39,12 +28,35 @@
             role="Romo"
             :nama="romoParoki.nama"
           ></approval-chip>
+
+          <button-chat
+            :countChatUnread="countChatUnread"
+            :chatPageUrl="`/keluarga/surat/surat-minyak-suci/chat/${formData.id}`"
+            :detailPageUrl="`/keluarga/surat/surat-minyak-suci/detail/${formData.id}`"
+            :endpointUrl="url"
+          ></button-chat>
         </v-card-title>
 
         <v-divider></v-divider>
 
-
         <v-form class="pa-6" @submit.prevent="submit">
+          <div class="mb-15">
+            <label>No. surat</label>
+            <p>
+              {{ formData.no_surat }}
+            </p>
+            <v-btn
+              class="text-none"
+              depressed
+              color="blue"
+              text
+              outlined
+              @click="isSidebarLogActive = true"
+            >
+              Log surat
+            </v-btn>
+          </div>
+
           <v-alert type="info" text icon="fas fa-info-circle">
             <p class="ma-0">
               Data dapat diedit jika belum disetujui Ketua Lingkungan
@@ -69,7 +81,7 @@
           <p>{{ formData.tempat_lahir }}</p>
 
           <label>Tanggal lahir</label>
-          <p>{{ formData.tgl_lahir }}</p>
+          <p>{{ changeDate(formData.tgl_lahir) }}</p>
 
           <label>Alamat</label>
           <p>{{ formData.alamat }}</p>
@@ -231,19 +243,29 @@
       </v-card>     
     </div>
     <snackbar />
+
+    <sidebar-log-surat
+      :logList="logList"
+      :isSidebarActive="isSidebarLogActive"
+      @closeSidebar="isSidebarLogActive = false"
+    ></sidebar-log-surat>
   </div>
 </template>
 
 <script>
-import { getData, getOneData, editData, changeDateFormat } from '../../../../utils'
+import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '../../../../utils'
 import { caraMenikahList } from '../../../../constants'
 import Autocomplete from '../../../../components/Autocomplete'
 import ApprovalChip from '../../../../components/ApprovalChip.vue'
+import SidebarLogSurat from '../../../../components/SidebarLogSurat.vue'
+import ButtonChat from '../../../../components/ButtonChat.vue'
 
 export default {
   components: {
     Autocomplete,
-    ApprovalChip
+    ApprovalChip,
+    SidebarLogSurat,
+    ButtonChat,
   },
   data: () => ({
     url: '/surat-pelayanan-minyak-suci',
@@ -258,13 +280,21 @@ export default {
     pastorList: [],
     sekretariat: { nama: '' },
     romoParoki: { nama: '' },
+    logList: [],
+    isSidebarLogActive: false,
+    countChatUnread: 0,
   }),
   async mounted() {
     this.initTahun()
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
-    this.pastorList = await getData(`/admin/role/3`)
+    this.pastorList = await getData(`/admin/role/4`)
     this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
-    this.formData.tgl_lahir = changeDateFormat(this.formData.tgl_lahir)
+
+    // Get Log surat
+    this.logList = await getLogSuratByNoSurat(this.formData.id)
+
+    // Set editable boolean to true if ketua lingkungan have not approved
+    this.isEditable = this.formData.ketua_lingkungan_approval === 1 ? false : true
 
     // Get data sekretariat and romo if surat has been approved
     if(this.formData.id_sekretariat != null) {
@@ -277,6 +307,10 @@ export default {
     if(this.formData.nama_pasangan === null) {
       this.isPunyaPasangan = false
     }
+
+    // Get jumlah chat yg belum read
+    this.countChatUnread = await getOneData(`/chat/count-unread/${this.$route.params.id}`)
+    this.countChatUnread = this.countChatUnread.count_unread
   },
   computed: {
     isSubmitDisabled() {
@@ -297,6 +331,9 @@ export default {
     saveDate (date) {
       this.$refs.menu.save(date)
     },
+    changeDate(date) {
+      return changeDateFormat(date)
+    },
     changePasangan() {
       if (!this.isPunyaPasangan) {
         this.formData.nama_pasangan = null
@@ -312,7 +349,7 @@ export default {
       this.formData.id_lingkungan = temp.lingkungan_id
       this.formData.nama_baptis = temp.nama_baptis
       this.formData.tempat_lahir = temp.tempat_lahir
-      this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
+      this.formData.tgl_lahir = temp.tgl_lahir
       this.formData.alamat = temp.alamat
     },
     async changeIdPastor(e) {
@@ -326,7 +363,7 @@ export default {
       this.$store.commit('snackbar/resetSnackbar')
 
       if(this.formData.status_terima_minyak === 'Belum pernah') {
-        this.fotmData.tgl_terima_minyak = null
+        this.formData.tgl_terima_minyak = null
       }
 
       let snackbar = {}
