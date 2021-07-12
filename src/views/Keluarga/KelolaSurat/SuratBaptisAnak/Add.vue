@@ -307,9 +307,10 @@ export default {
     },
     async changeIdAnak(e) {
       let temp = this.anggotaKeluarga.find(_ => {
-        return _.nama === e
+        return (_.nama === e && _.deleted_at === null)
       })
       this.formData.id_anak = temp.id
+      console.log(temp.id)
       this.formData.id_lingkungan = temp.lingkungan_id
       this.formData.tempat_lahir = temp.tempat_lahir
       this.formData.tgl_lahir = changeDateFormat(temp.tgl_lahir)
