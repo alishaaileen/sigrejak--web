@@ -10,31 +10,16 @@
           <v-card-title>
             <h3>Detail Informasi</h3>
             <v-spacer></v-spacer>
-            <v-btn
-              class="btn text-none mr-3"
-              color="yellow accent-4"
-              dark
-              depressed
-              rounded
-            >
-              <v-icon small>mdi-chat</v-icon>
-              Chat
-            </v-btn>
-
-            <v-btn
-              class="btn text-none"
-              color="blue accent-4"
-              dark
-              rounded
-              depressed
-              v-if="data.ketua_lingkungan_approval === 0"
-              @click="verify"
-            >
-              Verifikasi
-            </v-btn>
+            <button-chat
+              :countChatUnread="countChatUnread"
+              :chatPageUrl="`/keluarga/ketua/surat/surat-minyak-suci/chat/${data.id}`"
+              :detailPageUrl="`/keluarga/ketua/surat/surat-minyak-suci/detail/${data.id}`"
+              :endpointUrl="url"
+            ></button-chat>
             <v-chip
               v-if="data.ketua_lingkungan_approval === 1"
               :color="data.ketua_lingkungan_approval === 1 ? 'green' : 'grey lighten-2'"
+              class="ml-2"
             >
               <span class="color-white">
                 Terverifikasi
@@ -124,9 +109,22 @@
               <v-divider class="mb-5"></v-divider>
 
               <label>Nama pastor</label>
-              <p>{{ pastorPelayan.nama }}</p>
+              <p>{{ data.nama_pastor_pelayan }}</p>
             </div>
           </v-card-text>
+          <v-card-actions v-if="data.ketua_lingkungan_approval === 0" class="py-3 px-5">
+            <v-spacer></v-spacer>
+            <v-btn
+              class="btn text-none"
+              color="blue accent-4"
+              dark
+              depressed
+              v-if="data.ketua_lingkungan_approval === 0"
+              @click="verify"
+            >
+              Verifikasi
+            </v-btn>
+          </v-card-actions>
         </v-card>    
       </v-col>
     </v-row>
@@ -137,13 +135,18 @@
 <script>
 import { getOneData, changeDateFormat } from '../../../../utils'
 import { verifySurat } from '../../../../utils/pengurus'
+import ButtonChat from '../../../../components/ButtonChat.vue'
 
 export default {
+  components: {
+    ButtonChat,
+  },
   data: () => ({
     url: '/surat-pelayanan-minyak-suci',
     data: {},
     textChat: '',
     pastorPelayan: { nama: '' },
+    countChatUnread: 0,
   }),
   async mounted() {
     this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
@@ -151,6 +154,11 @@ export default {
     this.data.tgl_terima_minyak = changeDateFormat(this.data.tgl_terima_minyak)
     
     this.pastorPelayan = await getOneData(`/admin/${this.data.id_pastor_pelayan}`)
+    console.log(this.pastorPelayan)
+
+    // Get jumlah chat yg belum read
+    this.countChatUnread = await getOneData(`/chat/count-unread/${this.$route.params.id}`)
+    this.countChatUnread = this.countChatUnread.count_unread
   },
   computed: {
     isVerifyDisabled() {

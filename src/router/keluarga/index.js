@@ -272,7 +272,7 @@ const keluarga = {
     },
     {
       path: 'ketua/surat/surat-izin-ekaristi/chat/:id',
-      name: 'ChatSuratIzinEkaristiDetail',
+      name: 'KetuaChatSuratIzinEkaristi',
       component: importView("Keluarga/Chat")
     },
     // ===== Surat Keterangan Beasiswa =====
@@ -286,6 +286,11 @@ const keluarga = {
       name: 'KetuaViewSuratKeteranganBeasiswaDetail',
       component: importView("Keluarga/KetuaLingkungan/SuratKeteranganBeasiswa/Detail")
     },
+    {
+      path: 'ketua/surat/surat-keterangan-beasiswa/chat/:id',
+      name: 'KetuaChatSuratKeteranganBeasiswa',
+      component: importView("Keluarga/Chat")
+    },
     // ===== Surat Keterangan Pindah =====
     {
       path: 'ketua/surat/surat-keterangan-pindah',
@@ -294,8 +299,13 @@ const keluarga = {
     },
     {
       path: 'ketua/surat/surat-keterangan-pindah/detail/:id',
-      name: 'KetuaViewSuratKeteranganDetail',
+      name: 'KetuaViewSuratKeteranganPindahDetail',
       component: importView("Keluarga/KetuaLingkungan/SuratKeteranganPindah/Detail")
+    },
+    {
+      path: 'ketua/surat/surat-keterangan-pindah/chat/:id',
+      name: 'KetuaChatSuratKeteranganPindah',
+      component: importView("Keluarga/Chat")
     },
     // ===== Surat Keterangan Mati =====
     {
@@ -308,6 +318,11 @@ const keluarga = {
       name: 'KetuaViewSuratKeteranganMatiDetail',
       component: importView("Keluarga/KetuaLingkungan/SuratKeteranganMati/Detail")
     },
+    {
+      path: 'ketua/surat/surat-keterangan-mati/chat/:id',
+      name: 'KetuaChatSuratKeteranganMati',
+      component: importView("Keluarga/Chat")
+    },
     // ===== Surat Keterangan =====
     {
       path: 'ketua/surat/surat-keterangan',
@@ -318,6 +333,11 @@ const keluarga = {
       path: 'ketua/surat/surat-keterangan/detail/:id',
       name: 'KetuaViewSuratKeteranganDetail',
       component: importView("Keluarga/KetuaLingkungan/SuratKeterangan/Detail")
+    },
+    {
+      path: 'ketua/surat/surat-keterangan/chat/:id',
+      name: 'KetuaChatSuratKeterangan',
+      component: importView("Keluarga/Chat")
     },
     // ===== Surat Keterangan Minyak Suci =====
     {
@@ -335,6 +355,11 @@ const keluarga = {
       name: 'KetuaViewSuratMinyakSuciDetail',
       component: importView("Keluarga/KetuaLingkungan/SuratPelayananMinyakSuci/Detail")
     },
+    {
+      path: 'ketua/surat/surat-minyak-suci/chat/:id',
+      name: 'KetuaChatSuratMinyakSuci',
+      component: importView("Keluarga/Chat")
+    },
     // ===== Surat Baptis Anak =====
     {
       path: 'ketua/surat/surat-baptis-anak',
@@ -345,6 +370,11 @@ const keluarga = {
       path: 'ketua/surat/surat-baptis-anak/detail/:id',
       name: 'KetuaViewSuratBaptisAnakDetail',
       component: importView("Keluarga/KetuaLingkungan/SuratBaptisAnak/Detail")
+    },
+    {
+      path: 'ketua/surat/surat-baptis-anak/chat/:id',
+      name: 'KetuaChatSuratBaptisAnak',
+      component: importView("Keluarga/Chat")
     },
     // ===== Surat Komuni Penguatan =====
     {
@@ -357,6 +387,11 @@ const keluarga = {
       name: 'KetuaViewSuratKomuniPenguatanDetail',
       component: importView("Keluarga/KetuaLingkungan/SuratKomuniPenguatan/Detail")
     },
+    {
+      path: 'ketua/surat/surat-komuni-penguatan/chat/:id',
+      name: 'KetuaChatSuratKomuniPenguatan',
+      component: importView("Keluarga/Chat")
+    },
     // ===== Surat Keterangan Calon Pengantion =====
     {
       path: 'ketua/surat/surat-keterangan-calon-pengantin',
@@ -367,6 +402,11 @@ const keluarga = {
       path: 'ketua/surat/surat-keterangan-calon-pengantin/detail/:id',
       name: 'KetuaViewSuratKeteranganCalonPengantinDetail',
       component: importView("Keluarga/KetuaLingkungan/SuratKeteranganCalonPengantin/Detail")
+    },
+    {
+      path: 'ketua/surat/surat-keterangan-calon-pengantin/chat/:id',
+      name: 'KetuaChatSuratKeteranganCalonPengantin',
+      component: importView("Keluarga/Chat")
     },
   ]
 }

@@ -10,31 +10,16 @@
           <v-card-title>
             <h3>Detail Informasi</h3>
             <v-spacer></v-spacer>
-            <v-btn
-              class="btn text-none mr-3"
-              color="yellow accent-4"
-              dark
-              depressed
-              rounded
-            >
-              <v-icon small>mdi-chat</v-icon>
-              Chat
-            </v-btn>
-
-            <v-btn
-              class="btn text-none"
-              color="blue accent-4"
-              dark
-              rounded
-              depressed
-              v-if="data.ketua_lingkungan_approval === 0"
-              @click="verify"
-            >
-              Verifikasi
-            </v-btn>
+            <button-chat
+              :countChatUnread="countChatUnread"
+              :chatPageUrl="`/keluarga/ketua/surat/surat-keterangan-pindah/chat/${data.id}`"
+              :detailPageUrl="`/keluarga/ketua/surat/surat-keterangan-pindah/detail/${data.id}`"
+              :endpointUrl="url"
+            ></button-chat>
             <v-chip
               v-if="data.ketua_lingkungan_approval === 1"
               :color="data.ketua_lingkungan_approval === 1 ? 'green' : 'grey lighten-2'"
+              class="ml-2"
             >
               <span class="color-white">
                 Terverifikasi
@@ -106,6 +91,19 @@
             <label>Nomor telepon baru</label>
             <p>{{ data.no_telp_baru }}</p>
           </v-card-text>
+          <v-card-actions v-if="data.ketua_lingkungan_approval === 0" class="py-3 px-5">
+            <v-spacer></v-spacer>
+            <v-btn
+              class="btn text-none"
+              color="blue accent-4"
+              dark
+              depressed
+              v-if="data.ketua_lingkungan_approval === 0"
+              @click="verify"
+            >
+              Verifikasi
+            </v-btn>
+          </v-card-actions>
         </v-card>    
       </v-col>
     </v-row>
@@ -116,19 +114,26 @@
 <script>
 import { getOneData, changeDateFormat } from '../../../../utils'
 import { verifySurat } from '../../../../utils/pengurus'
+import ButtonChat from '../../../../components/ButtonChat.vue'
 
 export default {
+  components: {
+    ButtonChat,
+  },
   data: () => ({
     url: '/surat-keterangan-pindah',
     data: {},
-    textChat: '',
-    isAlertOrtuActive: false,
+    countChatUnread: 0,
   }),
   async mounted() {
     this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
     this.data.tgl_lahir = changeDateFormat(this.data.tgl_lahir)
     this.data.tgl_domisili_lama = changeDateFormat(this.data.tgl_domisili_lama)
     this.data.tgl_domisili_baru = changeDateFormat(this.data.tgl_domisili_baru)
+
+    // Get jumlah chat yg belum read
+    this.countChatUnread = await getOneData(`/chat/count-unread/${this.$route.params.id}`)
+    this.countChatUnread = this.countChatUnread.count_unread
   },
   computed: {
     isVerifyDisabled() {

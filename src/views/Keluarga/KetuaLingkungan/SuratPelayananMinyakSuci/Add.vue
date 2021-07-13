@@ -1,6 +1,6 @@
 <template>
   <div>
-    <btn-kembali path="/keluarga/surat/surat-minyak-suci" />
+    <btn-kembali path="/keluarga/ketua/surat/surat-minyak-suci" />
 
     <h1>Tambah Surat Pelayanan Minyak Suci</h1>
 
@@ -252,7 +252,7 @@ export default {
   }),
   async mounted() {
     this.initTahun()
-    this.pastorList = await getData(`/admin/role/3`)
+    this.pastorList = await getData(`/admin/role/4`)
     
     this.formData.id_keluarga = null
     this.formData.isKetuaLingkungan = true
@@ -273,17 +273,6 @@ export default {
     saveDate (date) {
       this.$refs.menu.save(date)
       this.$refs.dateMenu.save(date)
-    },
-    async changeIdUmat(e) {
-      let temp = this.anggotaKeluarga.find(_ => {
-        return _.nama === e
-      })
-      this.formData.nama = temp.nama
-      this.formData.id_lingkungan = temp.lingkungan_id
-      this.formData.nama_baptis = temp.nama_baptis
-      this.formData.tempat_lahir = temp.tempat_lahir
-      this.formData.tgl_lahir = temp.tgl_lahir
-      this.formData.alamat = temp.alamat
     },
     async changeIdPastor(e) {
       let temp = this.pastorList.find(_ => {
@@ -310,7 +299,7 @@ export default {
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
           snackbar.text = 'Surat berhasil dibuat!'
-          this.$router.push('/keluarga/surat/surat-minyak-suci')
+          this.$router.push('/keluarga/ketua/surat/surat-minyak-suci')
         } else {
           snackbar.color = 'error',
           snackbar.text = 'Harap periksa kembali inputan anda'

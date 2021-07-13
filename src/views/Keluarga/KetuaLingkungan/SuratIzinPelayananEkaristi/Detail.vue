@@ -10,30 +10,17 @@
           <v-card-title>
             <h3>Detail Informasi</h3>
             <v-spacer></v-spacer>
-            <v-badge
-              dark
-              color="orange"
-              overlap
-              :value="countChatUnread > 0"
-              :content="countChatUnread"
-            >
-              <v-btn
-                class="btn text-none mr-3"
-                color="yellow accent-4"
-                dark
-                depressed
-                rounded
-                @click="goToChat"
-              >
-                <v-icon small>mdi-chat</v-icon>
-                Chat
-              </v-btn>
-            </v-badge>
-            
+            <button-chat
+              :countChatUnread="countChatUnread"
+              :chatPageUrl="`/keluarga/ketua/surat/surat-izin-ekaristi/chat/${data.id}`"
+              :detailPageUrl="`/keluarga/ketua/surat/surat-izin-ekaristi/detail/${data.id}`"
+              :endpointUrl="url"
+            ></button-chat>
 
             <v-chip
               v-if="data.ketua_lingkungan_approval === 1"
               :color="data.ketua_lingkungan_approval === 1 ? 'green' : 'grey lighten-2'"
+              class="ml-2"
             >
               <span class="color-white">
                 Terverifikasi
@@ -93,9 +80,7 @@
               <label>Nomor telepon komunitas</label>
               <p>{{ data.no_telp_komunitas }}</p>
             </div>
-
           </v-card-text>
-
           <v-card-actions v-if="data.ketua_lingkungan_approval === 0" class="py-3 px-5">
             <v-spacer></v-spacer>
             <v-btn
@@ -119,8 +104,12 @@
 <script>
 import { getOneData, changeDateFormat } from '../../../../utils'
 import { verifySurat } from '../../../../utils/pengurus'
+import ButtonChat from '../../../../components/ButtonChat.vue'
 
 export default {
+  components: {
+    ButtonChat,
+  },
   data: () => ({
     url: '/surat-izin-pelayanan-ekaristi',
     data: {
@@ -128,7 +117,6 @@ export default {
       waktu_selesai: '',
     },
     countChatUnread: 0,
-    isAlertOrtuActive: false,
   }),
   async mounted() {
     this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
@@ -165,13 +153,6 @@ export default {
       this.$store.dispatch('snackbar/openSnackbar', snackbar)
       this.$store.dispatch('loading/closeLoading')
     },
-    goToChat() {
-      this.$store.dispatch('chat/setChat', {
-        detailPageUrl: `/keluarga/ketua/surat/surat-izin-ekaristi/detail/${this.data.id}`,
-        endpointUrl: this.url
-      })
-      this.$router.push(`/keluarga/ketua/surat/surat-izin-ekaristi/chat/${this.data.id}`)
-    }
   }
 }
 </script>

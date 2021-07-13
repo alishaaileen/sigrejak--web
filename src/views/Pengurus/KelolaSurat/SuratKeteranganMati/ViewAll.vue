@@ -2,7 +2,7 @@
   <div>
     <btn-kembali path="/pengurus/surat" />
       
-    <h1>Surat Keterangan Mati</h1>
+    <h1>Surat Keterangan Kematian</h1>
 
     <div class="data-table mt-5">
       <v-card flat>
