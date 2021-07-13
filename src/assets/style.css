@@ -72,7 +72,7 @@ input {
 }
 
 .login-keluarga {
-  background-image: url("../assets/bg.jpg");
+  background-image: url("../assets/keluarga-login.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -80,9 +80,9 @@ input {
 
 .login-pengurus {
   background-image: url("../assets/pengurus-login.jpg");
-  background-position: center;
+  background-position: right;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
 }
 
 .app-container {

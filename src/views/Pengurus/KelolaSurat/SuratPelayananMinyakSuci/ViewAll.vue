@@ -94,7 +94,7 @@
                     <v-list-item-title>Detail</v-list-item-title>
                   </v-list-item>
                   <v-list-item
-                    v-if="item.ketua_lingkungan_approval === 1 && item.sekretariat_approval === 1 && item.pastor_pelayan_approval === 0"
+                    v-if="item.ketua_lingkungan_approval === 1 && item.sekretariat_approval === 1 && item.pastor_pelayan_approval != 1"
                     @click="romoVerify(item)"
                   >
                     <v-list-item-title>Verifikasi sebagai Pastor Pelayan</v-list-item-title>

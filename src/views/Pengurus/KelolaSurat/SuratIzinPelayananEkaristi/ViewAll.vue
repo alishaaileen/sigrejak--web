@@ -207,9 +207,9 @@ export default {
       } else if (this.selectedShowData === 'Belum diverifikasi') {
         return this.surat.filter(e => {
           if(this.selectedLingkungan.length === 0) {
-            return e.deleted_at === null && e.sekretariat_approval === null
+            return e.deleted_at === null && e.ketua_lingkungan_approval === 1 && e.sekretariat_approval === null
           } else {
-            return e.deleted_at === null && e.sekretariat_approval === null && this.selectedLingkungan.some(el => el.id === e.id_lingkungan)
+            return e.deleted_at === null && e.ketua_lingkungan_approval === 1 && e.sekretariat_approval === null && this.selectedLingkungan.some(el => el.id === e.id_lingkungan)
           }
         })
       } else {

@@ -20,12 +20,13 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             class="text-none"
-            text
             v-bind="attrs"
             v-on="on"
+            icon
+            large
+            color="blue darken-3"
           >
             <v-icon>mdi-account-circle</v-icon>
-            {{ $store.state.pengurus.nama }}
           </v-btn>
         </template>
 
@@ -50,19 +51,22 @@
     <!-- SIDEBAR -->
     <v-navigation-drawer color="blue darken-3" dark permanent fixed width="240" app>
       <v-list dense nav class="my-7 px-4">
-        <!-- <v-list-item two-line>
-          <v-avatar size="24" tile>
-            <img src="" />
+        <v-list-item two-line>
+          <v-avatar size="48" tile>
+            <v-icon x-large>mdi-account-circle</v-icon>
           </v-avatar>
 
           <v-list-item-content>
-            <v-list-item-title class="sidebar-app-name"
-              >Nama Keluarga</v-list-item-title
-            >
+            <v-list-item-title class="sidebar-app-name">
+              <h3 class="color-white">{{ $store.state.pengurus.nama }}</h3>
+            </v-list-item-title>
+            <v-list-item-subtitle class="sidebar-app-name">
+              {{ getRole($store.state.pengurus.role) }}
+            </v-list-item-subtitle>
           </v-list-item-content>
-        </v-list-item> -->
+        </v-list-item>
 
-        <!-- <v-divider></v-divider> -->
+        <v-divider></v-divider>
 
         <!-- MENU-MENU -->
 
@@ -148,26 +152,31 @@ export default {
           title: "Dashboard",
           icon: "mdi-view-dashboard-outline",
           to: "/pengurus/dashboard",
+          show: true,
         },
         {
           title: "Pengurus",
           icon: "mdi-account-tie-outline",
           to: "/pengurus/pengurus",
+          show: false,
         },
         {
           title: "Keluarga",
           icon: "mdi-account-group-outline",
           to: "/pengurus/keluarga",
+          show: false,
         },
         {
           title: "Lingkungan",
           icon: "mdi-home-group",
           to: "/pengurus/lingkungan",
+          show: false,
         },
         {
           title: "Surat",
           icon: "mdi-book-outline",
-          to: "/pengurus/surat"
+          to: "/pengurus/surat",
+          show: false,
           // hasOption: true,
           // options: [
           //   {
@@ -189,16 +198,18 @@ export default {
       if (role === 1) return "indigo lighten-1"
       else if (role === 2) return "lime darken-2"
       else if (role === 3) return "light-blue"
+      else if (role === 4) return "blue"
     },
     getIcon(role) {
-      if (role === 1) return "head-outline"
-      else if (role === 2) return "account-cog-outline"
-      else if (role === 3) return "cross-outline"
+      if (role === 1) return "mdi-head-cog-outline"
+      else if (role === 2) return "mdi-account-cog-outline"
+      else return "mdi-cross-outline"
     },
     getRole(role) {
       if (role === 1) return "Super Admin"
       else if (role === 2) return "Sekretariat"
-      else if (role === 3) return "Romo"
+      else if (role === 3) return "Romo Paroki"
+      else if (role === 4) return "Romo"
     },
     logout() {
       this.$store.dispatch('pengurus/logout')

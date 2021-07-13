@@ -39,13 +39,12 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             class="text-none"
-            text
             v-bind="attrs"
             v-on="on"
+            icon
+            color="blue darken-3"
           >
             <v-icon>mdi-account-circle</v-icon>
-            <!-- {{ keluarga.nama_keluarga }} -->
-            {{ $store.state.keluarga.nama_keluarga }}
           </v-btn>
         </template>
 
@@ -70,19 +69,22 @@
     <!-- SIDEBAR -->
     <v-navigation-drawer color="blue darken-3" dark permanent fixed width="240" app>
       <v-list dense nav class="my-7 px-4">
-        <!-- <v-list-item two-line>
-          <v-avatar size="24" tile>
-            <img src="" />
+        <v-list-item two-line>
+          <v-avatar size="48" tile>
+            <v-icon x-large>mdi-account-circle</v-icon>
           </v-avatar>
 
           <v-list-item-content>
-            <v-list-item-title class="sidebar-app-name"
-              >Nama Keluarga</v-list-item-title
-            >
+            <v-list-item-title class="sidebar-app-name">
+              <h3 class="color-white">{{ $store.state.keluarga.nama_keluarga }}</h3>
+            </v-list-item-title>
+            <v-list-item-subtitle class="sidebar-app-name">
+              {{ $store.state.keluarga.lingkunganId != null ? 'Ketua Lingkungan' : 'Keluarga' }}
+            </v-list-item-subtitle>
           </v-list-item-content>
-        </v-list-item> -->
+        </v-list-item>
 
-        <!-- <v-divider></v-divider> -->
+        <v-divider></v-divider>
 
         <!-- MENU-MENU -->
 
