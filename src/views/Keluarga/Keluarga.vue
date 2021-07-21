@@ -182,10 +182,6 @@ export default {
           hasOption: true,
           options: [
             {
-              optionTitle: "Umat lingkungan",
-              to: "/keluarga/ketua/umat-lingkungan",
-            },
-            {
               optionTitle: "Surat",
               to: "/keluarga/ketua/surat",
             },

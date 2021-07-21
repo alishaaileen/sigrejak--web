@@ -37,7 +37,9 @@
             dense
           ></v-text-field>
 
-          <div class="d-flex justify-end">
+          <v-card-actions>
+            <small>Password akan di-generate sistem</small>
+            <v-spacer></v-spacer>
             <v-btn
               class="btn text-none mt-2"
               type="submit"
@@ -47,10 +49,16 @@
             >
               Tambah anggota
             </v-btn>
-          </div>
+          </v-card-actions>
         </v-form>
       </v-card>
     </div>
+
+    <modal-password
+      :isModalActive="isPassModalActive"
+      :password="generatedPass"
+      @close="closePassModal"
+    />
 
     <snackbar></snackbar>
   </div>
@@ -58,16 +66,26 @@
 
 <script>
 import { postData } from '../../../utils'
+import ModalPassword from '../../../components/ModalPassword.vue'
 
 export default {
+  components: {
+    ModalPassword,
+  },
   data: () => ({
     formData: {
       nama: '',
       email: '',
       role: null,
-    }
+    },
+    isPassModalActive: false,
+    generatedPass: '',
   }),
   methods: {
+    closePassModal() {
+      this.isPassModalActive = false
+      this.$router.push('/pengurus/pengurus')
+    },
     async submit() {
       this.$store.dispatch('loading/openLoading')
       let snackbar = {}
@@ -81,15 +99,14 @@ export default {
         if(response.status >= 200 && response.status < 300) {
           snackbar.color = 'success'
           snackbar.text = 'Data berhasil ditambahkan!'
-
-          this.$router.push('/pengurus/pengurus')
+          this.generatedPass = response.data.result.generatedPassword
+          this.isPassModalActive = true
         } else {
           snackbar.color = 'error'
           snackbar.text = 'Harap periksa kembali inputan anda!'
         }
       } catch (error) {
         console.error(error)
-
         snackbar.color = 'error'
         snackbar.text = error
       }

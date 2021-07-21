@@ -184,8 +184,12 @@ export default {
           })
           snackbar.color = 'success',
           snackbar.text = 'Data berhasil ditambahkan!'
+
+          this.$router.push('anggota')
+        } else {
+          snackbar.color = 'error',
+          snackbar.text = 'Harap periksa inputan anda kembali'
         }
-        this.$router.push('anggota')
       } catch (error) {
         snackbar.color = 'error',
         snackbar.text = error

@@ -24,7 +24,7 @@
             v-on="on"
             icon
             large
-            color="blue darken-3"
+            :color="getColor($store.state.pengurus.role)"
           >
             <v-icon>mdi-account-circle</v-icon>
           </v-btn>
@@ -112,17 +112,6 @@
         </div>
       </v-list>
 
-      <!-- <template v-slot:append>
-        <div class="pa-2">
-          <v-btn
-            color="error"
-            @click="logout"
-            class="btn text-transform-none text-none"
-            block
-            >Keluar</v-btn
-          >
-        </div>
-      </template> -->
     </v-navigation-drawer>
     <div class="app-container pa-10 grey lighten-4">
       <router-view class="pt-15"/>
@@ -135,6 +124,7 @@
 <script>
 import { mapState } from 'vuex'
 import { setAxiosBearerToken } from '../../utils'
+import { adminMenu, sekretariatMenu, romoMenu } from '../../constants'
 
 import ChipAccount from '../../components/ChipJenisAkun'
 
@@ -177,13 +167,12 @@ export default {
           icon: "mdi-book-outline",
           to: "/pengurus/surat",
           show: false,
-          // hasOption: true,
-          // options: [
-          //   {
-          //     optionTitle: "Surat Pindah",
-          //     to: "/spesies",
-          //   },
-          // ],
+        },
+        {
+          title: "Laporan",
+          icon: "mdi-file-document-multiple-outline",
+          to: "/pengurus/laporan",
+          show: false,
         },
       ],
     }
@@ -192,18 +181,24 @@ export default {
     setAxiosBearerToken()
     await this.$store.dispatch('pengurus/checkUserToken')
     await this.$store.dispatch('pengurus/getPengurusProfile')
+    this.menus = this.getMenuList(this.$store.state.pengurus.role)
   },
   methods: {
+    getMenuList(role) {
+      if (role === 1) return adminMenu
+      if (role === 2) return sekretariatMenu
+      if (role === 3 || role === 4) return romoMenu
+    },
     getColor(role) {
       if (role === 1) return "indigo lighten-1"
-      else if (role === 2) return "lime darken-2"
+      else if (role === 2) return "cyan"
       else if (role === 3) return "light-blue"
       else if (role === 4) return "blue"
     },
     getIcon(role) {
-      if (role === 1) return "mdi-head-cog-outline"
-      else if (role === 2) return "mdi-account-cog-outline"
-      else return "mdi-cross-outline"
+      if (role === 1) return "mdi-head-cog"
+      else if (role === 2) return "mdi-account-cog"
+      else return "mdi-account"
     },
     getRole(role) {
       if (role === 1) return "Super Admin"

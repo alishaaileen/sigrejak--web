@@ -91,6 +91,14 @@
               ></v-text-field>
             </div>
 
+            <label>Tempat menikah*</label>
+            <v-text-field
+              v-model="formData.tempat_ortu_menikah"
+              required
+              outlined
+              dense
+            ></v-text-field>
+
             <label>Tanggal menikah*</label>
             <v-menu
               ref="menuTglMenikah"

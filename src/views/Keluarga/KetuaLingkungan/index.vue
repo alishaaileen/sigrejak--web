@@ -1,15 +1,13 @@
 <template>
   <div>
     <h1>Surat-surat Lingkungan {{ lingkungan.nama_lingkungan }}</h1>
-
-    <v-card flat class="mt-5 pa-6">
-      <h4 class="">Nama lingkungan: {{ lingkungan.nama_lingkungan }}</h4>
-      
-      <p>Paroki: Kumetiran</p>
-      <p>Ketua lingkungan: {{ lingkungan.ketua_lingkungan }}</p>
-    </v-card>
     
     <v-card class="mt-5 pa-6" flat>
+      <v-card flat outlined class="mb-5 pa-6">
+        <h3 class="">Nama lingkungan: {{ lingkungan.nama_lingkungan }}</h3>
+        
+        <p class="ma-0">Paroki: Kumetiran</p>
+      </v-card>
       <v-text-field
         v-model="search"
         outlined

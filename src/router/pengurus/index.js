@@ -165,6 +165,14 @@ const pengurus = {
       name: 'AdminViewSuratKeteranganCalonPengantin',
       component: importView("Pengurus/KelolaSurat/SuratKeteranganCalonPengantin/ViewAll")
     },
+    // ===================
+    // ===== Laporan =====
+    // ===================
+    {
+      path: 'laporan',
+      name: 'LaporanDashboard',
+      component: importView("Pengurus/Laporan/index"),
+    },
   ]
 }
 

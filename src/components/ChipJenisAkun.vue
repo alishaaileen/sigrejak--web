@@ -4,7 +4,7 @@
     :color="color"
     text-color="white"
   >
-    <v-avatar left :class="`${color} darken-3`">
+    <v-avatar left :class="`${color} darken-2`">
       <v-icon
         color="white"
         small

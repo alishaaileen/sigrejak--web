@@ -20,3 +20,7 @@ export const verifySurat = async (url, id, data) => {
 
 	return snackbar
 }
+
+// export const filterSekretariat = () => {
+	
+// }

@@ -76,7 +76,7 @@ export default {
   methods: {
     getRoleColor(role) {
       if (role === 1) return "indigo"
-      else if (role === 2) return "lime darken-2"
+      else if (role === 2) return "cyan"
       else if (role === 3) return "light-blue"
     },
     async editProfile() {

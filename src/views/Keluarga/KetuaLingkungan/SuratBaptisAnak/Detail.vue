@@ -77,6 +77,9 @@
               <label>Cara menikah</label>
               <p>{{ data.cara_ortu_menikah }}</p>
 
+              <label>Tempat menikah</label>
+              <p>{{ data.tempat_ortu_menikah }}</p>
+
               <label>Tanggal menikah</label>
               <p>{{ data.tgl_ortu_menikah }}</p>
             </div>
