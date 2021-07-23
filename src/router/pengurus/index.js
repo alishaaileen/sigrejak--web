@@ -173,6 +173,66 @@ const pengurus = {
       name: 'LaporanDashboard',
       component: importView("Pengurus/Laporan/index"),
     },
+    // ===== Laporan semua surat =====
+    {
+      path: 'laporan/semua',
+      name: 'AdminViewLaporanSemua',
+      component: importView("Pengurus/Laporan/LaporanSemua")
+    },
+    // ===== Surat Izin Pelayanan Ekaristi =====
+    {
+      path: 'laporan/surat-izin-ekaristi',
+      name: 'AdminViewLaporanSuratIzinEkaristi',
+      component: importView("Pengurus/Laporan/LaporanIzinEkaristi")
+    },
+    // ===== Surat Keterangan =====
+    {
+      path: 'laporan/surat-keterangan',
+      name: 'AdminViewLaporanSuratKeterangan',
+      component: importView("Pengurus/Laporan/LaporanKeterangan")
+    },
+    // ===== Surat Pelayanan Minyak Suci =====
+    {
+      path: 'laporan/surat-minyak-suci',
+      name: 'AdminViewLaporanSuratKeterangan',
+      component: importView("Pengurus/Laporan/Laporan")
+    },
+    // ===== Surat Keterangan Pindah =====
+    {
+      path: 'laporan/surat-keterangan-pindah',
+      name: 'AdminViewLaporanSuratKeteranganPindah',
+      component: importView("Pengurus/Laporan/LaporanKeteranganPindah")
+    },
+    // ===== Surat Keterangan Mati =====
+    {
+      path: 'laporan/surat-keterangan-mati',
+      name: 'AdminViewLaporanSuratKeteranganMati',
+      component: importView("Pengurus/Laporan/LaporanKeteranganMati")
+    },
+    // ===== Surat Keterangan Beasiswa =====
+    {
+      path: 'laporan/surat-keterangan-beasiswa',
+      name: 'AdminViewLaporanSuratKeteranganBeasiswa',
+      component: importView("Pengurus/Laporan/LaporanKeteranganBeasiswa")
+    },
+    // ===== Surat Baptis Anak =====
+    {
+      path: 'laporan/surat-baptis-anak',
+      name: 'AdminViewLaporanSuratBaptisAnak',
+      component: importView("Pengurus/Laporan/LaporanBaptisAnak")
+    },
+    // ===== Surat Komuni Penguatan =====
+    {
+      path: 'laporan/surat-komuni-penguatan',
+      name: 'AdminViewLaporanSuratKomuniPenguatan',
+      component: importView("Pengurus/Laporan/LaporanKomuniPenguatan")
+    },
+    // ===== Surat Keterangan Calon Pengantin =====
+    {
+      path: 'laporan/surat-keterangan-calon-pengantin',
+      name: 'AdminViewLaporanSuratKeteranganCalonPengantin',
+      component: importView("Pengurus/Laporan/LaporanKeteranganPengantin")
+    },
   ]
 }
 

@@ -3,136 +3,93 @@
     <h1 class="mb-5">Laporan</h1>
 
     <v-card class="pa-6" flat>
-      <v-row>
-        <!-- <v-col>
-          <v-select
-            v-model="selectedEndpoint"
-            :items="jenisSuratOption"
-            item-text="name"
-            item-value="endpoint"
-            label="Surat"
-            outlined
-            dense
-          ></v-select>
-        </v-col> -->
-        <v-col>
-          <v-select
-            v-model="selectedJangkaWaktuOption"
-            :items="jangkaWaktuOption"
-            item-text="name"
-            item-value="id"
-            label="Jangka waktu"
-            outlined
-            dense
-          ></v-select>
-        </v-col>
-        <v-col v-if="selectedJangkaWaktuOption">
-          <v-select
-            v-model="selectedJangkaWaktu"
-            label="Pilih"
-            outlined
-            dense
-            :items="jangkaWaktu"
-          ></v-select>
-        </v-col>
-        <v-col>
-          <v-btn
-            class="text-none mt-2"
-            @click="generate"
-            color="blue darken-3"
-            dark
-            depressed
-          >
-            Lihat
-          </v-btn>
+      <v-row dense>
+        <v-col cols="4" v-for="(card, i) in cards" :key="i">
+          <router-link :to="card.to" class="text-decoration-none">
+            <v-card
+              class="outline-grey"
+              hover
+              outlined
+              rounded="lg"
+            >
+              <div>
+                <v-card-title class="headline">
+                  <h5>{{ card.title }}</h5>
+                </v-card-title>
+
+                <v-card-subtitle v-text="card.desc"></v-card-subtitle>
+              </div>
+            </v-card>
+          </router-link>
         </v-col>
       </v-row>
-      <area-chart />
     </v-card>
     <snackbar />
   </div>
 </template>
 
 <script>
-import { getData } from '../../../utils'
-import AreaChart from "../../../components/AreaChart"
-
 export default {
-  components: {
-    AreaChart,
-  },
-  props: ['options'],
   data: () => ({
     selectedJenisSurat: '',
-    jenisSuratOption: [
-      // { endpoint: '/', name: 'Semua', },
-      { endpoint: '/surat-izin-pelayanan-ekaristi', name: 'Surat Izin Pelayanan Ekaristi', data: [] },
-      { endpoint: '/surat-keterangan-beasiswa', name: 'Surat Keterangan Beasiswa', data: [] },
-      { endpoint: '/surat-keterangan', name: 'Surat Keterangan', data: [] },
-      { endpoint: '/surat-baptis-anak', name: 'Surat Baptis Anak', data: [] },
-      { endpoint: '/surat-baptis-dewasa', name: 'Surat Baptis Dewasa', data: [] },
-      { endpoint: '/surat-komuni-penguatan', name: 'Surat Komuni I/Penguatan', data: [] },
-      { endpoint: '/surat-keterangan-calon-pengantin', name: 'Surat Keterangan Calon Pengantin', data: [] },
-      { endpoint: '/surat-pelayanan-minyak-suci', name: 'Surat Pelayanan Minyak Suci', data: [] },
-      { endpoint: '/surat-keterangan-mati', name: 'Surat Keterangan Kematian', data: [] },
-      { endpoint: '/surat-keterangan-pindah', name: 'Surat Keterangan Pindah', data: [] },
+    cards: [
+      // {
+      //   title: 'Semua', 
+      //   desc: 'Laporan semua surat',
+      //   to: 'laporan/semua',
+      // },
+      {
+        title: 'Surat Izin Pelayanan Ekaristi', 
+        desc: 'Laporan Surat Izin Pelayanan Ekaristi',
+        to: 'laporan/surat-izin-ekaristi',
+      },
+      {
+        title: 'Surat Keterangan Beasiswa', 
+        desc: 'Laporan Surat Keterangan Beasiswa',
+        to: 'laporan/surat-keterangan-beasiswa',
+      },
+      {
+        title: 'Surat Keterangan',
+        desc: 'Laporan Surat Keterangan',
+        to: 'laporan/surat-keterangan',
+      },
+      {
+        title: 'Surat Baptis Anak',
+        desc: 'Laporan Surat Baptis Anak',
+        to: 'laporan/surat-baptis-anak',
+      },
+      {
+        title: 'Surat Baptis Dewasa',
+        desc: 'Laporan Surat Baptis Dewasa',
+        to: 'laporan/surat-baptis-dewasa',
+      },
+      {
+        title: 'Surat Komuni I/Penguatan',
+        desc: 'Laporan Surat Komuni I/Penguatan',
+        to: 'laporan/surat-komuni-penguatan',
+      },
+      {
+        title: 'Surat Ket. Calon Pengantin',
+        desc: 'Laporan Surat Ket. Calon Pengantin',
+        to: 'laporan/surat-keterangan-calon-pengantin',
+      },
+      {
+        title: 'Surat Ply. Minyak Suci',
+        desc: 'Laporan Surat Pelayanan Minyak Suci',
+        to: 'laporan/surat-minyak-suci',
+      },
+      {
+        title: 'Surat Keterangan Mati',
+        desc: 'Laporan Surat Keterangan Mati',
+        to: 'laporan/surat-keterangan-mati',
+      },
+      {
+        title: 'Surat Keterangan Pindah',
+        desc: 'Laporan Surat Keterangan Pindah',
+        to: 'laporan/surat-keterangan-pindah',
+      },
     ],
-    selectedJangkaWaktuOption: null,
-    jangkaWaktuOption: [
-      { id: 1, name: 'Bulanan' },
-      { id: 2, name: 'Tahunan' }
-    ],
-    selectedJangkaWaktu: null,
-    selectedEndpoint: null,
-    bulanList: [
-      'Januari',
-      'Februari',
-      'Maret',
-      'April',
-      'Mei',
-      'Juni',
-      'Juli',
-      'Agustus',
-      'September',
-      'Oktober',
-      'November',
-      'Desember',
-    ],
-    tahunList: [],
-
-    data: [],
   }),
-  computed: {
-    jangkaWaktu() {
-      return (this.selectedJangkaWaktuOption === 1 ? this.bulanList : this.tahunList)
-    }
-  },
-  mounted() {
-    this.initTahun()
-    this.jenisSuratOption.map(async (e) => {
-      e.data = await getData(e.endpoint)
-    })
-  },
-  methods: {
-    initTahun() {
-      let tahun = new Date()
-      
-      tahun = tahun.getFullYear()
-
-      for(var i=0; i<50; i++) {
-        this.tahunList.push(tahun)
-        tahun--
-      }
-    },
-    async generate() {
-      try {
-        this.data = await getData(this.selectedEndpoint)
-        console.log(this.data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-  }
 }
 </script>
 
