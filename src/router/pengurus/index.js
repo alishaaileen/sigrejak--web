@@ -121,7 +121,7 @@ const pengurus = {
     // ===== Surat Pelayanan Minyak Suci =====
     {
       path: 'surat/surat-minyak-suci',
-      name: 'AdminViewSuratKeterangan',
+      name: 'AdminViewSuratMinyakSuci',
       component: importView("Pengurus/KelolaSurat/SuratPelayananMinyakSuci/ViewAll")
     },
     // ===== Surat Keterangan Pindah =====
@@ -171,7 +171,7 @@ const pengurus = {
     {
       path: 'laporan',
       name: 'LaporanDashboard',
-      component: importView("Pengurus/Laporan/index"),
+      component: importView("Pengurus/Laporan/LaporanSemua"),
     },
     // ===== Laporan semua surat =====
     {
@@ -194,7 +194,7 @@ const pengurus = {
     // ===== Surat Pelayanan Minyak Suci =====
     {
       path: 'laporan/surat-minyak-suci',
-      name: 'AdminViewLaporanSuratKeterangan',
+      name: 'AdminViewLaporanSuratMinyakSuci',
       component: importView("Pengurus/Laporan/Laporan")
     },
     // ===== Surat Keterangan Pindah =====

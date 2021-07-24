@@ -1,8 +1,8 @@
 <template>
   <div>
-    <btn-kembali path="/pengurus/laporan" />
+    <!-- <btn-kembali path="/pengurus/laporan" /> -->
 
-    <h1 class="mb-5">Laporan Semua Surat</h1>
+    <h1 class="mb-5">Laporan</h1>
 
     <v-card class="pa-6" flat>
       <v-row>
@@ -17,17 +17,27 @@
             dense
           ></v-select>
         </v-col>
-        <v-col v-if="selectedJangkaWaktuOption">
+        <v-col v-if="selectedJangkaWaktuOption === 1">
           <v-select
-            v-model="selectedJangkaWaktu"
+            v-model="selectedBulan"
             label="Pilih"
             outlined
             dense
-            :items="jangkaWaktu"
+            :items="bulanList"
+          ></v-select>
+        </v-col>
+        <v-col v-if="selectedJangkaWaktuOption">
+          <v-select
+            v-model="selectedTahun"
+            label="Pilih"
+            outlined
+            dense
+            :items="tahunList"
           ></v-select>
         </v-col>
         <v-col>
           <v-btn
+            :disabled="disableIsTrue"
             class="text-none mt-2"
             @click="generateData"
             color="blue darken-3"
@@ -39,6 +49,7 @@
         </v-col>
       </v-row>
       <div>
+        {{data.length}}
         <v-row>
           <v-col>
             <bar-chart :chart-data="chartData"/>
@@ -83,8 +94,7 @@ export default {
       { id: 1, name: 'Bulanan' },
       { id: 2, name: 'Tahunan' }
     ],
-    selectedJangkaWaktu: null,
-    selectedEndpoint: null,
+    selectedBulan: null,
     bulanList: [
       'Januari',
       'Februari',
@@ -99,21 +109,28 @@ export default {
       'November',
       'Desember',
     ],
+    selectedTahun: null,
     tahunList: [],
-
     data: [],
     chartData: [],
   }),
-  computed: {
-    jangkaWaktu() {
-      return (this.selectedJangkaWaktuOption === 1 ? this.bulanList : this.tahunList)
-    }
-  },
   mounted() {
     this.initTahun()
     this.jenisSuratList.map(async (surat) => {
       surat.data = await getData(surat.endpoint)
     })
+  },
+  computed: {
+    disableIsTrue() {
+      if (this.selectedJangkaWaktuOption === null)
+        return true
+      else if (this.selectedJangkaWaktuOption === 1 && (this.selectedBulan === null || this.selectedTahun === null))
+        return true
+      else if (this.selectedJangkaWaktuOption === 2 && this.selectedTahun === null)
+        return true
+      
+      return false
+    },
   },
   methods: {
     initTahun() {
@@ -126,27 +143,39 @@ export default {
         tahun--
       }
     },
-    async generateData() {
+    generateData() {
       let tempData = []
-        , SuratAll = tempData.length
-        , SuratSelesai = tempData.filter(e => e.sekretariat_approval === 1)
-        , SuratBelumSelesai = tempData.filter(e => e.sekretariat_approval != 1)
-        , SuratDihapus = tempData.filter(e => e.deleted_at != null)
+
+      this.jenisSuratList.map(surat => {
+        tempData = tempData.concat(surat.data)
+      })
+
+      if (this.selectedJangkaWaktuOption === 2) {
+        this.data = tempData.filter(e => {
+          console.log(e.created_at)
+          let tempTahun = e.created_at.substring(6,10)
+          return tempTahun == this.selectedTahun
+        })
+      } else if (this.selectedJangkaWaktuOption === 1) {
+        this.data = tempData.filter(e => e.created_at.substring(6,10) == this.selectedTahun && e.created_at.substring(3,5) === this.selectedBulan)
+      }
+
+      let SuratSelesai = this.data.filter(e => e.sekretariat_approval === 1)
+        , SuratBelumSelesai = this.data.filter(e => e.sekretariat_approval != 1)
+        , SuratDihapus = this.data.filter(e => e.deleted_at != null)
 
       let chartData = [
-        SuratAll.length,
         SuratSelesai.length,
         SuratBelumSelesai.length,
         SuratDihapus.length
-
       ]
 
       this.chartData = {
-        labels: ["Total surat", "Selesai", "Belum selesai", "Dihapus/dibatalkan",],
+        labels: ["Selesai", "Belum selesai", "Dihapus/dibatalkan",],
         datasets: [
           {
-            label: "Data One",
-            backgroundColor: ["#00D8FF", "#41B883", "#E46651", "#f87979"],
+            label: null,
+            backgroundColor: ["#00C853", "#FF9800", "#E46651"],
             data: chartData
           },
         ]

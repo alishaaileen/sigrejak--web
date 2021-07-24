@@ -124,20 +124,11 @@ export default {
   async mounted() {
     this.tableLoading = true
 
-    this.families = await this.getAllFamily('/keluarga')
+    this.families = await getData('/keluarga')
     
     this.tableLoading = false
   },
   methods: {
-    async getAllFamily(url) {
-      try {
-        let response = await getData(url)
-
-        return response
-      } catch (e) {
-        console.error(e)
-      }
-    },
     goToDetail(id) {
       this.$router.push(`/pengurus/keluarga/${id}`)
     },
