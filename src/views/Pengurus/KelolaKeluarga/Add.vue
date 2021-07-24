@@ -47,7 +47,7 @@
             dense
           ></v-text-field>
 
-          <small>Password keluarga otomatis terkirim ke email</small>
+          <small>Password akan di-generate sistem</small>
 
           <div class="d-flex justify-end">
             <v-btn
@@ -63,22 +63,39 @@
         </v-form>
       </v-card>
     </div>
+
+    <modal-password
+      :isModalActive="isPassModalActive"
+      :password="generatedPass"
+      @close="closePassModal"
+    />
+
     <snackbar></snackbar>
   </div>
 </template>
 
 <script>
 import { postData } from '../../../utils'
+import ModalPassword from '../../../components/ModalPassword.vue'
 
 export default {
+  components: {
+    ModalPassword,
+  },
   data: () => ({
     formData: {
       nama_keluarga: '',
       username: '',
       email: '',
     },
+    isPassModalActive: false,
+    generatedPass: '',
   }),
   methods: {
+    closePassModal() {
+      this.isPassModalActive = false
+      this.$router.push('/pengurus/keluarga')
+    },
     async submit() {
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
@@ -91,7 +108,8 @@ export default {
         if (response.status >= 200 && response.status < 300) {
           snackbar.color = 'success',
           snackbar.text = 'Data berhasil ditambahkan!'
-          this.$router.push('/pengurus/keluarga')
+          this.generatedPass = response.data.result.generatedPassword
+          this.isPassModalActive = true
         } else {
           snackbar.color = 'error',
           snackbar.text = 'Harap periksa kembali inputan anda'
