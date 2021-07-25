@@ -22,7 +22,6 @@
             <div>
               <v-card-title class="headline">
                 <v-badge
-                lar
                   color="amber darken-1"
                   :value="card.unverifiedCount > 0"
                   :content="card.unverifiedCount"
@@ -127,10 +126,10 @@ export default {
     },
   },
   mounted() {
-    this.getSuratNotApprovedByKetuaLingkungan()
+    this.getSuratNotApprovedBySekretariat()
   },
   methods: {
-    getSuratNotApprovedByKetuaLingkungan() {
+    getSuratNotApprovedBySekretariat() {
       this.cards.map(async (card) => {
         let tempData = await getData(`/${card.endpoint}`)
         
