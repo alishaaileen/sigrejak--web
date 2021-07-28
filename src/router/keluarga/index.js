@@ -165,6 +165,27 @@ const keluarga = {
       name: 'ChatSuratBaptisAnak',
       component: importView("Keluarga/Chat")
     },
+    // ===== Surat Baptis Dewasa =====
+    {
+      path: 'surat/surat-baptis-dewasa',
+      name: 'ViewSuratBaptisDewasa',
+      component: importView("Keluarga/KelolaSurat/SuratBaptisDewasa/ViewAll")
+    },
+    {
+      path: 'surat/surat-baptis-dewasa/tambah',
+      name: 'AddSuratBaptisDewasa',
+      component: importView("Keluarga/KelolaSurat/SuratBaptisDewasa/Add")
+    },
+    {
+      path: 'surat/surat-baptis-dewasa/detail/:id',
+      name: 'UpdateSuratBaptisDewasa',
+      component: importView("Keluarga/KelolaSurat/SuratBaptisDewasa/Edit")
+    },
+    {
+      path: 'surat/surat-baptis-dewasa/chat/:id',
+      name: 'ChatSuratBaptisDewasa',
+      component: importView("Keluarga/Chat")
+    },
     // ===== Surat Pelayanan Minyak Suci =====
     {
       path: 'surat/surat-minyak-suci',
@@ -374,6 +395,22 @@ const keluarga = {
     {
       path: 'ketua/surat/surat-baptis-anak/chat/:id',
       name: 'KetuaChatSuratBaptisAnak',
+      component: importView("Keluarga/Chat")
+    },
+    // ===== Surat Baptis Dewasa =====
+    {
+      path: 'ketua/surat/surat-baptis-baptis',
+      name: 'KetuaViewSuratBaptisDewasa',
+      component: importView("Keluarga/KetuaLingkungan/SuratBaptisDewasa/ViewAll")
+    },
+    {
+      path: 'ketua/surat/surat-baptis-dewasa/detail/:id',
+      name: 'KetuaViewSuratBaptisAnakDetail',
+      component: importView("Keluarga/KetuaLingkungan/SuratBaptisDewasa/Detail")
+    },
+    {
+      path: 'ketua/surat/surat-baptis-dewasa/chat/:id',
+      name: 'KetuaChatSuratBaptisDewasa',
       component: importView("Keluarga/Chat")
     },
     // ===== Surat Komuni Penguatan =====

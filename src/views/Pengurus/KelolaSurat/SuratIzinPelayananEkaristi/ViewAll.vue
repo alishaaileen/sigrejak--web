@@ -100,7 +100,8 @@
                     v-if="item.ketua_lingkungan_approval === 1 && item.sekretariat_approval === 1 && item.romo_approval === null"
                     @click="romoVerify(item)"
                   >
-                    <v-list-item-title>Verifikasi sebagai Romo</v-list-item-title>
+                    <v-list-item-title v-if="$store.state.pengurus.role < 3">Verifikasi sebagai Romo</v-list-item-title>
+                    <v-list-item-title v-else>Verifikasi</v-list-item-title>
                   </v-list-item>
                   <v-list-item
                     v-if="item.ketua_lingkungan_approval === 1 && item.sekretariat_approval === 1 && item.romo_approval === 1"

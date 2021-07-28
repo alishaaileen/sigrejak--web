@@ -28,7 +28,7 @@
 
           <label>Tanggal pertama kali tinggal di domisili lama*</label>
           <v-menu
-            ref="datePickerTglBaru"
+            ref="datePickerTglLama"
             v-model="isDatePickerTglLamaActive"
             :close-on-content-click="false"
             transition="scale-transition"
@@ -80,7 +80,7 @@
           
           <label>Tanggal mulai domisili baru*</label>
           <v-menu
-            ref="datePickerTglLama"
+            ref="datePickerTglBaru"
             v-model="isDatePickerTglBaruActive"
             :close-on-content-click="false"
             transition="scale-transition"

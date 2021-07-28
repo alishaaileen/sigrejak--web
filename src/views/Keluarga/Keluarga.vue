@@ -153,7 +153,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { setAxiosBearerToken } from '../../utils'
 
 export default {
   computed: mapState({
@@ -191,8 +190,6 @@ export default {
     }
   },
   async created() {
-    await setAxiosBearerToken()
-    await this.$store.dispatch('keluarga/checkUserToken')
     await this.$store.dispatch('keluarga/getUserProfile')
     await this.$store.dispatch('keluarga/checkKetuaLingkungan')
     this.menus[2].show = this.$store.state.keluarga.lingkunganId != null ? true : false 

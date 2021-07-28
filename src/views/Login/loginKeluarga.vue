@@ -62,6 +62,7 @@
 <script>
 import axios from 'axios'
 import { API_URL } from '../../constants'
+import { setAxiosBearerToken } from '../../utils'
 
 export default {
   data() {
@@ -82,6 +83,10 @@ export default {
         let response = await axios.post(`${API_URL}/keluarga/login`, this.user)
 
         await this.$store.dispatch('keluarga/login', response.data)
+
+        await setAxiosBearerToken()
+        await this.$store.dispatch('keluarga/checkUserToken')
+
         this.$router.push("/keluarga/anggota");
       } catch (error) {
         if(error.response.status >= 400 && error.response.status < 500 ) {
