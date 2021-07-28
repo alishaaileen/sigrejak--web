@@ -399,7 +399,7 @@ const keluarga = {
     },
     // ===== Surat Baptis Dewasa =====
     {
-      path: 'ketua/surat/surat-baptis-baptis',
+      path: 'ketua/surat/surat-baptis-dewasa',
       name: 'KetuaViewSuratBaptisDewasa',
       component: importView("Keluarga/KetuaLingkungan/SuratBaptisDewasa/ViewAll")
     },

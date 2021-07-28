@@ -1,8 +1,8 @@
 <template>
   <div>
-    <btn-kembali path="/keluarga/ketua/surat/surat-baptis-anak" />
+    <btn-kembali path="/keluarga/ketua/surat/surat-baptis-dewasa" />
     
-    <h1 class="mb-5">Detail Surat Baptis Anak</h1>
+    <h1 class="mb-5">Detail Surat Baptis Dewasa</h1>
 
     <v-row>
       <v-col>
@@ -12,8 +12,8 @@
             <v-spacer></v-spacer>
             <button-chat
               :countChatUnread="countChatUnread"
-              :chatPageUrl="`/keluarga/ketua/surat/surat-baptis-anak/chat/${data.id}`"
-              :detailPageUrl="`/keluarga/ketua/surat/surat-baptis-anak/detail/${data.id}`"
+              :chatPageUrl="`/keluarga/ketua/surat/surat-baptis-dewasa/chat/${data.id}`"
+              :detailPageUrl="`/keluarga/ketua/surat/surat-baptis-dewasa/detail/${data.id}`"
               :endpointUrl="url"
             ></button-chat>
             <v-chip
@@ -43,7 +43,7 @@
             </div>
 
             <div class="mb-15">
-              <h2 class="mb-5">Informasi Anak</h2>
+              <h2 class="mb-5">Informasi Siswa</h2>
 
               <v-divider class="mb-5"></v-divider>
 
@@ -55,12 +55,12 @@
 
               <label>Nama baptis</label>
               <p>{{ data.nama_baptis }}</p>
-            </div>
 
-            <div class="mb-15">
-              <h2 class="mb-5">Informasi Orang Tua</h2>
-              
-              <v-divider class="mb-5"></v-divider>
+              <label>Alamat</label>
+              <p>{{ data.alamat }}</p>
+
+              <label>No. telepon</label>
+              <p>{{ data.no_telp }}</p>
 
               <label>Nama ayah</label>
               <p>{{ data.nama_ayah }}</p>
@@ -68,20 +68,32 @@
               <label>Nama ibu</label>
               <p>{{ data.nama_ibu }}</p>
 
-              <label>Alamat orang tua</label>
-              <p>{{ data.alamat_ortu }}</p>
+              <label>Status perkawinan</label>
+              <p>{{ data.status_perkawinan }}</p>
 
-              <label>No. telepon orang tua</label>
-              <p>{{ data.no_telp_ortu }}</p>
+              <div v-if="data.status_perkawinan === 'Akan menikah'">
+                <label>Akan menikah dengan</label>
+                <p>{{ data.calon_pasangan }}</p>
 
-              <label>Cara menikah</label>
-              <p>{{ data.cara_ortu_menikah }}</p>
+                <label>Tanggal menikah</label>
+                <p>{{ data.tgl_menikah_calon }}</p>
+              </div>
 
-              <label>Tempat menikah</label>
-              <p>{{ data.tempat_ortu_menikah }}</p>
+              <div v-if="data.status_perkawinan === 'Sudah menikah'">
+                <label>Cara menikah</label>
+                <p>{{ data.cara_menikah }}</p>
 
-              <label>Tanggal menikah</label>
-              <p>{{ data.tgl_ortu_menikah }}</p>
+                <label>Tempat menikah</label>
+                <p>{{ data.tempat_menikah }}</p>
+
+                <label>Tanggal menikah</label>
+                <p>{{ data.tgl_menikah }}</p>
+
+                <div v-if="data.pembatalan_perkawinan">
+                  <label>Alasan pembatalan perkawinan</label>
+                  <p>{{ data.pembatalan_perkawinan }}</p>
+                </div>
+              </div>
             </div>
 
             <div class="mb-15">
@@ -90,10 +102,13 @@
               <v-divider class="mb-5"></v-divider>
 
               <label>Nama</label>
-              <p>{{ data.nama_wali_baptis }}</p>
+              <p>{{ data.nama_wali }}</p>
 
               <label>Tanggal krisma</label>
-              <p>{{ data.tgl_krisma_wali_baptis }}</p>
+              <p>{{ data.tgl_krisma_wali }}</p>
+
+              <label>Tempat krisma</label>
+              <p>{{ data.tempat_krisma_wali }}</p>
             </div>
 
             <h2 class="mb-5">Syarat-syarat</h2>
@@ -164,7 +179,7 @@ export default {
     ButtonChat,
   },
   data: () => ({
-    url: '/surat-baptis-anak',
+    url: '/surat-baptis-dewasa',
     data: {},
     displayGambarAkta: null,
     isImageCardActive: false,
@@ -206,7 +221,7 @@ export default {
       snackbar = await verifySurat(this.url, this.data.id, this.data)
 
       if (snackbar.color === 'success') {
-        this.$router.push('/keluarga/ketua/surat/surat-baptis-anak')
+        this.$router.push('/keluarga/ketua/surat/surat-baptis-dewasa')
       }
 
       this.$store.dispatch('snackbar/openSnackbar', snackbar)
