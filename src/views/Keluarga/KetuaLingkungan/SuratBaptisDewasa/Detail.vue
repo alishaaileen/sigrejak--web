@@ -43,7 +43,7 @@
             </div>
 
             <div class="mb-15">
-              <h2 class="mb-5">Informasi Siswa</h2>
+              <h2 class="mb-5">Informasi Calon</h2>
 
               <v-divider class="mb-5"></v-divider>
 
