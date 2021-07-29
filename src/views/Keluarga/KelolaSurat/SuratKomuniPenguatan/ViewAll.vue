@@ -1,5 +1,7 @@
 <template>
   <div>
+    <btn-kembali path="/keluarga/surat" />
+    
     <h1>Surat Komuni I/Penguatan</h1>
 
     <div class="data-table mt-5">

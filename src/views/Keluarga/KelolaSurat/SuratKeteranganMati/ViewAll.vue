@@ -1,5 +1,7 @@
 <template>
   <div>
+    <btn-kembali path="/keluarga/surat" />
+
     <h1>Surat Keterangan Kematian</h1>
 
     <div class="data-table mt-5">
