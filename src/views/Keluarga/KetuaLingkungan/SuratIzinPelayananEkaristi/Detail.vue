@@ -122,7 +122,7 @@ export default {
     this.data = await getOneData(`${this.url}/${this.$route.params.id}`)
 
     // Get jumlah chat yg belum read
-    this.countChatUnread = await getOneData(`/chat/count-unread/${this.$route.params.id}`)
+    this.countChatUnread = await getOneData(`/chat/count-unread/${this.$route.params.id}/${this.$store.state.keluarga.id}`)
     this.countChatUnread = this.countChatUnread.count_unread
   },
   computed: {

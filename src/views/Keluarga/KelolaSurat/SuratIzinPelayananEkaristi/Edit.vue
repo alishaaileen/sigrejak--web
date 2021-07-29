@@ -293,7 +293,7 @@ export default {
     this.waktu.selesai.menit = this.formData.waktu_selesai.substring(3,5)
 
     // Get jumlah chat yg belum read
-    this.countChatUnread = await getOneData(`/chat/count-unread/${this.$route.params.id}`)
+    this.countChatUnread = await getOneData(`/chat/count-unread/${this.$route.params.id}/${this.$store.state.keluarga.id}`)
     this.countChatUnread = this.countChatUnread.count_unread
   },
   computed: {

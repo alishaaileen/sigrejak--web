@@ -30,18 +30,18 @@
         
         <div class="chat-container pa-6">
           <div ref="chatContainer" v-for="(oneChat, i) in chatList" :key="i">
-            <div :class="`d-flex ${printLeftOrRight(oneChat.pengirim)}`">
+            <div :class="`d-flex ${printLeftOrRight(oneChat.id_pengirim)}`">
               <v-card
                 max-width="600"
                 rounded="xl"
-                :class="`mb-2 pa-3 ${chat.pengirim === oneChat.pengirim ? 'color-white':''}`"
-                :color="chat.pengirim === oneChat.pengirim ? 'blue darken-1' : 'grey lighten-3'"
+                :class="`mb-2 pa-3 ${chat.id_pengirim === oneChat.id_pengirim ? 'color-white':''}`"
+                :color="chat.id_pengirim === oneChat.id_pengirim ? 'blue darken-1' : 'grey lighten-3'"
                 flat
               >
                 <p class="ma-0 chat-text-break">{{ oneChat.teks }}</p>
               </v-card>
             </div>
-            <div :class="`mb-3 d-flex ${printLeftOrRight(oneChat.pengirim)}`">
+            <div :class="`mb-3 d-flex ${printLeftOrRight(oneChat.id_pengirim)}`">
               <small>{{ changeDateTime(oneChat.waktu_kirim) }}</small>
             </div>
           </div>
@@ -102,7 +102,7 @@ export default {
     surat: {},
     chat: {
       id_surat: '',
-      pengirim: '',
+      id_pengirim: '',
       teks: '',
     }
   }),
@@ -117,10 +117,11 @@ export default {
     this.chatList = await getData(`/chat/history/${this.$route.params.id}`)
 
     this.chat.id_surat = this.$route.params.id
-    this.chat.pengirim = parseInt(this.$store.state.keluarga.lingkunganId === null ? 0 : 1)
+    this.chat.id_pengirim = this.$store.state.keluarga.id
 
     // Read all chat
-    await editData(`/chat/read`, this.$route.params.id)
+    let id = `${this.$route.params.id}/${this.$store.state.keluarga.id}`
+    await editData(`/chat/read`, id)
 
     // Scroll to bottom of chat
     this.scrollToEnd()
@@ -133,8 +134,8 @@ export default {
     changeDateTime(dateTime) {
       return convertDateTime(dateTime)
     },
-    printLeftOrRight(pengirim) {
-      return (pengirim === this.chat.pengirim ? 'justify-end' : '')
+    printLeftOrRight(id_pengirim) {
+      return (id_pengirim === this.chat.id_pengirim ? 'justify-end' : '')
     },
     scrollToEnd () {
       // let content = this.$refs.chatContainer;
