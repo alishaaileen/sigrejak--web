@@ -32,6 +32,22 @@
             dense
           ></v-text-field>
 
+          <label>Nama kepala keluarga</label>
+          <v-text-field
+            v-model="keluarga.nama_kepala_keluarga"
+            required
+            outlined
+            dense
+          ></v-text-field>
+
+          <label>No. telepon*</label>
+          <v-text-field
+            v-model="keluarga.no_telp_kepala_keluarga"
+            required
+            outlined
+            dense
+          ></v-text-field>
+
           <div class="d-flex justify-end">
             <v-btn
               class="btn text-none"
@@ -78,16 +94,16 @@
                     dense
                     background-color="#FAFAFA"
                   ></v-text-field>
-                  <v-btn
+                  <!-- <v-btn
                     class="btn text-none mt-2 ml-4"
                     color="blue accent-4"
                     tag="router-link"
-                    to="tambah"
+                    to="/pengurus/keluarga/anggota/tambah"
                     dark
                     depressed
                   >
                     Tambah anggota
-                  </v-btn>
+                  </v-btn> -->
                 </v-card-title>
               </template>
 
@@ -96,17 +112,10 @@
                 <p v-if="item.telepon === null">-</p>
                 <p v-else>{{ item.telepon }}</p>
               </template>
-              <template v-slot:[`item.is_umat_active`]="{ item }">
-                <span v-if="item.is_umat_active === 0">
-                  <v-icon color="grey darken-2">
-                    mdi-checkbox-blank-circle
-                  </v-icon>
-                </span>
-                <span v-else>
-                  <v-icon color="green darken-2">
-                    mdi-checkbox-marked-circle
-                  </v-icon>
-                </span>
+              <template v-slot:[`item.deleted`]="{ item }">
+                <div v-if="item.deleted_at != null">
+                  <v-chip small>Terhapus</v-chip>
+                </div>
               </template>
               <template v-slot:[`item.is_dead`]="{ item }">
                 <span v-if="item.is_dead === 0"></span>
@@ -117,17 +126,32 @@
                 </span>
               </template>
               <template v-slot:expanded-item="{ headers, item }">
-                <td class="ma-5" :colspan="headers.length">
-                  Tempat Lahir: {{ item.tempat_lahir }}
-                  <br>
-                  Tanggal Lahir: {{ item.tgl_lahir }}
-                  <br>
-                  Alamat: {{ item.alamat }}
-                  <br>
-                  Pekerjaan: {{ item.pekerjaan }}
+                <td class="pa-0" :colspan="headers.length">
+                  <v-sheet class="pa-6 ma-0">
+                    <v-row class="pl-10">
+                      <v-col>
+                        <label>Tempat lahir</label>
+                        <p>{{ item.tempat_lahir }}</p>
+                      </v-col>
+                      <v-col>
+                        <label>Jenis kelamin</label>
+                        <p>{{ item.jenis_kelamin }}</p>
+                      </v-col>
+                    </v-row>
+                    <v-row class="pl-10">
+                      <v-col>
+                        <label>Alamat</label>
+                        <p>{{ item.alamat }}</p>
+                      </v-col>
+                      <v-col>
+                        <label>Pekerjaan</label>
+                        <p>{{ item.pekerjaan }}</p>
+                      </v-col>
+                    </v-row>
+                  </v-sheet>
                 </td>
               </template>
-              <template v-slot:[`item.action`]="{ item }">
+              <!-- <template v-slot:[`item.action`]="{ item }">
                 <div>
                   <v-menu bottom offset-y>
                     <template v-slot:activator="{ on, attrs }">
@@ -145,7 +169,7 @@
                     </v-list>
                   </v-menu>
                 </div>
-              </template>
+              </template> -->
 
               <template v-slot:footer>
                 <v-divider></v-divider>
@@ -189,20 +213,17 @@ export default {
         text: 'Nama baptis', value: 'nama_baptis',
       },
       {
-        text: 'Jenis kelamin', value: 'jenis_kelamin',
-      },
-      {
         text: 'Telepon', value: 'no_telp',
       },
       {
-        text: 'Aktif', value: 'is_umat_active',
+        text: 'Terhapus', value: 'deleted',
       },
       {
         text: '', value: 'is_dead',
       },
-      {
-        text: 'Aksi', value: 'action',
-      },
+      // {
+      //   text: 'Aksi', value: 'action',
+      // },
     ],
     familyMembers: [],
     page: 1,

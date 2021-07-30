@@ -1,7 +1,9 @@
 <template>
   <div>
     <!------------- NAVBAR ----------->
-    <v-app-bar color="white" light flat fixed>
+    <v-app-bar color="white" light flat fixed app>
+      <v-app-bar-nav-icon @click="isNavDrawerShow = !isNavDrawerShow"></v-app-bar-nav-icon>
+
       <v-spacer></v-spacer>
 
       <v-chip
@@ -67,7 +69,7 @@
     </v-app-bar>
     
     <!-- SIDEBAR -->
-    <v-navigation-drawer color="blue darken-3" dark permanent fixed width="240" app>
+    <v-navigation-drawer color="blue darken-3" dark :permanent="isNavDrawerShow" fixed width="240" app>
       <v-list dense nav class="my-7 px-4">
         <v-list-item two-line>
           <v-avatar size="48" tile>
@@ -161,6 +163,7 @@ export default {
   data() {
     return {
       isKetuaLingkungan: false,
+      isNavDrawerShow: true,
       menus: [
         {
           title: "Anggota Keluarga",

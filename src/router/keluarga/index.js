@@ -405,7 +405,7 @@ const keluarga = {
     },
     {
       path: 'ketua/surat/surat-baptis-dewasa/detail/:id',
-      name: 'KetuaViewSuratBaptisAnakDetail',
+      name: 'KetuaViewSuratBaptisDewasaDetail',
       component: importView("Keluarga/KetuaLingkungan/SuratBaptisDewasa/Detail")
     },
     {
