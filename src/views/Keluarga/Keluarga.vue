@@ -69,7 +69,7 @@
     </v-app-bar>
     
     <!-- SIDEBAR -->
-    <v-navigation-drawer color="blue darken-3" dark :permanent="isNavDrawerShow" fixed width="240" app>
+    <v-navigation-drawer color="blue darken-3" dark v-model="isNavDrawerShow" :permanent="isNavDrawerShow" fixed width="240" app>
       <v-list dense nav class="my-7 px-4">
         <v-list-item two-line>
           <v-avatar size="48" tile>
@@ -146,7 +146,7 @@
     </v-navigation-drawer>
 
     <div class="app-container pa-10 grey lighten-4">
-      <router-view class="pt-15"/>
+      <router-view />
     </div>
 
     <loading-overlay></loading-overlay>

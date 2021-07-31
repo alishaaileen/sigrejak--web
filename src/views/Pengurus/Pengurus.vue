@@ -5,9 +5,6 @@
       <v-app-bar-nav-icon @click="isNavDrawerShow = !isNavDrawerShow"></v-app-bar-nav-icon>
       
       <v-spacer></v-spacer>
-      <!-- <v-btn icon class="btn text-none ma-2">
-        <v-icon>mdi-bell-outline</v-icon>
-      </v-btn> -->
 
       <chip-account
         :color="getColor($store.state.pengurus.role)"
