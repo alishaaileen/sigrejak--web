@@ -51,55 +51,38 @@
             {{ `${item.waktu_mulai.substring(0, 5)}-${item.waktu_selesai.substring(0, 5)}` }}
           </template>
           <template v-slot:[`item.status_ketua_lingkungan`]="{ item }">
-            <span v-if="item.ketua_lingkungan_approval === 1">
-              <v-icon color="green darken-1">far fa-check-circle</v-icon>
-            </span>
-            <span v-else>
-              <v-icon color="grey">fas fa-history</v-icon>
-            </span>
+            <approval-table-icon :approval="item.ketua_lingkungan_approval" />
           </template>
           <template v-slot:[`item.status_sekretariat`]="{ item }">
-            <span v-if="item.sekretariat_approval === 1">
-              <v-icon color="green darken-1">far fa-check-circle</v-icon>
-            </span>
-            <span v-else>
-              <v-icon color="grey">fas fa-history</v-icon>
-            </span>
+            <approval-table-icon :approval="item.sekretariat_approval" />
           </template>
           <template v-slot:[`item.status_romo`]="{ item }">
-            <span v-if="item.romo_approval === 1">
-              <v-icon color="green darken-1">far fa-check-circle</v-icon>
-            </span>
-            <span v-else>
-              <v-icon color="grey">fas fa-history</v-icon>
-            </span>
+            <approval-table-icon :approval="item.romo_approval" />
           </template>
           <template v-slot:[`item.action`]="{ item }">
-            <div>
-              <v-menu bottom offset-y>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn text fab small v-bind="attrs" v-on="on">
-                    <v-icon color="#131313">mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item @click="goToDetail(item.id)">
-                    <v-list-item-title>{{ item.ketua_lingkungan_approval === 1 ? 'Detail' : 'Ubah' }}</v-list-item-title>
-                  </v-list-item>
+            <v-menu bottom offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn text fab small v-bind="attrs" v-on="on">
+                  <v-icon color="#131313">mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item @click="goToDetail(item.id)">
+                  <v-list-item-title>{{ item.ketua_lingkungan_approval === 1 ? 'Detail' : 'Ubah' }}</v-list-item-title>
+                </v-list-item>
 
-                  <v-list-item
-                    v-if="item.ketua_lingkungan_approval === 1 && item.sekretariat_approval === 1 && item.romo_approval === 1"
-                    @click="cetak(item.id)"
-                  >
-                    <v-list-item-title>Cetak surat</v-list-item-title>
-                  </v-list-item>
+                <v-list-item
+                  v-if="item.ketua_lingkungan_approval === 1 && item.sekretariat_approval === 1 && item.romo_approval === 1"
+                  @click="cetak(item.id)"
+                >
+                  <v-list-item-title>Cetak surat</v-list-item-title>
+                </v-list-item>
 
-                  <v-list-item :disabled="item.ketua_lingkungan_approval === 1" @click="openConfirmDelete(item.id)">
-                    <v-list-item-title>Hapus</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
+                <v-list-item :disabled="item.ketua_lingkungan_approval === 1" @click="openConfirmDelete(item.id)">
+                  <v-list-item-title>Hapus</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </template>
 
           <template v-slot:footer>
@@ -130,7 +113,12 @@
 import { changeDateFormat } from '../../../../utils'
 import { getData, deleteData, cetakSurat } from '../../../../utils'
 
+import ApprovalTableIcon from '@/components/ApprovalTableIcon'
+
 export default {
+  components: {
+    ApprovalTableIcon
+  },
   data: () => ({
     url: '/surat-izin-pelayanan-ekaristi',
     tableLoading: true,

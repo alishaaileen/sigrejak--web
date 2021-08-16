@@ -69,20 +69,10 @@
             {{ `${item.waktu_mulai.substring(0, 5)}-${item.waktu_selesai.substring(0, 5)}` }}
           </template>
           <template v-slot:[`item.status_sekretariat`]="{ item }">
-            <span v-if="item.sekretariat_approval === 1" class="d-flex justify-center">
-              <v-icon color="green darken-2">far fa-check-circle</v-icon>
-            </span>
-            <span v-else>
-              <v-icon color="grey darken-2">fas fa-history</v-icon>
-            </span>
+            <approval-table-icon :approval="item.sekretariat_approval" />
           </template>
           <template v-slot:[`item.status_romo_paroki`]="{ item }">
-            <span v-if="item.romo_approval === 1" class="d-flex justify-center">
-              <v-icon color="green darken-2">far fa-check-circle</v-icon>
-            </span>
-            <span v-else>
-              <v-icon color="grey darken-2">fas fa-history</v-icon>
-            </span>
+            <approval-table-icon :approval="item.romo_approval" />
           </template>
           <template v-slot:[`item.action`]="{ item }">
             <div>
@@ -149,10 +139,12 @@ import { getData, getOneData, cetakSurat } from '../../../../utils'
 import { verifySurat } from '../../../../utils/pengurus'
 
 import ModalDetail from './DetailModal'
+import ApprovalTableIcon from '@/components/ApprovalTableIcon'
 
 export default {
   components: {
     ModalDetail,
+    ApprovalTableIcon,
   },
   data: () => ({
     url: '/surat-izin-pelayanan-ekaristi',
