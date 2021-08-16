@@ -8,7 +8,7 @@ const keluargaRouteGuard = (to,from, next) => {
 }
 
 const importView = (path) => {
-  return () => import(`../../views/${path}.vue`)
+  return () => import(`@/views/${path}.vue`)
 }
 
 const keluarga = {
@@ -16,7 +16,7 @@ const keluarga = {
   name: 'Keluarga',
   component: importView("Keluarga/Keluarga"),
   beforeEnter: keluargaRouteGuard,
-  // redirect: '/keluarga/anggota',
+  redirect: '/keluarga/anggota',
   children: [
     // Profile Keluarga =========================
     {

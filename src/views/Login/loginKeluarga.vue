@@ -87,7 +87,7 @@ export default {
         await setAxiosBearerToken()
         await this.$store.dispatch('keluarga/checkUserToken')
 
-        this.$router.push("/keluarga/anggota");
+        this.$router.push("/keluarga");
       } catch (error) {
         if(error.response.status >= 400 && error.response.status < 500 ) {
           this.errorMsg = "Username atau Password salah"
