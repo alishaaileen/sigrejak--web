@@ -17,6 +17,7 @@
         outlined
         v-bind="attrs"
         v-on="on"
+        :rules="rules"
       ></v-text-field>
     </template>
     <v-date-picker
@@ -36,6 +37,10 @@ export default {
   props: {
     tgl: String,
     editable: Boolean,
+    rules: {
+      type: Array,
+      default: () => [],
+    }
   },
   data: () => ({
     dateMenu: false,

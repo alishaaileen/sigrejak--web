@@ -42,6 +42,7 @@ input {
   padding: 5px;
   border: 2px dashed #c2c2c2;
   width: 300px;
+  height: auto;
 }
 
 .chat-container {

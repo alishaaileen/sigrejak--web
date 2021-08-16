@@ -4,15 +4,16 @@
     
     <h1>Tambah Anggota Keluarga</h1>
     
-    <div class="form mt-5" @submit.prevent="submit">
+    <div class="form mt-5">
       <v-card class="pa-6 mx-auto" flat>
-        <v-form>
+        <v-form ref="form" @submit.prevent="submit">
           <label>Nama lengkap*</label>
           <v-text-field
             v-model="formData.nama"
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Nama baptis</label>
@@ -29,6 +30,7 @@
             v-model="formData.jenis_kelamin"
             outlined
             dense
+            :rules="[required]"
           ></v-select>
 
           <label>Tempat lahir*</label>
@@ -37,9 +39,10 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
-          <label>Tanggal lahir</label>
+          <label>Tanggal lahir*</label>
           <v-menu
             ref="dateMenu"
             v-model="dateMenu"
@@ -57,6 +60,7 @@
                 outlined
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -73,6 +77,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Pekerjaan*</label>
@@ -81,6 +86,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Alamat*</label>
@@ -89,6 +95,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <autocomplete
@@ -96,6 +103,7 @@
             :suggestionList="lingkunganList"
             itemText="nama_lingkungan"
             @changeData="changeIdLingkungan"
+            :rules="[required]"
           ></autocomplete>
 
           <div class="d-flex justify-end">
@@ -119,6 +127,8 @@
 
 <script>
 import { getData, postData } from '../../../utils'
+
+import { required } from '@/validations'
 
 import Autocomplete from '../../../components/Autocomplete'
 
@@ -145,6 +155,9 @@ export default {
       keluarga_id: '',
     },
     dateMenu: false,
+
+    // validation rules
+    required,
   }),
   watch: {
     dateMenu (val) {
@@ -167,8 +180,16 @@ export default {
       this.$refs.dateMenu.save(date)
     },
     async submit () {
-      this.$store.dispatch('loading/openLoading')
       let snackbar = {}
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
+      this.$store.dispatch('loading/openLoading')
 
       // Assign keluarga_id to the form
       this.formData.keluarga_id = this.$store.state.keluarga.id

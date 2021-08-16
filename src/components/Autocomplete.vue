@@ -10,6 +10,7 @@
       :disabled="disable"
       dense
       :readonly="disable"
+      :rules="rules"
     ></v-autocomplete>
   </div>
 </template>
@@ -22,6 +23,10 @@ export default {
     suggestionList: Array,
     disable: Boolean,
     itemText: String,
+    rules: {
+      type: Array,
+      default: () => [],
+    }
   },
   methods: {
     changeData(e) {

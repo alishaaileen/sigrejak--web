@@ -7,7 +7,7 @@
     <v-card class="form mt-5 pa-6" light flat>
       <h2>Informasi Umum</h2>
       
-      <v-form class="mt-4">
+      <v-form class="mt-4" ref="formUmat" @submit.prevent="saveUmat">
         <v-row>
           <v-col>
             <label>Nama lengkap*</label>
@@ -16,15 +16,11 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-text-field>
 
             <label>Nama baptis</label>
-            <v-text-field
-              v-model="umat.nama_baptis"
-              required
-              outlined
-              dense
-            ></v-text-field>
+            <p>{{ umat.nama_baptis || '-' }}</p>
 
             <label>Jenis kelamin*</label>
             <v-select
@@ -32,6 +28,7 @@
               v-model="umat.jenis_kelamin"
               outlined
               dense
+              :rules="[required]"
             ></v-select>
 
             <label>Tempat lahir*</label>
@@ -40,12 +37,14 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-text-field>
 
             <label>Tanggal lahir*</label>
             <birth-date-picker
               :tgl="umat.tgl_lahir"
               @saveDate="saveDate"
+              :rules="[required]"
             ></birth-date-picker>
           </v-col>
 
@@ -64,6 +63,7 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-text-field>
 
             <label>Alamat*</label>
@@ -72,6 +72,7 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-text-field>
 
             <autocomplete
@@ -80,6 +81,7 @@
               :suggestionList="lingkunganList"
               itemText="nama_lingkungan"
               @changeData="changeIdLingkungan"
+              :rules="[required]"
             ></autocomplete>
           </v-col>
         </v-row>
@@ -87,10 +89,10 @@
         <div class="d-flex justify-end">
           <v-btn
             class="btn text-none"
-            @click="saveUmat"
             color="blue accent-4"
             dark
             depressed
+            type="submit"
           >
             Simpan
           </v-btn>
@@ -122,32 +124,34 @@
           </span>
       </v-banner>
       
-      <form class="mt-4" enctype="multipart/form-data">
+      <v-form class="mt-4" enctype="multipart/form-data" ref="formDetail" @submit.prevent="saveDetailUmat">
         <v-row>
           <v-col>
             <autocomplete
               :value.sync="namaAyah"
               :disable="false"
-              label="Ayah"
-              :suggestionList="keluargaNameList"
+              label="Ayah*"
+              :suggestionList="anggotaKeluargaNotDeleted"
               itemText="nama"
               @changeData="changeIdAyah"
+              :rules="[required]"
             ></autocomplete>
           </v-col>
           <v-col>
             <autocomplete
               :value="namaIbu"
               :disable="false"
-              label="Ibu"
-              :suggestionList="keluargaNameList"
+              label="Ibu*"
+              :suggestionList="anggotaKeluargaNotDeleted"
               itemText="nama"
               @changeData="changeIdIbu"
+              :rules="[required]"
             ></autocomplete>
           </v-col>
         </v-row>
 
         <div class="mb-5">
-          <label>File akta lahir</label>
+          <label>File akta lahir*</label>
           <v-file-input
             style="display: none"
             show-size
@@ -155,6 +159,7 @@
             accept="image/*"
             v-model="detailUmat.file_akta_lahir"
             @change="previewImage('akta')"
+            :rules="[required]"
           ></v-file-input>
           <div>
             <v-btn
@@ -210,15 +215,15 @@
         <div class="d-flex justify-end">
           <v-btn
             class="btn text-none"
-            @click="saveDetailUmat"
             color="blue accent-4"
             dark
             depressed
+            type="submit"
           >
             Simpan
           </v-btn>
         </div>
-      </form>
+      </v-form>
     </v-card>
     <snackbar></snackbar>
   </div>
@@ -228,6 +233,8 @@
 // import axios from 'axios'
 import { getData, getOneData, editData } from '../../../utils'
 import { API_URL } from '../../../constants'
+
+import { required } from '@/validations'
 
 import BirthDatePicker from '../../../components/BirthDatePicker'
 import Autocomplete from '../../../components/Autocomplete'
@@ -247,14 +254,13 @@ export default {
 
     displayGambarAkta: null,
     displayGambarKtp: null,
+
+    // validation rules
+    required,
   }),
   computed: {
-    keluargaNameList() {
-      return this.anggotaKeluarga.filter(e => {
-        if(e.id != this.umat.id) {
-          return e.nama
-        }
-      })
+    anggotaKeluargaNotDeleted() {
+      return this.anggotaKeluarga.filter(e => e.id != this.umat.id && e.deleted_at === null)
     },
   },
   async mounted() {
@@ -267,10 +273,19 @@ export default {
     if(this.detailUmat.id_ayah) this.setNamaAyah()
     if(this.detailUmat.id_ibu) this.setNamaIbu()
 
-    if(this.detailUmat.file_akta_lahir)
+    if(this.detailUmat.file_akta_lahir) {
       this.getImage(this.detailUmat.file_akta_lahir, 'akta')
-    if(this.detailUmat.file_ktp)
+    }
+    // else {
+    //   this.detailUmat.file_akta_lahir = {}
+    // }
+
+    if(this.detailUmat.file_ktp) {
       this.getImage(this.detailUmat.file_ktp, 'ktp')
+    }
+    // else {
+    //   this.detailUmat.file_ktp = {}
+    // }
   },
   methods: {
     changeIdLingkungan(e) {
@@ -299,10 +314,18 @@ export default {
       this.umat.tgl_lahir = newDate
     },
     async saveUmat() {
+      let snackbar = {}
+
+      if(!this.$refs.formUmat.validate()) {
+        this.$refs.formUmat.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
-
-      let snackbar = {}
 
       try {
         let response = await editData('/umat', this.$route.params.id, this.umat)
@@ -327,21 +350,33 @@ export default {
 
 
     async saveDetailUmat() {
+      let snackbar = {}
+
+      if(!this.$refs.formDetail.validate()) {
+        this.$refs.formDetail.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
       let formData = new FormData()
-      if(this.detailUmat.id_ayah != null) {
-        formData.append('id_ayah', this.detailUmat.id_ayah)
-      }
-      if(this.detailUmat.id_ibu != null) {
-        formData.append('id_ibu', this.detailUmat.id_ibu)
-      }
-      // maybe tambah if file_akta_lahir bukan string maka append?
-      formData.append('file_akta_lahir', this.detailUmat.file_akta_lahir)
-      formData.append('file_ktp', this.detailUmat.file_ktp)
 
-      let snackbar = {}
+      if(this.detailUmat.id_ayah)
+        formData.append('id_ayah', this.detailUmat.id_ayah)
+      if(this.detailUmat.id_ibu)
+        formData.append('id_ibu', this.detailUmat.id_ibu)
+      
+      // if file_akta_lahir bukan string maka append data
+      if(this.detailUmat.file_akta_lahir && typeof this.detailUmat.file_akta_lahir != 'string') {
+        formData.append('file_akta_lahir', this.detailUmat.file_akta_lahir)
+      }
+      if(this.detailUmat.file_ktp && typeof this.detailUmat.file_ktp != 'string') {
+        formData.append('file_ktp', this.detailUmat.file_ktp)
+      }
 
       try {
         let response = await editData('/detail-umat', this.$route.params.id, formData)
