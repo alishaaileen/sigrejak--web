@@ -214,11 +214,11 @@
 </template>
 
 <script>
-import { getData, getOneData } from '../../../../utils'
-import { verifySurat } from '../../../../utils/pengurus'
+import { getData, getOneData } from '@/utils'
+import { verifySurat } from '@/utils/pengurus'
 
-import Autocomplete from '../../../../components/Autocomplete.vue'
-import CalendarBaptis from '../../../../components/CalendarBaptis.vue'
+import Autocomplete from '@/components/Autocomplete.vue'
+import CalendarBaptis from '@/components/CalendarBaptis.vue'
 
 export default {
   components: {

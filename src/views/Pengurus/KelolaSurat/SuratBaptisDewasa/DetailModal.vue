@@ -170,8 +170,8 @@
 </template>
 
 <script>
-import { API_URL } from '../../../../constants'
-import { convertDateTime } from '../../../../utils'
+import { API_URL } from '@/constants'
+import { convertDateTime } from '@/utils'
 
 export default {
   props:{

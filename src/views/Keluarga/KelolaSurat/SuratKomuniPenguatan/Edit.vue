@@ -271,6 +271,7 @@
                 depressed
                 @click="$refs.inputSyarat.$refs.input.click()"
               >
+                <v-icon>mdi-upload</v-icon>
                 Upload file
               </v-btn>
             </div>
@@ -306,12 +307,12 @@
 </template>
 
 <script>
-import { API_URL } from '../../../../constants'
-import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '../../../../utils'
-import Autocomplete from '../../../../components/Autocomplete'
-import ApprovalChip from '../../../../components/ApprovalChip.vue'
-import SidebarLogSurat from '../../../../components/SidebarLogSurat.vue'
-import ButtonChat from '../../../../components/ButtonChat.vue'
+import { API_URL } from '@/constants'
+import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
+import Autocomplete from '@/components/Autocomplete'
+import ApprovalChip from '@/components/ApprovalChip.vue'
+import SidebarLogSurat from '@/components/SidebarLogSurat.vue'
+import ButtonChat from '@/components/ButtonChat.vue'
 
 export default {
   components: {

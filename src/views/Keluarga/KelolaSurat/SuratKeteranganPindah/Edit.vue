@@ -256,11 +256,11 @@
 </template>
 
 <script>
-import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '../../../../utils'
-import Autocomplete from '../../../../components/Autocomplete'
-import ApprovalChip from '../../../../components/ApprovalChip.vue'
-import SidebarLogSurat from '../../../../components/SidebarLogSurat.vue'
-import ButtonChat from '../../../../components/ButtonChat.vue'
+import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
+import Autocomplete from '@/components/Autocomplete'
+import ApprovalChip from '@/components/ApprovalChip.vue'
+import SidebarLogSurat from '@/components/SidebarLogSurat.vue'
+import ButtonChat from '@/components/ButtonChat.vue'
 
 export default {
   components: {

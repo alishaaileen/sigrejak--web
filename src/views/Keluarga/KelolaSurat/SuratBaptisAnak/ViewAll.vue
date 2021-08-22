@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import { getData, deleteData, cetakSurat } from '../../../../utils'
+import { getData, deleteData, cetakSurat } from '@/utils'
 
 import ApprovalTableIcon from '@/components/ApprovalTableIcon'
 

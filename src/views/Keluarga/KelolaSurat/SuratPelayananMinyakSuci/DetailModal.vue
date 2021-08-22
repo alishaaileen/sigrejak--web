@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import { getData } from '../../../../utils'
+import { getData } from '@/utils'
 
 export default {
   props:{

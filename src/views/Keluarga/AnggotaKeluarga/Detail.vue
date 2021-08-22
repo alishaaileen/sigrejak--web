@@ -169,7 +169,8 @@
               depressed
               @click="selectFile('akta')"
             >
-              Upload file
+              <v-icon>mdi-upload</v-icon>
+                Upload file
             </v-btn>
           </div>
           <div class="image-preview" v-if="detailUmat.file_akta_lahir != null">
@@ -195,7 +196,8 @@
               depressed
               @click="selectFile('ktp')"
             >
-              Upload file
+              <v-icon>mdi-upload</v-icon>
+                Upload file
             </v-btn>
           </div>
           <div class="image-preview" v-if="detailUmat.file_ktp != null">

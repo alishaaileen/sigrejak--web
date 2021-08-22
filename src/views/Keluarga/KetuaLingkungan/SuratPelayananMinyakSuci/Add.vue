@@ -209,9 +209,9 @@
 </template>
 
 <script>
-import { getData, postData } from '../../../../utils'
-import { caraMenikahList } from '../../../../constants'
-import Autocomplete from '../../../../components/Autocomplete'
+import { getData, postData } from '@/utils'
+import { caraMenikahList } from '@/constants'
+import Autocomplete from '@/components/Autocomplete'
 
 export default {
   components: {

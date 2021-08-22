@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { getData } from '../../../../utils'
+import { getData } from '@/utils'
 
 import ApprovalTableIcon from '@/components/ApprovalTableIcon'
 

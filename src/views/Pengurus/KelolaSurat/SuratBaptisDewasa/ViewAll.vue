@@ -139,11 +139,11 @@
 </template>
 
 <script>
-import { API_URL } from '../../../../constants'
-import { convertDateTime, getData, getOneData, cetakSurat } from '../../../../utils'
+import { API_URL } from '@/constants'
+import { convertDateTime, getData, getOneData, cetakSurat } from '@/utils'
 
 import ModalDetail from './DetailModal'
-import DialogImage from '../../../../components/DialogImage.vue'
+import DialogImage from '@/components/DialogImage.vue'
 import ApprovalTableIcon from '@/components/ApprovalTableIcon'
 
 export default {

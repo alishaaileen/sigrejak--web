@@ -167,9 +167,9 @@
 </template>
 
 <script>
-import { getData, postData, changeDateFormat } from '../../../../utils'
-import { caraMenikahList } from '../../../../constants'
-import Autocomplete from '../../../../components/Autocomplete'
+import { getData, postData, changeDateFormat } from '@/utils'
+import { caraMenikahList } from '@/constants'
+import Autocomplete from '@/components/Autocomplete'
 
 export default {
   components: {

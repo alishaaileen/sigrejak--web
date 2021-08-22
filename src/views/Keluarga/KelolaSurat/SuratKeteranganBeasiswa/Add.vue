@@ -6,7 +6,7 @@
 
     <div class="form mt-5">
       <v-card class="pa-6" width="100%" flat>
-        <v-form @submit.prevent="submit">
+        <v-form ref="form" @submit.prevent="submit">
           <h3 class="mb-5">Informasi Siswa</h3>
 
           <autocomplete
@@ -14,6 +14,7 @@
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdSiswa"
+            :rules="[required]"
           ></autocomplete>
 
           <label>Tempat lahir</label>
@@ -34,6 +35,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Kelas</label>
@@ -42,6 +44,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -88,6 +91,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-textarea>
 
           <label>File syarat beasiswa*</label>
@@ -100,6 +104,7 @@
               style="display: none;"
               ref="inputSyaratBeasiswa"
               v-model="formData.file_syarat_beasiswa"
+              :rules="[required, acceptZipOnly]"
             ></v-file-input>
             <div>
               <v-btn
@@ -109,6 +114,7 @@
                 depressed
                 @click="$refs.inputSyaratBeasiswa.$refs.input.click()"
               >
+                <v-icon>mdi-upload</v-icon>
                 Upload file
               </v-btn>
             </div>
@@ -153,8 +159,10 @@
 </template>
 
 <script>
-import { getData, getOneData, postData, changeDateFormat } from '../../../../utils'
-import Autocomplete from '../../../../components/Autocomplete'
+import { getData, getOneData, postData, changeDateFormat } from '@/utils'
+import { required, acceptZipOnly } from '@/validations'
+
+import Autocomplete from '@/components/Autocomplete'
 
 export default {
   components: {
@@ -188,6 +196,10 @@ export default {
     },
     anggotaKeluarga: [],
     isAlertOrtuActive: false,
+
+    // validation rules
+    required,
+    acceptZipOnly,
   }),
   computed: {
     isSubmitDisabled() {
@@ -204,6 +216,7 @@ export default {
   async mounted() {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
     this.formData.id_keluarga = this.$store.state.keluarga.id
+    this.anggotaKeluarga = this.anggotaKeluarga.filter(e => e.deleted_at === null )
   },
   methods: {
     async changeIdSiswa(e) {
@@ -240,6 +253,16 @@ export default {
       this.formData.alamat_ortu = tempOrangTua.alamat || '-'
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
@@ -257,13 +280,11 @@ export default {
         this.formData.isKetuaLingkungan = true
         this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
       } else {
-        this.formData.isKetuaLingkungan = false
+        this.formData.isKetuaLingkungan = false  
         this.formData.ketua_lingkungan = null
       }
       formData.append('ketua_lingkungan', this.formData.ketua_lingkungan)
       formData.append('isKetuaLingkungan', this.formData.isKetuaLingkungan)
-
-      let snackbar = {}
 
       try {
         let response = await postData('/surat-keterangan-beasiswa/add', formData)

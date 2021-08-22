@@ -171,6 +171,8 @@
                 depressed
                 @click="$refs.inputSyarat.$refs.input.click()"
               >
+                <v-icon>mdi-upload</v-icon>
+                <v-icon>mdi-upload</v-icon>
                 Upload file
               </v-btn>
             </div>
@@ -202,8 +204,8 @@
 </template>
 
 <script>
-import { getData, getOneData, postData, changeDateFormat } from '../../../../utils'
-import Autocomplete from '../../../../components/Autocomplete'
+import { getData, getOneData, postData, changeDateFormat } from '@/utils'
+import Autocomplete from '@/components/Autocomplete'
 
 export default {
   components: {

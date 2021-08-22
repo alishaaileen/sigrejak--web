@@ -6,7 +6,7 @@
 
     <div class="form mt-5">
       <v-card class="pa-6 mx-auto" flat>
-        <v-form>
+        <v-form ref="form" @submit.prevent="submit">
           <label>Tanggal pelaksanaan*</label>
           <v-menu
             ref="menu"
@@ -25,6 +25,7 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -44,6 +45,7 @@
                   outlined
                   dense
                   placeholder="jam"
+                  :rules="[required]"
                 ></v-select>
                 <h3 class="mx-2 py-2">:</h3>
                 <v-select
@@ -52,6 +54,7 @@
                   outlined
                   dense
                   placeholder="menit"
+                  :rules="[required]"
                 ></v-select>
               </div>
             </v-col>
@@ -64,6 +67,7 @@
                   outlined
                   dense
                   placeholder="jam"
+                  :rules="[required]"
                 ></v-select>
                 <h3 class="mx-2 py-2">:</h3>
                 <v-select
@@ -72,6 +76,7 @@
                   outlined
                   dense
                   placeholder="menit"
+                  :rules="[required]"
                 ></v-select>
               </div>
             </v-col>
@@ -83,6 +88,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-textarea>
 
           <autocomplete
@@ -90,6 +96,7 @@
             :suggestionList="lingkunganList"
             itemText="nama_lingkungan"
             @changeData="changeIdLingkungan"
+            :rules="[required]"
           ></autocomplete>
 
           <label>Alamat lokasi/tempat/rumah*</label>
@@ -98,6 +105,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-textarea>
 
           <label>Nomor telepon rumah/HP*</label>
@@ -106,6 +114,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -118,6 +127,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Alamat/komunitas*</label>
@@ -126,6 +136,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-textarea>
 
           <label>Nomor telepon komunitas*</label>
@@ -134,12 +145,13 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <div class="d-flex justify-end">
             <v-btn
               class="btn text-none mt-2"
-              @click="submit"
+              type="submit"
               color="blue accent-4"
               dark
               depressed
@@ -155,8 +167,10 @@
 </template>
 
 <script>
-import { getData, postData } from '../../../../utils'
-import Autocomplete from '../../../../components/Autocomplete'
+import { getData, postData } from '@/utils'
+import { required } from '@/validations'
+
+import Autocomplete from '@/components/Autocomplete'
 
 export default {
   components: {
@@ -191,6 +205,9 @@ export default {
       ketua_lingkungan: null,
       isKetuaLingkungan: false,
     },
+
+    // validation rules
+    required,
   }),
   async mounted() {
     // Inisialisasi array jam
@@ -225,6 +242,16 @@ export default {
       this.$refs.menu.save(date)
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
@@ -237,8 +264,6 @@ export default {
         this.formData.isKetuaLingkungan = false
         this.formData.ketua_lingkungan = null
       }
-
-      let snackbar = {}
 
       try {
         let response = await postData(`${this.url}/add`, this.formData)

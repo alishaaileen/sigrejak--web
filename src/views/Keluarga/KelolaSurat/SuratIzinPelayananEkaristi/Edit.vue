@@ -39,7 +39,7 @@
 
         <v-divider></v-divider>
 
-        <v-content class="pa-6">
+        <v-main class="pa-6">
           <div class="mb-15">
             <label>No. surat</label>
             <p>
@@ -57,7 +57,7 @@
             </v-btn>
           </div>
 
-          <v-form>
+          <v-form ref="form" @submit.prevent="submit">
             <label>Tanggal pelaksanaan*</label>
             <v-menu
               :disabled="(!isEditable)"
@@ -78,6 +78,7 @@
                   dense
                   v-bind="attrs"
                   v-on="on"
+                  :rules="[required]"
                 ></v-text-field>
               </template>
               <v-date-picker
@@ -99,6 +100,7 @@
                     outlined
                     dense
                     placeholder="jam"
+                    :rules="[required]"
                   ></v-select>
                   <h3 class="mx-2 py-2">:</h3>
                   <v-select
@@ -108,6 +110,7 @@
                     outlined
                     dense
                     placeholder="menit"
+                    :rules="[required]"
                   ></v-select>
                 </div>
               </v-col>
@@ -121,6 +124,7 @@
                     outlined
                     dense
                     placeholder="jam"
+                    :rules="[required]"
                   ></v-select>
                   <h3 class="mx-2 py-2">:</h3>
                   <v-select
@@ -130,6 +134,7 @@
                     outlined
                     dense
                     placeholder="menit"
+                    :rules="[required]"
                   ></v-select>
                 </div>
               </v-col>
@@ -142,6 +147,7 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-textarea>
 
             <autocomplete
@@ -151,6 +157,7 @@
               :suggestionList="lingkunganList"
               itemText="nama_lingkungan"
               @changeData="changeIdLingkungan"
+              :rules="[required]"
             ></autocomplete>
 
             <label>Alamat lokasi/tempat/rumah*</label>
@@ -160,6 +167,7 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-textarea>
 
             <label>Nomor telepon rumah/HP*</label>
@@ -169,6 +177,7 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-text-field>
 
             <v-divider class="mb-5"></v-divider>
@@ -182,6 +191,7 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-text-field>
 
             <label>Alamat/komunitas*</label>
@@ -191,6 +201,7 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-textarea>
 
             <label>Nomor telepon komunitas*</label>
@@ -200,6 +211,7 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-text-field>
 
             <div class="d-flex justify-end">
@@ -215,7 +227,7 @@
               </v-btn>
             </div>
           </v-form>
-        </v-content>
+        </v-main>
       </v-card>
     </div>
     <snackbar />
@@ -229,11 +241,13 @@
 </template>
 
 <script>
-import { getData, getOneData, getLogSuratByNoSurat, editData } from '../../../../utils'
-import Autocomplete from '../../../../components/Autocomplete'
-import ApprovalChip from '../../../../components/ApprovalChip.vue'
-import SidebarLogSurat from '../../../../components/SidebarLogSurat.vue'
-import ButtonChat from '../../../../components/ButtonChat.vue'
+import { getData, getOneData, getLogSuratByNoSurat, editData } from '@/utils'
+import { required } from '@/validations'
+
+import Autocomplete from '@/components/Autocomplete'
+import ApprovalChip from '@/components/ApprovalChip.vue'
+import SidebarLogSurat from '@/components/SidebarLogSurat.vue'
+import ButtonChat from '@/components/ButtonChat.vue'
 
 export default {
   components: {
@@ -259,6 +273,9 @@ export default {
     logList: [],
     isSidebarLogActive: false,
     countChatUnread: 0,
+
+    // validation rules
+    required,
   }),
   async mounted() {
     // Inisialisasi array jam
@@ -324,12 +341,20 @@ export default {
       this.$refs.menu.save(date)
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
       this.setAllWaktu(this.waktu)
-
-      let snackbar = {}
 
       try {
         let response = await editData(this.url, this.formData.id, this.formData)

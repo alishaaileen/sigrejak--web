@@ -417,9 +417,9 @@
 </template>
 
 <script>
-import { countAge, getData, getOneData, postData, changeDateFormat } from '../../../../utils'
-import { caraMenikahList } from '../../../../constants'
-import Autocomplete from '../../../../components/Autocomplete'
+import { countAge, getData, getOneData, postData, changeDateFormat } from '@/utils'
+import { caraMenikahList } from '@/constants'
+import Autocomplete from '@/components/Autocomplete'
 
 export default {
   components: {

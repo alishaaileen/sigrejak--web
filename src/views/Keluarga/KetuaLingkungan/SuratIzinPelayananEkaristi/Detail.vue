@@ -102,9 +102,9 @@
 </template>
 
 <script>
-import { getOneData, changeDateFormat } from '../../../../utils'
-import { verifySurat } from '../../../../utils/pengurus'
-import ButtonChat from '../../../../components/ButtonChat.vue'
+import { getOneData, changeDateFormat } from '@/utils'
+import { verifySurat } from '@/utils/pengurus'
+import ButtonChat from '@/components/ButtonChat.vue'
 
 export default {
   components: {

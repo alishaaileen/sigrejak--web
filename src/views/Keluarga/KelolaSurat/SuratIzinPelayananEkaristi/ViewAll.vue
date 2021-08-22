@@ -110,8 +110,8 @@
 </template>
 
 <script>
-import { changeDateFormat } from '../../../../utils'
-import { getData, deleteData, cetakSurat } from '../../../../utils'
+import { changeDateFormat } from '@/utils'
+import { getData, deleteData, cetakSurat } from '@/utils'
 
 import ApprovalTableIcon from '@/components/ApprovalTableIcon'
 

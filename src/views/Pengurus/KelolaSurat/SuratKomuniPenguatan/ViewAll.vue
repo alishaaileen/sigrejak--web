@@ -154,12 +154,12 @@
 </template>
 
 <script>
-import { API_URL } from '../../../../constants'
-import { getData, getOneData, cetakSurat } from '../../../../utils'
-import { verifySurat } from '../../../../utils/pengurus'
+import { API_URL } from '@/constants'
+import { getData, getOneData, cetakSurat } from '@/utils'
+import { verifySurat } from '@/utils/pengurus'
 
 import ModalDetail from './DetailModal'
-import DialogImage from '../../../../components/DialogImage.vue'
+import DialogImage from '@/components/DialogImage.vue'
 import ApprovalTableIcon from '@/components/ApprovalTableIcon'
 
 export default {

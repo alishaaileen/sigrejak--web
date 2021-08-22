@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import { getData, editData } from '../../../../utils'
+import { getData, editData } from '@/utils'
 
 import ApprovalTableIcon from '@/components/ApprovalTableIcon'
 

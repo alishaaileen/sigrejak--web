@@ -137,8 +137,8 @@
 </template>
 
 <script>
-import { getData, getOneData, cetakSurat } from '../../../../utils'
-import { verifySurat } from '../../../../utils/pengurus'
+import { getData, getOneData, cetakSurat } from '@/utils'
+import { verifySurat } from '@/utils/pengurus'
 
 import ModalDetail from './DetailModal'
 import ApprovalTableIcon from '@/components/ApprovalTableIcon'

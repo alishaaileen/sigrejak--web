@@ -72,6 +72,7 @@
             itemText="nama"
             @changeData="changeIdSiswa"
             :disabled="(!isEditable)"
+            :rules="[required]"
           ></autocomplete>
 
           <label>Tempat lahir</label>
@@ -94,6 +95,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Kelas</label>
@@ -104,6 +106,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -144,6 +147,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-select>
 
           <label>Lampirkan permohonan untuk keterangan beasiswa*</label>
@@ -154,6 +158,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-textarea>
 
           <label>File syarat beasiswa*</label>
@@ -176,6 +181,7 @@
               style="display: none;"
               ref="inputSyaratBeasiswa"
               v-model="formData.file_syarat_beasiswa"
+              :rules="[required]"
             ></v-file-input>
             <div>
               <v-btn
@@ -186,6 +192,7 @@
                 depressed
                 @click="$refs.inputSyaratBeasiswa.$refs.input.click()"
               >
+                <v-icon>mdi-upload</v-icon>
                 Upload file
               </v-btn>
             </div>
@@ -221,12 +228,12 @@
 </template>
 
 <script>
-import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '../../../../utils'
-import Autocomplete from '../../../../components/Autocomplete'
-import ApprovalChip from '../../../../components/ApprovalChip.vue'
-import { API_URL } from '../../../../constants'
-import SidebarLogSurat from '../../../../components/SidebarLogSurat.vue'
-import ButtonChat from '../../../../components/ButtonChat.vue'
+import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
+import Autocomplete from '@/components/Autocomplete'
+import ApprovalChip from '@/components/ApprovalChip.vue'
+import { API_URL } from '@/constants'
+import SidebarLogSurat from '@/components/SidebarLogSurat.vue'
+import ButtonChat from '@/components/ButtonChat.vue'
 
 export default {
   components: {

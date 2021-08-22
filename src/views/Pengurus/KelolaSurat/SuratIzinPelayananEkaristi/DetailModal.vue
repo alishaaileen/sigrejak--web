@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import { changeDateFormat } from '../../../../utils'
+import { changeDateFormat } from '@/utils'
 export default {
   props:{
     isModalDetailActive: Boolean,

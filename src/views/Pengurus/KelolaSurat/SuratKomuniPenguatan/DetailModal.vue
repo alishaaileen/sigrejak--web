@@ -151,7 +151,7 @@
 </template>
 
 <script>
-import { API_URL } from '../../../../constants'
+import { API_URL } from '@/constants'
 
 export default {
   props:{

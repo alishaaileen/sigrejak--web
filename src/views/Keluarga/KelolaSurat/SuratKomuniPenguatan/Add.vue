@@ -229,8 +229,8 @@
 </template>
 
 <script>
-import { getData, getOneData, postData, changeDateFormat } from '../../../../utils'
-import Autocomplete from '../../../../components/Autocomplete'
+import { getData, getOneData, postData, changeDateFormat } from '@/utils'
+import Autocomplete from '@/components/Autocomplete'
 
 export default {
   components: {
