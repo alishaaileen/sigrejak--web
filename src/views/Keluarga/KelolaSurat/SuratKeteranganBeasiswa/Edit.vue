@@ -39,7 +39,7 @@
 
         <v-divider></v-divider>
 
-        <v-form class="pa-6" @submit.prevent="submit">
+        <v-form class="pa-6" ref="form" @submit.prevent="submit">
           <div class="mb-15">
             <label>No. surat</label>
             <p>
@@ -197,7 +197,7 @@
               </v-btn>
             </div>
             <div v-if="(typeof formData.file_syarat_beasiswa) != 'string'" class="ml-5">
-              <p class="ma-0">{{formData.file_syarat_beasiswa.name}}</p>
+              <p class="ma-0">{{ formData.file_syarat_beasiswa.name }}</p>
               <small>{{ fileSize }} Mb</small>
             </div>
           </div>
@@ -229,9 +229,11 @@
 
 <script>
 import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
+import { API_URL } from '@/constants'
+import { required } from '@/validations'
+
 import Autocomplete from '@/components/Autocomplete'
 import ApprovalChip from '@/components/ApprovalChip.vue'
-import { API_URL } from '@/constants'
 import SidebarLogSurat from '@/components/SidebarLogSurat.vue'
 import ButtonChat from '@/components/ButtonChat.vue'
 
@@ -253,6 +255,9 @@ export default {
     countChatUnread: 0,
     isSidebarLogActive: false,
     logList: [],
+
+    // validation rules
+    required,
   }),
   computed: {
     isSubmitDisabled() {
@@ -329,10 +334,18 @@ export default {
       this.formData.alamat_ortu = tempOrangTua.alamat || '-'
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+      
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
-
-      let snackbar = {}
 
       let formData = new FormData()
       formData.append('id_keluarga', this.formData.id_keluarga)

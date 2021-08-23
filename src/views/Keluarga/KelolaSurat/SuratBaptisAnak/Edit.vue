@@ -33,7 +33,7 @@
 
         <v-divider></v-divider>
 
-        <v-form class="pa-6" @submit.prevent="submit">
+        <v-form class="pa-6" ref="form" @submit.prevent="submit">
           <div class="mb-15">
             <label>No. surat</label>
             <p>
@@ -60,6 +60,7 @@
             itemText="nama"
             @changeData="changeIdAnak"
             :disable="(!isEditable)"
+            :rules="[required]"
           ></autocomplete>
 
           <v-alert
@@ -89,6 +90,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -127,15 +129,17 @@
               v-model="formData.cara_ortu_menikah"
               outlined
               dense
+              :rules="[required]"
             ></v-select>
 
-            <div v-show="formData.cara_ortu_menikah === 'Cara lain'">
+            <div v-if="formData.cara_ortu_menikah === 'Cara lain'">
               <label>Cara lain*</label>
               <v-text-field
                 v-model="temp_cara_ortu_menikah"
                 required
                 outlined
                 dense
+                :rules="[required]"
               ></v-text-field>
             </div>
 
@@ -145,6 +149,7 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-text-field>
 
             <label>Tanggal menikah*</label>
@@ -167,6 +172,7 @@
                   v-bind="attrs"
                   v-on="on"
                   :disabled="(!isEditable)"
+                  :rules="[required]"
                 ></v-text-field>
               </template>
               <v-date-picker
@@ -215,6 +221,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Tanggal krisma wali baptis*</label>
@@ -237,6 +244,7 @@
                 v-bind="attrs"
                 v-on="on"
                 :disabled="(!isEditable)"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -274,6 +282,7 @@
               style="display: none;"
               ref="inputSyaratBaptisAnak"
               v-model="formData.file_syarat_baptis"
+              :rules="[required, acceptZipOnly]"
             ></v-file-input>
             <div>
               <v-btn
@@ -321,10 +330,11 @@
 
 <script>
 import { countAge, getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
-import { caraMenikahList } from '@/constants'
+import { API_URL, caraMenikahList } from '@/constants'
+import { required, acceptZipOnly } from '@/validations'
+
 import Autocomplete from '@/components/Autocomplete'
 import ApprovalChip from '@/components/ApprovalChip.vue'
-import { API_URL } from '@/constants'
 import SidebarLogSurat from '@/components/SidebarLogSurat.vue'
 import ButtonChat from '@/components/ButtonChat.vue'
 
@@ -350,6 +360,10 @@ export default {
     logList: [],
     isSidebarLogActive: false,
     countChatUnread: 0,
+
+    // validation rules
+    required,
+    acceptZipOnly,
   }),
   computed: {
     isSubmitDisabled() {
@@ -430,11 +444,20 @@ export default {
       }
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
-      let snackbar = {}
-        , formData = new FormData()
+      let formData = new FormData()
       if(this.formData.cara_ortu_menikah === 'Cara lain') {
         this.formData.cara_ortu_menikah = this.temp_cara_ortu_menikah
       }

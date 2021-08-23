@@ -73,7 +73,7 @@
 
           <v-divider class="mb-5"></v-divider>
 
-          <v-form @submit.prevent="submit">
+          <v-form ref="form" @submit.prevent="submit">
             <h3 class="mb-5">Informasi Umat</h3>
 
             <autocomplete
@@ -83,6 +83,7 @@
               :disable="(!isEditable)"
               itemText="nama"
               @changeData="changeIdUmat"
+              :rules="[required]"
             ></autocomplete>
 
             <label>Tempat lahir</label>
@@ -105,6 +106,7 @@
               dense
               :disabled="(!isEditable)"
               :readonly="(!isEditable)"
+              :rules="[required]"
             ></v-text-field>
 
             <v-divider class="mb-5"></v-divider>
@@ -142,6 +144,7 @@
               dense
               :disabled="(!isEditable)"
               :readonly="(!isEditable)"
+              :rules="[required]"
             ></v-textarea>
 
             <div class="d-flex justify-end">
@@ -173,6 +176,8 @@
 
 <script>
 import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
+import { required } from '@/validations'
+
 import Autocomplete from '@/components/Autocomplete'
 import ApprovalChip from '@/components/ApprovalChip.vue'
 import SidebarLogSurat from '@/components/SidebarLogSurat.vue'
@@ -196,6 +201,9 @@ export default {
     logList: [],
     isSidebarLogActive: false,
     countChatUnread: 0,
+
+    // validation rules
+    required,
   }),
   async mounted() {
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
@@ -260,10 +268,18 @@ export default {
       this.formData.alamat_ortu = tempOrangTua.alamat
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
-
-      let snackbar = {}
 
       try {
         let response = await editData(this.url, this.formData.id, this.formData)

@@ -6,7 +6,7 @@
 
     <div class="form mt-5">
       <v-card class="pa-6 mx-auto" flat>
-        <v-form @submit.prevent="submit">
+        <v-form ref="form" @submit.prevent="submit">
           <h3 class="mb-5">Informasi Umat</h3>
 
           <autocomplete
@@ -14,6 +14,7 @@
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdUmat"
+            :rules="[required]"
           ></autocomplete>
 
           <label>Tempat lahir</label>
@@ -34,6 +35,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -69,6 +71,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-textarea>
 
           <div class="d-flex justify-end">
@@ -92,6 +95,8 @@
 
 <script>
 import { getData, getOneData, postData, changeDateFormat } from '@/utils'
+import { required } from '@/validations'
+
 import Autocomplete from '@/components/Autocomplete'
 
 export default {
@@ -119,6 +124,9 @@ export default {
     anggotaKeluarga: [],
     umat: {},
     isAlertOrtuActive: false,
+
+    // validation rules
+    required,
   }),
   computed: {
     isSubmitDisabled() {
@@ -164,10 +172,18 @@ export default {
       this.formData.alamat_ortu = tempOrangTua.alamat
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
-
-      let snackbar = {}
 
       if (this.formData.id_lingkungan == this.$store.state.keluarga.lingkunganId) {
         this.formData.isKetuaLingkungan = true

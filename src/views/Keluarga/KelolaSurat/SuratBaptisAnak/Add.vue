@@ -6,7 +6,7 @@
 
     <div class="form mt-5">
       <v-card class="pa-6" width="100%" flat>
-        <v-form @submit.prevent="submit">
+        <v-form ref="form" @submit.prevent="submit">
           <h3 class="mb-5">Informasi Anak</h3>
 
           <autocomplete
@@ -14,6 +14,7 @@
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdAnak"
+            :rules="[required]"
           ></autocomplete>
 
           <v-alert
@@ -41,6 +42,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -79,15 +81,17 @@
               v-model="formData.cara_ortu_menikah"
               outlined
               dense
+              :rules="[required]"
             ></v-select>
 
-            <div v-show="formData.cara_ortu_menikah === 'Cara lain'">
+            <div v-if="formData.cara_ortu_menikah === 'Cara lain'">
               <label>Cara lain*</label>
               <v-text-field
                 v-model="temp_cara_ortu_menikah"
                 required
                 outlined
                 dense
+                :rules="[required]"
               ></v-text-field>
             </div>
 
@@ -97,6 +101,7 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-text-field>
 
             <label>Tanggal menikah*</label>
@@ -117,6 +122,7 @@
                   dense
                   v-bind="attrs"
                   v-on="on"
+                  :rules="[required]"
                 ></v-text-field>
               </template>
               <v-date-picker
@@ -161,6 +167,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Tanggal krisma wali baptis*</label>
@@ -181,6 +188,7 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -206,6 +214,7 @@
               style="display: none;"
               ref="inputSyaratBaptisAnak"
               v-model="formData.file_syarat_baptis"
+              :rules="[required, acceptZipOnly]"
             ></v-file-input>
             <div>
               <v-btn
@@ -248,9 +257,11 @@
 </template>
 
 <script>
-import { countAge, getData, getOneData, postData, changeDateFormat } from '../../../../utils'
-import { caraMenikahList } from '../../../../constants'
-import Autocomplete from '../../../../components/Autocomplete'
+import { countAge, getData, getOneData, postData, changeDateFormat } from '@/utils'
+import { required, acceptZipOnly } from '@/validations'
+import { caraMenikahList } from '@/constants'
+
+import Autocomplete from '@/components/Autocomplete'
 
 export default {
   components: {
@@ -291,6 +302,10 @@ export default {
     anggotaKeluarga: [],
     isAlertUmurActive: false,
     isAlertOrtuActive: false,
+
+    // validation rules
+    required,
+    acceptZipOnly,
   }),
   computed: {
     isSubmitDisabled() {
@@ -347,11 +362,20 @@ export default {
       }
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
-      let snackbar = {}
-        , formData = new FormData()
+      let formData = new FormData()
       if(this.formData.cara_ortu_menikah === 'Cara lain') {
         this.formData.cara_ortu_menikah = this.temp_cara_ortu_menikah
       }
