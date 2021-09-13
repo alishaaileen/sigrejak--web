@@ -6,7 +6,7 @@
 
     <div class="form mt-5" @submit.prevent="submit">
       <v-card class="pa-6 mx-auto" flat>
-        <v-form>
+        <v-form ref="form">
           <h3 class="mb-5">Informasi Umat</h3>
 
           <autocomplete
@@ -14,6 +14,7 @@
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdUmat"
+            :rules="[required]"
           ></autocomplete>
 
           <label>Nama baptis</label>
@@ -35,9 +36,9 @@
           <label>Tempat meninggal*</label>
           <v-textarea
             v-model="formData.tempat_meninggal"
-            required
             outlined
             dense
+            :rules="[required]"
           ></v-textarea>
 
           <label>Tanggal meninggal*</label>
@@ -58,6 +59,7 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -69,9 +71,9 @@
           <label>Tempat pemakaman/kremasi*</label>
           <v-textarea
             v-model="formData.tempat_makam_kremasi"
-            required
             outlined
             dense
+            :rules="[required]"
           ></v-textarea>
 
           <label>Tanggal pemakaman/kremasi*</label>
@@ -92,6 +94,7 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -123,9 +126,9 @@
           <label>Nama Pasangan*</label>
           <v-text-field
             v-model="formData.nama_pasangan"
-            required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -153,6 +156,7 @@
                     dense
                     v-bind="attrs"
                     v-on="on"
+                    :rules="[required]"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -166,9 +170,9 @@
               <v-text-field
                 v-model="formData.pelayan_komuni"
                 prefix="Romo"
-                required
                 outlined
                 dense
+                :rules="[required]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -194,6 +198,7 @@
                     dense
                     v-bind="attrs"
                     v-on="on"
+                    :rules="[required]"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -207,7 +212,6 @@
               <v-text-field
                 v-model="formData.pelayan_pengampunan_dosa"
                 prefix="Romo"
-                required
                 outlined
                 dense
               ></v-text-field>
@@ -235,6 +239,7 @@
                     dense
                     v-bind="attrs"
                     v-on="on"
+                    :rules="[required]"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -248,9 +253,9 @@
               <v-text-field
                 v-model="formData.pelayan_perminyakan"
                 prefix="Romo"
-                required
                 outlined
                 dense
+                :rules="[required]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -276,6 +281,7 @@
                     dense
                     v-bind="attrs"
                     v-on="on"
+                    :rules="[required]"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -289,9 +295,9 @@
               <v-text-field
                 v-model="formData.pelayan_baptis_darurat"
                 prefix="Romo"
-                required
                 outlined
                 dense
+                :rules="[required]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -303,30 +309,31 @@
             :suggestionList="imamList"
             itemText="nama"
             @changeData="changeIdImam"
+            :rules="[required]"
           ></autocomplete>
 
           <label>Nama pelapor*</label>
           <v-text-field
             v-model="formData.nama_pelapor"
-            required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Nomor HP pelapor*</label>
           <v-text-field
             v-model="formData.no_hp_pelapor"
-            required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Nomor HP keluarga/penanggung jawab yang bisa dihubungi*</label>
           <v-text-field
             v-model="formData.no_hp_penanggungjawab"
-            required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <div class="d-flex justify-end">
@@ -349,8 +356,9 @@
 </template>
 
 <script>
-import { getData, getOneData, postData, changeDateFormat } from '@/utils'
+import { getData, getAnggotaKeluargaNotDeleted, getOneData, postData, changeDateFormat } from '@/utils'
 import Autocomplete from '@/components/Autocomplete'
+import { required } from '@/validations'
 
 export default {
   components: {
@@ -387,6 +395,9 @@ export default {
     },
     anggotaKeluarga: [],
     imamList: [],
+
+    // validation rules
+    required,
   }),
   computed: {
     isSubmitDisabled() {
@@ -395,7 +406,7 @@ export default {
   },
   async mounted() {
     this.imamList = await getData(`/admin/role/4`)
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
     this.formData.id_keluarga = this.$store.state.keluarga.id
     if (this.$store.state.keluarga.lingkunganId) {
       this.formData.isKetuaLingkungan = true
@@ -446,10 +457,18 @@ export default {
       this.formData.nama_orang_tua = temp.nama
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
-
-      let snackbar = {}
 
       if (this.formData.id_lingkungan == this.$store.state.keluarga.lingkunganId) {
         this.formData.isKetuaLingkungan = true

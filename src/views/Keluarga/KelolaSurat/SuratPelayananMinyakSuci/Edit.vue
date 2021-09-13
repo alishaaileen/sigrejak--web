@@ -39,7 +39,7 @@
 
         <v-divider></v-divider>
 
-        <v-form class="pa-6" @submit.prevent="submit">
+        <v-form class="pa-6" ref="form" @submit.prevent="submit">
           <div class="mb-15">
             <label>No. surat</label>
             <p>
@@ -72,6 +72,7 @@
             itemText="nama"
             :disable="(!isEditable)"
             @changeData="changeIdUmat"
+            :rules="[required]"
           ></autocomplete>
 
           <label>Nama baptis</label>
@@ -98,9 +99,10 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-select>
 
-          <div v-show="formData.status_terima_minyak === 'Sudah pernah'">
+          <div v-if="formData.status_terima_minyak === 'Sudah pernah'">
             <label>Tanggal*</label>
             <v-menu
               ref="menu"
@@ -121,6 +123,7 @@
                   v-bind="attrs"
                   v-on="on"
                   :disabled="(!isEditable)"
+                  :rules="[required]"
                 ></v-text-field>
               </template>
               <v-date-picker
@@ -149,7 +152,7 @@
           ></v-switch>
 
           <div v-if="isPunyaPasangan">
-            <label>Nama pasangan</label>
+            <label>Nama pasangan*</label>
             <v-text-field
               v-model="formData.nama_pasangan"
               required
@@ -157,9 +160,10 @@
               dense
               :disabled="(!isEditable)"
               :readonly="(!isEditable)"
+              :rules="[required]"
             ></v-text-field>
 
-            <label>Cara menikah</label>
+            <label>Cara menikah*</label>
             <v-select
               :items="caraMenikahList"
               v-model="formData.cara_menikah"
@@ -167,9 +171,10 @@
               dense
               :disabled="(!isEditable)"
               :readonly="(!isEditable)"
+              :rules="[required]"
             ></v-select>
 
-            <label>Tahun menikah</label>
+            <label>Tahun menikah*</label>
             <v-select
               :items="tahunList"
               v-model="formData.tahun_menikah"
@@ -178,6 +183,7 @@
               dense
               :disabled="(!isEditable)"
               :readonly="(!isEditable)"
+              :rules="[required]"
             ></v-select>
           </div>
 
@@ -193,6 +199,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Alamat*</label>
@@ -203,6 +210,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-textarea>
 
           <label>Nomor telepon*</label>
@@ -213,6 +221,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -226,6 +235,7 @@
             itemText="nama"
             @changeData="changeIdPastor"
             :disable="(!isEditable)"
+            :rules="[required]"
           ></autocomplete>
 
           <div class="d-flex justify-end">
@@ -253,12 +263,13 @@
 </template>
 
 <script>
-import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
+import { getData, getAnggotaKeluargaNotDeleted, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
 import { caraMenikahList } from '@/constants'
 import Autocomplete from '@/components/Autocomplete'
 import ApprovalChip from '@/components/ApprovalChip.vue'
 import SidebarLogSurat from '@/components/SidebarLogSurat.vue'
 import ButtonChat from '@/components/ButtonChat.vue'
+import { required } from '@/validations'
 
 export default {
   components: {
@@ -283,10 +294,13 @@ export default {
     logList: [],
     isSidebarLogActive: false,
     countChatUnread: 0,
+
+    // validation rules
+    required,
   }),
   async mounted() {
     this.initTahun()
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
     this.pastorList = await getData(`/admin/role/4`)
     this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
 
@@ -359,6 +373,16 @@ export default {
       this.formData.id_pastor_pelayan = temp.id
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
@@ -366,7 +390,6 @@ export default {
         this.formData.tgl_terima_minyak = null
       }
 
-      let snackbar = {}
       if(this.formData.cara_ortu_menikah === 'Cara lain') {
         this.formData.cara_ortu_menikah = this.temp_cara_ortu_menikah
       }

@@ -441,7 +441,7 @@
 </template>
 
 <script>
-import { countAge, getData, getOneData, postData, changeDateFormat } from '@/utils'
+import { countAge, getAnggotaKeluargaNotDeleted, getOneData, postData, changeDateFormat } from '@/utils'
 import { required, acceptZipOnly } from '@/validations'
 import { caraMenikahList } from '@/constants'
 
@@ -518,11 +518,7 @@ export default {
     }
   },
   async mounted() {
-    // console.log(this.$refs)
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
-
-    // filter anggota yg sudah dihapus
-    this.anggotaKeluarga = this.anggotaKeluarga.filter(e => e.deleted_at === null)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
 
     this.formData.id_keluarga = this.$store.state.keluarga.id
   },

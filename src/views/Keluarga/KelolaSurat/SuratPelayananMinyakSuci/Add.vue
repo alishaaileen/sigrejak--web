@@ -6,7 +6,7 @@
 
     <div class="form mt-5">
       <v-card class="pa-6" width="100%" flat>
-        <v-form @submit.prevent="submit">
+        <v-form ref="form" @submit.prevent="submit">
           <h3 class="mb-5">Informasi Umat</h3>
 
           <autocomplete
@@ -14,6 +14,7 @@
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdUmat"
+            :rules="[required]"
           ></autocomplete>
 
           <label>Nama baptis</label>
@@ -38,9 +39,10 @@
             v-model="formData.status_terima_minyak"
             outlined
             dense
+            :rules="[required]"
           ></v-select>
 
-          <div v-show="formData.status_terima_minyak === 'Sudah pernah'">
+          <div v-if="formData.status_terima_minyak === 'Sudah pernah'">
             <label>Tanggal*</label>
             <v-menu
               ref="menu"
@@ -59,6 +61,7 @@
                   dense
                   v-bind="attrs"
                   v-on="on"
+                  :rules="[required]"
                 ></v-text-field>
               </template>
               <v-date-picker
@@ -83,29 +86,32 @@
           ></v-switch>
 
           <div v-if="isPunyaPasangan">
-            <label>Nama pasangan</label>
+            <label>Nama pasangan*</label>
             <v-text-field
               v-model="formData.nama_pasangan"
               required
               outlined
               dense
+              :rules="[required]"
             ></v-text-field>
 
-            <label>Cara menikah</label>
+            <label>Cara menikah*</label>
             <v-select
               :items="caraMenikahList"
               v-model="formData.cara_menikah"
               outlined
               dense
+              :rules="[required]"
             ></v-select>
 
-            <label>Tahun menikah</label>
+            <label>Tahun menikah*</label>
             <v-select
               :items="tahunList"
               v-model="formData.tahun_menikah"
               clearable
               outlined
               dense
+              :rules="[required]"
             ></v-select>
           </div>
 
@@ -119,6 +125,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Alamat*</label>
@@ -127,6 +134,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-textarea>
 
           <label>Nomor telepon*</label>
@@ -135,6 +143,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -146,6 +155,7 @@
             :suggestionList="pastorList"
             itemText="nama"
             @changeData="changeIdPastor"
+            :rules="[required]"
           ></autocomplete>
 
           <div class="d-flex justify-end">
@@ -167,7 +177,8 @@
 </template>
 
 <script>
-import { getData, postData, changeDateFormat } from '@/utils'
+import { getData, getAnggotaKeluargaNotDeleted, postData, changeDateFormat } from '@/utils'
+import { required } from '@/validations'
 import { caraMenikahList } from '@/constants'
 import Autocomplete from '@/components/Autocomplete'
 
@@ -207,10 +218,13 @@ export default {
     },
     anggotaKeluarga: [],
     pastorList: [],
+
+    // validation rules
+    required,
   }),
   async mounted() {
     this.initTahun()
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
     this.pastorList = await getData(`/admin/role/4`)
     this.formData.id_keluarga = this.$store.state.keluarga.id
   },
@@ -256,10 +270,20 @@ export default {
       this.formData.id_pastor_pelayan = temp.id
     },
     async submit() {
+      let snackbar = {}
+
+      console.log(this.$refs.form.validate())
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
-
-      let snackbar = {}
 
       if (this.formData.id_lingkungan == this.$store.state.keluarga.lingkunganId) {
         this.formData.isKetuaLingkungan = true

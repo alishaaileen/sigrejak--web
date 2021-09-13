@@ -327,11 +327,12 @@
 
 <script>
 import { API_URL } from '@/constants'
-import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
+import { getAnggotaKeluargaNotDeleted, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
 import Autocomplete from '@/components/Autocomplete'
 import ApprovalChip from '@/components/ApprovalChip.vue'
 import SidebarLogSurat from '@/components/SidebarLogSurat.vue'
 import ButtonChat from '@/components/ButtonChat.vue'
+import { required, acceptZipOnly } from '@/validations'
 
 export default {
   components: {
@@ -354,6 +355,10 @@ export default {
     logList: [],
     isSidebarLogActive: false,
     countChatUnread: 0,
+
+    // validation rules
+    required,
+    acceptZipOnly,
   }),
   computed: {
     isSubmitDisabled() {
@@ -368,7 +373,8 @@ export default {
     }
   },
   async mounted() {
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
+    
     this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
     this.formData.tgl_lahir = changeDateFormat(this.formData.tgl_lahir)
 

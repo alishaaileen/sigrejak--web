@@ -6,7 +6,7 @@
 
     <div class="form mt-5">
       <v-card class="pa-6 mx-auto" flat>
-        <v-form @submit.prevent="submit">
+        <v-form ref="form" @submit.prevent="submit">
           <h3 class="mb-5">Informasi Umat</h3>
 
           <autocomplete
@@ -14,6 +14,7 @@
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdUmat"
+            :rules="[required]"
           ></autocomplete>
 
           <label>Tempat lahir</label>
@@ -44,6 +45,7 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -96,6 +98,7 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -105,15 +108,13 @@
           </v-menu>
 
           <v-row>
-            <v-col>
+            <v-col v-if="isNotKumetiran">
               <label>Paroki baru</label>
               <v-text-field
                 v-model="formData.paroki_baru"
-                required
                 outlined
                 dense
-                :readonly="!isNotKumetiran"
-                :disabled="!isNotKumetiran"
+                :rules="[required]"
               ></v-text-field>
             </v-col>
 
@@ -124,14 +125,15 @@
                 :suggestionList="lingkunganList"
                 itemText="nama_lingkungan"
                 @changeData="changeIdLingkungan"
+                :rules="[required]"
               ></autocomplete>
               <div v-else>
                 <label>Lingkungan baru*</label>
                 <v-text-field
                   v-model="formData.nama_lingkungan_baru"
-                  required
                   outlined
                   dense
+                  :rules="[required]"
                 ></v-text-field>
               </div>
             </v-col>
@@ -140,9 +142,9 @@
           <label>Alamat baru*</label>
           <v-textarea
             v-model="formData.alamat_baru"
-            required
             outlined
             dense
+            :rules="[required]"
           ></v-textarea>
 
           <label>Nomor telepon baru*</label>
@@ -151,6 +153,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <div class="d-flex justify-end">
@@ -172,8 +175,9 @@
 </template>
 
 <script>
-import { getData, postData, changeDateFormat } from '@/utils'
+import { getData, getAnggotaKeluargaNotDeleted, postData, changeDateFormat } from '@/utils'
 import Autocomplete from '@/components/Autocomplete'
+import { required } from '@/validations'
 
 export default {
   components: {
@@ -211,10 +215,13 @@ export default {
     umat: {},
     isDatePickerTglLamaActive: false,
     isDatePickerTglBaruActive: false,
+
+    // validation rules
+    required,
   }),
   async mounted() {
     this.lingkunganList = await getData(`/lingkungan`)
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
     this.formData.id_keluarga = this.$store.state.keluarga.id
   },
   methods: {
@@ -252,10 +259,18 @@ export default {
       this.formData.nama_lingkungan_baru = ''
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
-
-      let snackbar = {}
 
       if (this.formData.id_lingkungan == this.$store.state.keluarga.lingkunganId) {
         this.formData.isKetuaLingkungan = true

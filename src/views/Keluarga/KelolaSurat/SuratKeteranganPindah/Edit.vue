@@ -39,12 +39,10 @@
 
         <v-divider></v-divider>
 
-        <v-form class="pa-6" @submit.prevent="submit">
+        <v-form class="pa-6" ref="form" @submit.prevent="submit">
           <div class="mb-15">
             <label>No. surat</label>
-            <p>
-              {{ formData.no_surat }}
-            </p>
+            <p>{{ formData.no_surat }}</p>
             <v-btn
               class="text-none"
               depressed
@@ -72,6 +70,7 @@
             itemText="nama"
             :disable="(!isEditable)"
             @changeData="changeIdUmat"
+            :rules="[required]"
           ></autocomplete>
 
           <label>Tempat lahir</label>
@@ -104,6 +103,7 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -163,6 +163,7 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -174,15 +175,15 @@
           </v-menu>
 
           <v-row>
-            <v-col>
+            <v-col v-if="isNotKumetiran">
               <label>Paroki baru</label>
               <v-text-field
                 v-model="formData.paroki_baru"
-                required
                 outlined
                 dense
                 :readonly="!isNotKumetiran || (!isEditable)"
                 :disabled="!isNotKumetiran"
+                :rules="[required]"
               ></v-text-field>
             </v-col>
 
@@ -195,16 +196,17 @@
                 itemText="nama_lingkungan"
                 @changeData="changeIdLingkungan"
                 :disable="(!isEditable)"
+                :rules="[required]"
               ></autocomplete>
               <div v-else>
                 <label>Lingkungan baru*</label>
                 <v-text-field
                   v-model="formData.nama_lingkungan_baru"
-                  required
                   outlined
                   dense
                   :disabled="(!isEditable)"
                   :readonly="(!isEditable)"
+                  :rules="[required]"
                 ></v-text-field>
               </div>
             </v-col>
@@ -213,21 +215,21 @@
           <label>Alamat baru*</label>
           <v-text-field
             v-model="formData.alamat_baru"
-            required
             outlined
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Nomor telepon baru*</label>
           <v-text-field
             v-model="formData.no_telp_baru"
-            required
             outlined
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <div class="d-flex justify-end">
@@ -256,11 +258,12 @@
 </template>
 
 <script>
-import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
+import { getData, getAnggotaKeluargaNotDeleted, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
 import Autocomplete from '@/components/Autocomplete'
 import ApprovalChip from '@/components/ApprovalChip.vue'
 import SidebarLogSurat from '@/components/SidebarLogSurat.vue'
 import ButtonChat from '@/components/ButtonChat.vue'
+import { required } from '@/validations'
 
 export default {
   components: {
@@ -288,6 +291,9 @@ export default {
     logList: [],
     isSidebarLogActive: false,
     countChatUnread: 0,
+
+    // validation rules
+    required,
   }),
   computed: {
     isSubmitDisabled() {
@@ -296,7 +302,7 @@ export default {
   },
   async mounted() {
     this.lingkunganList = await getData(`/lingkungan`)
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
     
     // Get data surat
     this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
@@ -358,11 +364,18 @@ export default {
       this.formData.nama_lingkungan_baru = ''
     },
     async submit() {
-      console.log(this.formData)
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
-
-      let snackbar = {}
 
       try {
         let response = await editData(this.url, this.formData.id, this.formData)

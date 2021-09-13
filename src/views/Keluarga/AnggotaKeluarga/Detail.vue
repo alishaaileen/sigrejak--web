@@ -233,7 +233,7 @@
 
 <script>
 // import axios from 'axios'
-import { getData, getOneData, editData } from '../../../utils'
+import { getData, getAnggotaKeluargaNotDeleted, getOneData, editData } from '../../../utils'
 import { API_URL } from '../../../constants'
 
 import { required } from '@/validations'
@@ -267,7 +267,7 @@ export default {
   },
   async mounted() {
     this.lingkunganList = await getData(`/lingkungan`)
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
 
     this.umat = await getOneData(`/umat/${this.$route.params.id}`)
     this.detailUmat = await getOneData(`/detail-umat/${this.$route.params.id}`)

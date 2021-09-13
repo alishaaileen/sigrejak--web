@@ -39,7 +39,7 @@
 
         <v-divider></v-divider>
 
-        <v-form class="pa-6" @submit.prevent="submit">
+        <v-form class="pa-6" ref="form" @submit.prevent="submit">
           <div class="mb-15">
             <label>No. surat</label>
             <p>
@@ -69,6 +69,7 @@
             @changeData="changeIdUmat"
             :value="formData.nama"
             :disable="(!isEditable)"
+            :rules="[required]"
           ></autocomplete>
 
           <v-alert
@@ -120,6 +121,7 @@
             dense
             :readonly="(!isEditable)"
             :disabled="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Tempat lahir*</label>
@@ -131,6 +133,7 @@
             :hint="`${formData.tempat_lahir_pasangan.length}/255`"
             :readonly="(!isEditable)"
             :disabled="(!isEditable)"
+            :rules="[required]"
           ></v-textarea>
           
           <label>Tanggal lahir pasangan*</label>
@@ -153,6 +156,7 @@
                 v-bind="attrs"
                 v-on="on"
                 :disabled="(!isEditable)"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -174,6 +178,7 @@
             :hint="`${formData.alamat_pasangan.length}/255`"
             :readonly="(!isEditable)"
             :disabled="(!isEditable)"
+            :rules="[required]"
           ></v-textarea>
 
           <label>No. telp pasangan*</label>
@@ -184,6 +189,7 @@
             dense
             :readonly="(!isEditable)"
             :disabled="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Agama pasangan*</label>
@@ -194,6 +200,7 @@
             dense
             :readonly="(!isEditable)"
             :disabled="(!isEditable)"
+            :rules="[required]"
           ></v-select>
 
           <label>Nama ayah pasangan*</label>
@@ -204,6 +211,7 @@
             dense
             :readonly="(!isEditable)"
             :disabled="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Nama ibu pasangan* (nama kecil)</label>
@@ -214,6 +222,7 @@
             dense
             :readonly="(!isEditable)"
             :disabled="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>File syarat*</label>
@@ -236,6 +245,7 @@
               style="display: none;"
               ref="inputSyarat"
               v-model="formData.file_syarat"
+              :rules="[required]"
             ></v-file-input>
             <div>
               <v-btn
@@ -282,12 +292,13 @@
 </template>
 
 <script>
-import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
+import { getAnggotaKeluargaNotDeleted, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
 import Autocomplete from '@/components/Autocomplete'
 import ApprovalChip from '@/components/ApprovalChip.vue'
 import { API_URL } from '@/constants'
 import SidebarLogSurat from '@/components/SidebarLogSurat.vue'
 import ButtonChat from '@/components/ButtonChat.vue'
+import { required, acceptZipOnly } from '@/validations'
 
 export default {
   components: {
@@ -307,6 +318,10 @@ export default {
     logList: [],
     isSidebarLogActive: false,
     countChatUnread: 0,
+
+    // validation rules
+    required,
+    acceptZipOnly,
   }),
   computed: {
     isSubmitDisabled() {
@@ -321,7 +336,7 @@ export default {
     }
   },
   async mounted() {
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
     this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
     this.formData.tgl_lahir = changeDateFormat(this.formData.tgl_lahir)
 
@@ -380,10 +395,18 @@ export default {
       this.formData.nama_ayah = tempOrangTua.nama || '-'
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
-
-      let snackbar = {}
 
       let formData = new FormData()
       formData.append('id_keluarga', this.formData.id_keluarga)

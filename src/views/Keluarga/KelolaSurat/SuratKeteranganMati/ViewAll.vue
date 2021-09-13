@@ -48,12 +48,7 @@
             <approval-table-icon :approval="item.ketua_lingkungan_approval" />
           </template>
           <template v-slot:[`item.status_imam`]="{ item }">
-            <span v-if="item.imam_pemberkat_approval === 1" class="d-flex justify-center">
-              <v-icon color="green darken-2">far fa-check-circle</v-icon>
-            </span>
-            <span v-else>
-              <v-icon color="grey darken-2">fas fa-history</v-icon>
-            </span>
+            <approval-table-icon :approval="item.imam_pemberkat_approval" />
           </template>
           <template v-slot:[`item.status_sekretariat`]="{ item }">
             <approval-table-icon :approval="item.sekretariat_approval" />

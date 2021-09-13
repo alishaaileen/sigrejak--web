@@ -6,7 +6,7 @@
 
     <div class="form mt-5">
       <v-card class="pa-6" width="100%" flat>
-        <v-form @submit.prevent="submit">
+        <v-form ref="form" @submit.prevent="submit">
           <v-alert type="info" color="orange" text icon="fas fa-info-circle">
             Satu surat hanya berlaku untuk <strong>satu orang</strong>
           </v-alert>
@@ -17,6 +17,7 @@
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdUmat"
+            :rules="[required]"
           ></autocomplete>
 
           <v-alert
@@ -66,6 +67,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Tempat lahir*</label>
@@ -74,7 +76,7 @@
             required
             outlined
             dense
-            :hint="`${formData.tempat_lahir_pasangan.length}/255`"
+            :rules="[required]"
           ></v-textarea>
           
           <label>Tanggal lahir pasangan*</label>
@@ -95,12 +97,11 @@
                 outlined
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
               ref="picker"
-              :readonly="editable"
-              :disabled="editable"
               v-model="formData.tgl_lahir_pasangan"
               :max="new Date().toISOString().substr(0, 10)"
               @change="saveDate"
@@ -114,6 +115,7 @@
             outlined
             dense
             :hint="`${formData.alamat_pasangan.length}/255`"
+            :rules="[required]"
           ></v-textarea>
 
           <label>No. telp pasangan*</label>
@@ -122,6 +124,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Agama pasangan*</label>
@@ -130,6 +133,7 @@
             v-model="formData.agama_pasangan"
             outlined
             dense
+            :rules="[required]"
           ></v-select>
 
           <label>Nama ayah pasangan*</label>
@@ -138,6 +142,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Nama ibu pasangan* (nama kecil)</label>
@@ -146,6 +151,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -162,6 +168,7 @@
               style="display: none;"
               ref="inputSyarat"
               v-model="formData.file_syarat"
+              :rules="[required, acceptZipOnly]"
             ></v-file-input>
             <div>
               <v-btn
@@ -171,7 +178,6 @@
                 depressed
                 @click="$refs.inputSyarat.$refs.input.click()"
               >
-                <v-icon>mdi-upload</v-icon>
                 <v-icon>mdi-upload</v-icon>
                 Upload file
               </v-btn>
@@ -204,7 +210,8 @@
 </template>
 
 <script>
-import { getData, getOneData, postData, changeDateFormat } from '@/utils'
+import { getAnggotaKeluargaNotDeleted, getOneData, postData, changeDateFormat } from '@/utils'
+import { required, acceptZipOnly } from '@/validations'
 import Autocomplete from '@/components/Autocomplete'
 
 export default {
@@ -243,6 +250,10 @@ export default {
     },
     anggotaKeluarga: [],
     isAlertOrtuActive: false,
+
+    // validation rules
+    required,
+    acceptZipOnly,
   }),
   computed: {
     isSubmitDisabled() {
@@ -262,7 +273,7 @@ export default {
     },
   },
   async mounted() {
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
     this.formData.id_keluarga = this.$store.state.keluarga.id
   },
   methods: {
@@ -300,7 +311,16 @@ export default {
       this.formData.nama_ayah = tempOrangTua.nama || '-'
     },
     async submit() {
-      console.log(this.formData)
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
@@ -323,13 +343,11 @@ export default {
         this.formData.isKetuaLingkungan = true
         this.formData.ketua_lingkungan = this.$store.state.keluarga.nama_kepala_keluarga
       } else {
-        this.formData.isKetuaLingkungan = false
+        this.formData.isKetuaLingkungan = false  
         this.formData.ketua_lingkungan = null
       }
       formData.append('ketua_lingkungan', this.formData.ketua_lingkungan)
       formData.append('isKetuaLingkungan', this.formData.isKetuaLingkungan)
-
-      let snackbar = {}
 
       try {
         let response = await postData('/surat-keterangan-calon-pengantin/add', formData)

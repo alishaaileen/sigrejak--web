@@ -175,7 +175,7 @@
 </template>
 
 <script>
-import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
+import { getAnggotaKeluargaNotDeleted, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
 import { required } from '@/validations'
 
 import Autocomplete from '@/components/Autocomplete'
@@ -206,7 +206,8 @@ export default {
     required,
   }),
   async mounted() {
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
+    
     this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
     this.formData.tgl_lahir = changeDateFormat(this.formData.tgl_lahir)
 

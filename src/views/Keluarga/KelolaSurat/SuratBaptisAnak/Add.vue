@@ -257,7 +257,7 @@
 </template>
 
 <script>
-import { countAge, getData, getOneData, postData, changeDateFormat } from '@/utils'
+import { countAge, getAnggotaKeluargaNotDeleted, getOneData, postData, changeDateFormat } from '@/utils'
 import { required, acceptZipOnly } from '@/validations'
 import { caraMenikahList } from '@/constants'
 
@@ -320,7 +320,7 @@ export default {
     }
   },
   async mounted() {
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
     this.formData.id_keluarga = this.$store.state.keluarga.id
   },
   methods: {

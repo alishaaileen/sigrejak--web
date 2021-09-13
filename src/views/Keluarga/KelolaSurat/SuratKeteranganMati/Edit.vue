@@ -39,7 +39,7 @@
 
         <v-divider></v-divider>
 
-        <v-form class="pa-6" @submit.prevent="submit">
+        <v-form class="pa-6" ref="form" @submit.prevent="submit">
           <div class="mb-15">
             <label>No. surat</label>
             <p>
@@ -72,6 +72,7 @@
             itemText="nama"
             @changeData="changeIdUmat"
             :disable="(!isEditable)"
+            :rules="[required]"
           ></autocomplete>
 
           <label>Nama baptis</label>
@@ -93,11 +94,11 @@
           <label>Tempat meninggal*</label>
           <v-textarea
             v-model="formData.tempat_meninggal"
-            required
             outlined
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-textarea>
 
           <label>Tanggal meninggal*</label>
@@ -120,6 +121,7 @@
                 v-bind="attrs"
                 v-on="on"
                 :disabled="(!isEditable)"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -138,6 +140,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-textarea>
 
           <label>Tanggal pemakaman/kremasi*</label>
@@ -160,6 +163,7 @@
                 v-bind="attrs"
                 v-on="on"
                 :disabled="(!isEditable)"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -193,11 +197,11 @@
           <label>Nama Pasangan*</label>
           <v-text-field
             v-model="formData.nama_pasangan"
-            required
             outlined
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -227,6 +231,7 @@
                     v-bind="attrs"
                     v-on="on"
                     :disabled="(!isEditable)"
+                    :rules="[required]"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -242,11 +247,11 @@
               <v-text-field
                 v-model="formData.pelayan_komuni"
                 prefix="Romo"
-                required
                 outlined
                 dense
                 :disabled="(!isEditable)"
                 :readonly="(!isEditable)"
+                :rules="[required]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -274,6 +279,7 @@
                     v-bind="attrs"
                     v-on="on"
                     :disabled="(!isEditable)"
+                    :rules="[required]"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -289,11 +295,11 @@
               <v-text-field
                 v-model="formData.pelayan_pengampunan_dosa"
                 prefix="Romo"
-                required
                 outlined
                 dense
                 :disabled="(!isEditable)"
                 :readonly="(!isEditable)"
+                :rules="[required]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -321,6 +327,7 @@
                     v-bind="attrs"
                     v-on="on"
                     :disabled="(!isEditable)"
+                    :rules="[required]"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -336,11 +343,11 @@
               <v-text-field
                 v-model="formData.pelayan_perminyakan"
                 prefix="Romo"
-                required
                 outlined
                 dense
                 :disabled="(!isEditable)"
                 :readonly="(!isEditable)"
+                :rules="[required]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -368,6 +375,7 @@
                     v-bind="attrs"
                     v-on="on"
                     :disabled="(!isEditable)"
+                    :rules="[required]"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -383,11 +391,11 @@
               <v-text-field
                 v-model="formData.pelayan_baptis_darurat"
                 prefix="Romo"
-                required
                 outlined
                 dense
                 :disabled="(!isEditable)"
                 :readonly="(!isEditable)"
+                :rules="[required]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -401,36 +409,37 @@
             itemText="nama"
             @changeData="changeIdImam"
             :disable="(!isEditable)"
+            :rules="[required]"
           ></autocomplete>
 
           <label>Nama pelapor*</label>
           <v-text-field
             v-model="formData.nama_pelapor"
-            required
             outlined
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Nomor HP pelapor*</label>
           <v-text-field
             v-model="formData.no_hp_pelapor"
-            required
             outlined
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Nomor HP keluarga/penanggung jawab yang bisa dihubungi*</label>
           <v-text-field
             v-model="formData.no_hp_penanggungjawab"
-            required
             outlined
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <div class="d-flex justify-end">
@@ -459,11 +468,12 @@
 </template>
 
 <script>
-import { getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
+import { getData, getAnggotaKeluargaNotDeleted, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
 import Autocomplete from '@/components/Autocomplete'
 import ApprovalChip from '@/components/ApprovalChip'
 import SidebarLogSurat from '@/components/SidebarLogSurat'
 import ButtonChat from '@/components/ButtonChat'
+import { required } from '@/validations'
 
 export default {
   components: {
@@ -490,6 +500,9 @@ export default {
     logList: [],
     isSidebarLogActive: false,
     countChatUnread: 0,
+
+    // validation rules
+    required,
   }),
   computed: {
     isSubmitDisabled() {
@@ -498,7 +511,7 @@ export default {
   },
   async mounted() {
     this.imamList = await getData(`/admin/role/4`)
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
     this.formData = await getOneData(`${this.url}/${this.$route.params.id}`)
     this.formData.tgl_lahir = changeDateFormat(this.formData.tgl_lahir)
 
@@ -558,6 +571,17 @@ export default {
       this.formData.nama_orang_tua = temp.nama
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
+      
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
@@ -565,7 +589,6 @@ export default {
         this.fotmData.tgl_terima_minyak = null
       }
 
-      let snackbar = {}
       if(this.formData.cara_ortu_menikah === 'Cara lain') {
         this.formData.cara_ortu_menikah = this.temp_cara_ortu_menikah
       }

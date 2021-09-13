@@ -131,8 +131,23 @@ export const cetakSurat = async (endpoint, id) => {
             responseType: 'blob',
         })
 
-        await saveAs(response.data, 'surat.pdf')
+        saveAs(response.data, 'surat.pdf')
 
+	} catch (error) {
+		return error
+	}
+}
+
+export const getAnggotaKeluargaNotDeleted = async (idKeluarga) => {
+    let url = `${API_URL}/umat/keluarga/${idKeluarga}`
+
+    try {
+		let listAnggota = await axios.get(url)
+
+        // filter anggota yg sudah dihapus
+        listAnggota = listAnggota.data.result.filter(e => e.deleted_at === null)
+
+        return listAnggota
 	} catch (error) {
 		return error
 	}

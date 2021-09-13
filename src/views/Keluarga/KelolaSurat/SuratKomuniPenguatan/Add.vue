@@ -240,7 +240,8 @@
 </template>
 
 <script>
-import { getData, getOneData, postData, changeDateFormat } from '@/utils'
+import { getAnggotaKeluargaNotDeleted, getOneData, postData, changeDateFormat } from '@/utils'
+import { required, acceptZipOnly } from '@/validations'
 import Autocomplete from '@/components/Autocomplete'
 
 export default {
@@ -281,6 +282,10 @@ export default {
     anggotaKeluarga: [],
     isAlertNotBaptized: false,
     isAlertOrtuActive: false,
+
+    // validation rules
+    required,
+    acceptZipOnly,
   }),
   computed: {
     isSubmitDisabled() {
@@ -295,7 +300,8 @@ export default {
     }
   },
   async mounted() {
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
+
     this.formData.id_keluarga = this.$store.state.keluarga.id
   },
   methods: {
@@ -335,6 +341,7 @@ export default {
       
       if(!this.$refs.form.validate()) {
         this.$refs.form.validate()
+        console.log(this.$refs.form)
         snackbar.color = 'error',
         snackbar.text = 'Harap periksa inputan anda kembali'
         this.$store.dispatch('snackbar/openSnackbar', snackbar)

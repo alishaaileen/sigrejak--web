@@ -159,7 +159,7 @@
 </template>
 
 <script>
-import { getData, getOneData, postData, changeDateFormat } from '@/utils'
+import { getAnggotaKeluargaNotDeleted, getOneData, postData, changeDateFormat } from '@/utils'
 import { required, acceptZipOnly } from '@/validations'
 
 import Autocomplete from '@/components/Autocomplete'
@@ -214,7 +214,7 @@ export default {
     }
   },
   async mounted() {
-    this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
+    this.anggotaKeluarga = await getAnggotaKeluargaNotDeleted(this.$store.state.keluarga.id)
     this.formData.id_keluarga = this.$store.state.keluarga.id
     this.anggotaKeluarga = this.anggotaKeluarga.filter(e => e.deleted_at === null )
   },
