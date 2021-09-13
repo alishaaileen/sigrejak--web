@@ -84,8 +84,7 @@ export default {
 
         await this.$store.dispatch('keluarga/login', response.data)
 
-        await setAxiosBearerToken()
-        await this.$store.dispatch('keluarga/checkUserToken')
+        setAxiosBearerToken()
 
         this.$router.push("/keluarga");
       } catch (error) {

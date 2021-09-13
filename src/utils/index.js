@@ -4,6 +4,7 @@ import { saveAs } from 'file-saver'
 import { API_URL } from '../constants'
 
 export function setAxiosBearerToken() {
+    console.log(localStorage.getItem("appKey"))
     axios.defaults.headers.common[
         "Authorization"
     ] = `Bearer ${localStorage.getItem("appKey")}`;
