@@ -33,7 +33,7 @@
 
         <v-divider></v-divider>
 
-        <v-form class="pa-6" @submit.prevent="submit">
+        <v-form class="pa-6" ref="form" @submit.prevent="submit">
           <div class="mb-15">
             <label>No. surat</label>
             <p>
@@ -66,6 +66,7 @@
             itemText="nama"
             @changeData="changeIdUmat"
             :disable="(!isEditable)"
+            :rules="[required]"
           ></autocomplete>
 
           <v-alert
@@ -96,11 +97,11 @@
           <label>Paroki tempat baptis*</label>
           <v-text-field
             v-model="formData.paroki_baptis"
-            required
             outlined
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Nomor surat baptis*</label>
@@ -111,6 +112,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Tanggal baptis*</label>
@@ -133,12 +135,13 @@
                 v-bind="attrs"
                 v-on="on"
                 :disabled="(!isEditable)"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
               v-model="formData.tgl_baptis"
               :max="new Date().toISOString().substr(0, 10)"
-              @change="saveDate"
+              @change="(date) => { this.$refs.menuTglBaptis.save(date) }"
               :disabled="(!isEditable)"
               :readonly="(!isEditable)"
             ></v-date-picker>
@@ -152,6 +155,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Kelas*</label>
@@ -162,6 +166,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -201,6 +206,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Nama Wali Penguatan*</label>
@@ -211,6 +217,7 @@
             dense
             :disabled="(!isEditable)"
             :readonly="(!isEditable)"
+            :rules="[required]"
           ></v-text-field>
 
           <label>Tanggal krisma wali*</label>
@@ -233,34 +240,46 @@
                 v-bind="attrs"
                 v-on="on"
                 :disabled="(!isEditable)"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
               v-model="formData.tgl_krisma_wali"
               :max="new Date().toISOString().substr(0, 10)"
-              @change="saveDate"
+              @change="(date) => { this.$refs.menuTglKrisma.save(date) }"
               :disabled="(!isEditable)"
               :readonly="(!isEditable)"
             ></v-date-picker>
           </v-menu>
 
           <label>File syarat*</label>
-          <div class="my-5">
-            <v-btn v-if="(typeof formData.file_syarat) == 'string'"
+          <div class="my-5" v-if="(!editFileSyarat)">
+            <v-btn v-if="formData.file_syarat && (typeof formData.file_syarat) == 'string'"
               text
               small
               color="blue"
               @click="downloadFile(formData.file_syarat)"
             >
-              klik untuk melihat file
+              Klik untuk melihat file
+            </v-btn>
+            <v-btn
+              v-if="isEditable"
+              class="text-none"
+              color="orange"
+              dark
+              depressed
+              @click="editFileSyarat = true"
+            >
+              Ubah file
             </v-btn>
           </div>
-          <div class="d-flex mb-5">
+          <div class="d-flex mb-5" v-if="editFileSyarat">
             <v-file-input
               accept="application/zip"
               style="display: none;"
               ref="inputSyarat"
               v-model="formData.file_syarat"
+              :rules="[required,acceptZipOnly]"
             ></v-file-input>
             <div>
               <v-btn
@@ -275,7 +294,7 @@
                 Upload file
               </v-btn>
             </div>
-            <div v-if="(typeof formData.file_syarat) != 'string'" class="ml-5">
+            <div v-if="formData.file_syarat && (typeof formData.file_syarat) != 'string'" class="ml-5">
               <p class="ma-0">{{formData.file_syarat.name}}</p>
               <small>{{ fileSize }} Mb</small>
             </div>
@@ -326,6 +345,7 @@ export default {
     isEditable: false,
     isDatePickerTglBaptisActive: false,
     isDatePickerTglKrismaWaliActive: false,
+    editFileSyarat: false,
     formData: { file_syarat: {size: 0}},
     anggotaKeluarga: [],
     isAlertNotBaptized: false,
@@ -375,10 +395,6 @@ export default {
     },
 
     
-    saveDate (date) {
-      this.$refs.menuTglBaptis.save(date)
-      this.$refs.menuTglKrisma.save(date)
-    },
     async changeIdUmat(e) {
       let temp = this.anggotaKeluarga.find(_ => {
         return _.nama === e
@@ -411,11 +427,20 @@ export default {
       }
     },
     async submit() {
+      let snackbar = {}
+      
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
-      let snackbar = {}
-        , formData = new FormData()
+      let formData = new FormData()
       
       if(this.formData.cara_ortu_menikah === 'Cara lain') {
         this.formData.cara_ortu_menikah = this.temp_cara_ortu_menikah

@@ -6,13 +6,14 @@
 
     <div class="form mt-5">
       <v-card class="pa-6" width="100%" flat>
-        <v-form @submit.prevent="submit">
-          <label>Pilih surat</label>
+        <v-form ref="form" @submit.prevent="submit">
+          <label>Jenis surat*</label>
           <v-select
             :items="[ 'Komuni I', 'Penguatan' ]"
             v-model="tempJenisSurat"
             outlined
             dense
+            :rules="[required]"
           ></v-select>
           
           <h3 class="mb-5">Informasi Umat</h3>
@@ -22,6 +23,7 @@
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdUmat"
+            :rules="[required]"
           ></autocomplete>
 
           <v-alert
@@ -55,6 +57,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Nomor surat baptis*</label>
@@ -63,6 +66,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Tanggal baptis*</label>
@@ -83,12 +87,13 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
               v-model="formData.tgl_baptis"
               :max="new Date().toISOString().substr(0, 10)"
-              @change="saveDate"
+              @change="(date) => { this.$refs.menuTglBaptis.save(date)} "
             ></v-date-picker>
           </v-menu>
 
@@ -98,6 +103,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Kelas*</label>
@@ -106,6 +112,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -126,10 +133,10 @@
           </v-alert>
 
           <div v-show="!isAlertOrtuActive">
-            <label>Nama ayah*</label>
+            <label>Nama ayah</label>
             <p>{{ formData.nama_ayah }}</p>
             
-            <label>Nama ibu*</label>
+            <label>Nama ibu</label>
             <p>{{ formData.nama_ibu }}</p>
           </div>
           
@@ -143,6 +150,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Nama Wali Penguatan*</label>
@@ -151,6 +159,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Tanggal krisma wali*</label>
@@ -171,12 +180,13 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
               v-model="formData.tgl_krisma_wali"
               :max="new Date().toISOString().substr(0, 10)"
-              @change="saveDate"
+              @change="(date) => { this.$refs.menuTglBaptis.save(date) }"
             ></v-date-picker>
           </v-menu>
 
@@ -187,6 +197,7 @@
               style="display: none;"
               ref="inputSyarat"
               v-model="formData.file_syarat"
+              :rules="[required, acceptZipOnly]"
             ></v-file-input>
             <div>
               <v-btn
@@ -288,10 +299,6 @@ export default {
     this.formData.id_keluarga = this.$store.state.keluarga.id
   },
   methods: {
-    saveDate (date) {
-      this.$refs.menuTglBaptis.save(date)
-      this.$refs.menuTglKrisma.save(date)
-    },
     async changeIdUmat(e) {
       let temp = this.anggotaKeluarga.find(_ => {
         return _.nama === e
@@ -324,11 +331,20 @@ export default {
       }
     },
     async submit() {
+      let snackbar = {}
+      
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+      
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
-      let snackbar = {}
-        , formData = new FormData()
+      let formData = new FormData()
 
       this.formData.jenis_surat = this.tempJenisSurat === 'Komuni I' ? 1 : 2
 

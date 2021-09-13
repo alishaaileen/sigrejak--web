@@ -6,7 +6,7 @@
 
     <div class="form mt-5">
       <v-card class="pa-6" width="100%" flat>
-        <v-form @submit.prevent="submit">
+        <v-form ref="form" @submit.prevent="submit">
           <h3 class="mb-5">Informasi Umat</h3>
 
           <label>Nama lengkap*</label>
@@ -15,6 +15,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Nama baptis*</label>
@@ -23,6 +24,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Tempat lahir*</label>
@@ -31,6 +33,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Tanggal lahir*</label>
@@ -51,13 +54,14 @@
                 outlined
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
               ref="picker"
               v-model="formData.tgl_lahir"
               :max="new Date().toISOString().substr(0, 10)"
-              @change="saveDate"
+              @change="(date) => { this.$refs.dateMenu.save(date) }"
             ></v-date-picker>
           </v-menu>
 
@@ -67,6 +71,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-textarea>
 
           <v-divider class="mb-5"></v-divider>
@@ -79,9 +84,10 @@
             v-model="formData.status_terima_minyak"
             outlined
             dense
+            :rules="[required]"
           ></v-select>
 
-          <div v-show="formData.status_terima_minyak === 'Sudah pernah'">
+          <div v-if="formData.status_terima_minyak === 'Sudah pernah'">
             <label>Tanggal*</label>
             <v-menu
               ref="menu"
@@ -100,12 +106,13 @@
                   dense
                   v-bind="attrs"
                   v-on="on"
+                  :rules="[required]"
                 ></v-text-field>
               </template>
               <v-date-picker
                 v-model="formData.tgl_terima_minyak"
                 :max="new Date().toISOString().substr(0, 10)"
-                @change="saveDate"
+                @change="(date) => { this.$refs.menu.save(date) }"
               ></v-date-picker>
             </v-menu>
           </div>
@@ -124,29 +131,32 @@
           ></v-switch>
 
           <div v-if="isPunyaPasangan">
-            <label>Nama pasangan</label>
+            <label>Nama pasangan*</label>
             <v-text-field
               v-model="formData.nama_pasangan"
               required
               outlined
               dense
+              :rules="[required]"
             ></v-text-field>
 
-            <label>Cara menikah</label>
+            <label>Cara menikah*</label>
             <v-select
               :items="caraMenikahList"
               v-model="formData.cara_menikah"
               outlined
               dense
+              :rules="[required]"
             ></v-select>
 
-            <label>Tahun menikah</label>
+            <label>Tahun menikah*</label>
             <v-select
               :items="tahunList"
               v-model="formData.tahun_menikah"
               clearable
               outlined
               dense
+              :rules="[required]"
             ></v-select>
           </div>
 
@@ -160,22 +170,23 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Alamat*</label>
           <v-textarea
             v-model="formData.alamat_keluarga_penanggung_jawab"
-            required
             outlined
             dense
+            :rules="[required]"
           ></v-textarea>
 
           <label>Nomor telepon*</label>
           <v-text-field
             v-model="formData.no_telp_keluarga_penanggung_jawab"
-            required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <v-divider class="mb-5"></v-divider>
@@ -187,6 +198,7 @@
             :suggestionList="pastorList"
             itemText="nama"
             @changeData="changeIdPastor"
+            :rules="[required]"
           ></autocomplete>
 
           <div class="d-flex justify-end">
@@ -210,7 +222,9 @@
 
 <script>
 import { getData, postData } from '@/utils'
+import { required, acceptZipOnly } from '@/validations'
 import { caraMenikahList } from '@/constants'
+
 import Autocomplete from '@/components/Autocomplete'
 
 export default {
@@ -249,6 +263,10 @@ export default {
       isKetuaLingkungan: false,
     },
     pastorList: [],
+
+    // validation rules
+    required,
+    acceptZipOnly,
   }),
   async mounted() {
     this.initTahun()
@@ -270,10 +288,6 @@ export default {
         tahun--
       }
     },
-    saveDate (date) {
-      this.$refs.menu.save(date)
-      this.$refs.dateMenu.save(date)
-    },
     async changeIdPastor(e) {
       let temp = this.pastorList.find(_ => {
         return _.nama === e
@@ -281,6 +295,16 @@ export default {
       this.formData.id_pastor_pelayan = temp.id
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
@@ -288,7 +312,6 @@ export default {
         this.formData.tgl_terima_minyak = null
       }
 
-      let snackbar = {}
       if(this.formData.cara_ortu_menikah === 'Cara lain') {
         this.formData.cara_ortu_menikah = this.temp_cara_ortu_menikah
       }

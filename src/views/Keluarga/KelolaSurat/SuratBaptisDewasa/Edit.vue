@@ -33,7 +33,7 @@
 
         <v-divider></v-divider>
 
-        <v-form class="pa-6" @submit.prevent="submit">
+        <v-form class="pa-6" ref="form" @submit.prevent="submit">
           <div class="mb-15">
             <label>No. surat</label>
             <p>
@@ -65,6 +65,7 @@
             :suggestionList="anggotaKeluarga"
             itemText="nama"
             @changeData="changeIdUmat"
+            :rules="[required]"
           ></autocomplete>
 
           <v-alert
@@ -94,10 +95,10 @@
           </v-alert>
 
           <div v-show="!isAlertOrtuActive">
-            <label>Nama ayah*</label>
+            <label>Nama ayah</label>
             <p>{{ formData.nama_ayah }}</p>
             
-            <label>Nama ibu*</label>
+            <label>Nama ibu</label>
             <p>{{ formData.nama_ibu }}</p>
           </div>
 
@@ -119,6 +120,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Status perkawinan*</label>
@@ -128,6 +130,7 @@
             outlined
             dense
             @change="changeStatusPerkawinan"
+            :rules="[required]"
           ></v-select>
 
           <div v-if="formData.status_perkawinan === 'Akan menikah'">
@@ -137,6 +140,7 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-text-field>
 
             <label>Tanggal menikah*</label>
@@ -157,6 +161,7 @@
                   dense
                   v-bind="attrs"
                   v-on="on"
+                :rules="[required]"
                 ></v-text-field>
               </template>
               <v-date-picker
@@ -183,6 +188,7 @@
                 required
                 outlined
                 dense
+                :rules="[required]"
               ></v-text-field>
             </div>
 
@@ -192,6 +198,7 @@
               required
               outlined
               dense
+              :rules="[required]"
             ></v-text-field>
 
             <label>Tanggal menikah*</label>
@@ -212,6 +219,7 @@
                   dense
                   v-bind="attrs"
                   v-on="on"
+                  :rules="[required]"
                 ></v-text-field>
               </template>
               <v-date-picker
@@ -240,10 +248,17 @@
                 v-model="formData.pembatalan_perkawinan"
                 outlined
                 dense
+                :rules="[required]"
               ></v-select>
 
-              <div v-show="formData.pembatalan_perkawinan === 'Cara lain'">
+              <div v-if="formData.pembatalan_perkawinan === 'Cara lain'">
                 <label>Cara lain*</label>
+                <v-text-field
+                  v-model="temp_pembatalan_perkawinan"
+                  outlined
+                  dense
+                  :rules="[required]"
+                ></v-text-field>
               </div>
             </div>
           </div>
@@ -268,6 +283,7 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -295,6 +311,7 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -322,6 +339,7 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -373,6 +391,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>Tanggal krisma wali baptis*</label>
@@ -393,6 +412,7 @@
                 dense
                 v-bind="attrs"
                 v-on="on"
+                :rules="[required]"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -408,6 +428,7 @@
             required
             outlined
             dense
+            :rules="[required]"
           ></v-text-field>
 
           <label>File syarat baptis*</label>
@@ -420,23 +441,35 @@
             </ol>
             Syarat yang memiliki tanda * harap discan/difoto lalu dimasukan ke dalam file <em>.zip</em> dan diupload disini.
           </v-alert>
-          <div class="my-5">
-            <v-btn v-if="(typeof formData.file_syarat_baptis) == 'string'"
+          <div class="my-5" v-if="(!editFileSyarat)">
+            <v-btn v-if="formData.file_syarat_baptis && (typeof formData.file_syarat_baptis) == 'string'"
               text
               small
               color="blue"
               @click="downloadFile(formData.file_syarat_baptis)"
             >
-              klik untuk melihat file
+              Klik untuk melihat file
+            </v-btn>
+            <v-btn
+              v-if="isEditable"
+              class="text-none"
+              color="orange"
+              dark
+              depressed
+              @click="editFileSyarat = true"
+            >
+              Ubah file
             </v-btn>
           </div>
-          <div class="d-flex mb-5">
+          <div class="d-flex mb-5" v-if="editFileSyarat">
             <v-file-input
               accept="application/zip"
               style="display: none;"
               ref="inputSyaratBaptisAnak"
               v-model="formData.file_syarat_baptis"
+              :rules="[required, acceptZipOnly]"
             ></v-file-input>
+            
             <div>
               <v-btn
                 v-if="isEditable"
@@ -450,7 +483,7 @@
                 Upload file
               </v-btn>
             </div>
-            <div v-if="(typeof formData.file_syarat_baptis) != 'string'" class="ml-5">
+            <div v-if="formData.file_syarat_baptis && (typeof formData.file_syarat_baptis) != 'string'" class="ml-5">
               <p class="ma-0">{{formData.file_syarat_baptis.name}}</p>
               <small>{{ fileSize }} Mb</small>
             </div>
@@ -483,10 +516,11 @@
 
 <script>
 import { countAge, getData, getOneData, getLogSuratByNoSurat, editData, changeDateFormat } from '@/utils'
-import { caraMenikahList } from '@/constants'
+import { required, acceptZipOnly } from '@/validations'
+import { API_URL, caraMenikahList } from '@/constants'
+
 import Autocomplete from '@/components/Autocomplete'
 import ApprovalChip from '@/components/ApprovalChip.vue'
-import { API_URL } from '@/constants'
 import SidebarLogSurat from '@/components/SidebarLogSurat.vue'
 import ButtonChat from '@/components/ButtonChat.vue'
 
@@ -508,7 +542,11 @@ export default {
     isDatePickerTglMulaiBelajarActive: false,
     isDatePickerTglMulaiEkaristiActive: false,
     isDatePickerTglMulaiKegiatanActive: false,
-    formData: {},
+    
+    editFileSyarat: false,
+    formData: {
+      file_syarat_baptis: null
+    },
     temp_cara_menikah: '',
     temp_pembatalan_perkawinan: '',
     anggotaKeluarga: [],
@@ -518,6 +556,10 @@ export default {
     logList: [],
     isSidebarLogActive: false,
     countChatUnread: 0,
+    
+    // validation rules
+    required,
+    acceptZipOnly,
   }),
   computed: {
     isSubmitDisabled() {
@@ -623,23 +665,20 @@ export default {
       }
     },
     async submit() {
+      let snackbar = {}
+
+      if(!this.$refs.form.validate()) {
+        this.$refs.form.validate()
+        snackbar.color = 'error',
+        snackbar.text = 'Harap periksa inputan anda kembali'
+        this.$store.dispatch('snackbar/openSnackbar', snackbar)
+        return
+      }
+
       this.$store.dispatch('loading/openLoading')
       this.$store.commit('snackbar/resetSnackbar')
 
-      let snackbar = {}
-        , formData = new FormData()
-      
-      if(this.formData.cara_menikah === 'Cara lain') {
-        this.formData.cara_menikah = this.temp_cara_menikah
-      }
-      if(this.formData.pembatalan_perkawinan === 'Cara lain') {
-        this.formData.pembatalan_perkawinan = this.temp_pembatalan_perkawinan
-      }
-      if(this.formData.status_perkawinan === 'Akan menikah') {
-        formData.append('tgl_menikah_calon', this.formData.tgl_menikah_calon)        
-      } else if(this.formData.status_perkawinan === 'Sudah menikah') {
-        formData.append('tgl_menikah', this.formData.tgl_menikah)
-      }
+      let formData = new FormData()
 
       formData.append('id_keluarga', this.formData.id_keluarga)
       formData.append('id_lingkungan', this.formData.id_lingkungan)
@@ -647,9 +686,7 @@ export default {
       formData.append('nama_baptis', this.formData.nama_baptis)
       formData.append('status_perkawinan', this.formData.status_perkawinan)
       formData.append('calon_pasangan', this.formData.calon_pasangan)
-      formData.append('cara_menikah', this.formData.cara_menikah)
       formData.append('tempat_menikah', this.formData.tempat_menikah)
-      formData.append('pembatalan_perkawinan', this.formData.pembatalan_perkawinan)
       formData.append('tgl_mulai_belajar_agama', this.formData.tgl_mulai_belajar_agama)
       formData.append('tgl_mulai_ikut_ekaristi', this.formData.tgl_mulai_ikut_ekaristi)
       formData.append('tgl_mulai_kegiatan_lingkungan', this.formData.tgl_mulai_kegiatan_lingkungan)
@@ -657,6 +694,20 @@ export default {
       formData.append('nama_wali', this.formData.nama_wali)
       formData.append('tgl_krisma_wali', this.formData.tgl_krisma_wali)
       formData.append('tempat_krisma_wali', this.formData.tempat_krisma_wali)
+      formData.append('cara_menikah', this.formData.cara_menikah === 'Cara lain'
+        ? this.formData.cara_menikah
+        : this.temp_cara_menikah
+      )
+      formData.append('pembatalan_perkawinan', this.formData.pembatalan_perkawinan === 'Cara lain'
+        ? this.formData.cara_menikah
+        : this.temp_pembatalan_perkawinan
+      )
+      if(this.formData.status_perkawinan === 'Akan menikah') {
+        formData.append('tgl_menikah_calon', this.formData.tgl_menikah_calon)        
+      } else if(this.formData.status_perkawinan === 'Sudah menikah') {
+        formData.append('tgl_menikah', this.formData.tgl_menikah)
+      }
+
       if (typeof this.formData.file_syarat_baptis != 'string') {
         formData.append('file_syarat_baptis', this.formData.file_syarat_baptis)
       }

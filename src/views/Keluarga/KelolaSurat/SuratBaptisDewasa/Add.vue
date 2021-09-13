@@ -44,10 +44,10 @@
           </v-alert>
 
           <div v-show="!isAlertOrtuActive">
-            <label>Nama ayah*</label>
+            <label>Nama ayah</label>
             <p>{{ formData.nama_ayah }}</p>
             
-            <label>Nama ibu*</label>
+            <label>Nama ibu</label>
             <p>{{ formData.nama_ibu }}</p>
           </div>
 
@@ -92,7 +92,7 @@
               :rules="[required]"
             ></v-text-field>
 
-            <label>Tanggal menikah*</label>
+            <label>Tanggal menikah dengan calon*</label>
             <v-menu
               ref="menuTglMenikahCalon"
               v-model="isDatePickerTglNikahCalonActive"
@@ -116,7 +116,7 @@
               <v-date-picker
                 v-model="formData.tgl_menikah_calon"
                 :min="new Date().toISOString().substr(0, 10)"
-                @change="saveDate"
+                @change="(date) => { this.$refs.menuTglMenikahCalon.save(date) }"
               ></v-date-picker>
             </v-menu>
           </div>
@@ -175,7 +175,7 @@
               <v-date-picker
                 v-model="formData.tgl_menikah"
                 :max="new Date().toISOString().substr(0, 10)"
-                @change="saveDate"
+                @change="(date) => { this.$refs.menuTglMenikah.save(date) }"
               ></v-date-picker>
             </v-menu>
 
@@ -201,8 +201,14 @@
                 :rules="[required]"
               ></v-select>
 
-              <div v-show="formData.pembatalan_perkawinan === 'Cara lain'">
+              <div v-if="formData.pembatalan_perkawinan === 'Cara lain'">
                 <label>Alasan pembatalan*</label>
+                <v-text-field
+                  v-model="temp_pembatalan_perkawinan"
+                  outlined
+                  dense
+                  :rules="[required]"
+                ></v-text-field>
               </div>
             </div>
           </div>
@@ -233,7 +239,7 @@
             <v-date-picker
               v-model="formData.tgl_mulai_belajar_agama"
               :max="new Date().toISOString().substr(0, 10)"
-              @change="saveDate"
+              @change="(date) => { this.$refs.menuTglMulaiBelajar.save(date) }"
             ></v-date-picker>
           </v-menu>
 
@@ -261,7 +267,7 @@
             <v-date-picker
               v-model="formData.tgl_mulai_ikut_ekaristi"
               :max="new Date().toISOString().substr(0, 10)"
-              @change="saveDate"
+              @change="(date) => { this.$refs.menuTglMulaiEkaristi.save(date) }"
             ></v-date-picker>
           </v-menu>
 
@@ -289,7 +295,7 @@
             <v-date-picker
               v-model="formData.tgl_mulai_kegiatan_lingkungan"
               :max="new Date().toISOString().substr(0, 10)"
-              @change="saveDate"
+              @change="(date) => { this.$refs.menuTglMulaiKegiatan.save(date) }"
             ></v-date-picker>
           </v-menu>
 
@@ -363,7 +369,7 @@
             <v-date-picker
               v-model="formData.tgl_krisma_wali"
               :max="new Date().toISOString().substr(0, 10)"
-              @change="saveDate"
+              @change="(date) => { this.$refs.menuTglKrisma.save(date) }"
             ></v-date-picker>
           </v-menu>
 
@@ -512,6 +518,7 @@ export default {
     }
   },
   async mounted() {
+    // console.log(this.$refs)
     this.anggotaKeluarga = await getData(`/umat/keluarga/${this.$store.state.keluarga.id}`)
 
     // filter anggota yg sudah dihapus
@@ -520,14 +527,6 @@ export default {
     this.formData.id_keluarga = this.$store.state.keluarga.id
   },
   methods: {
-    saveDate(date) {
-      this.$refs.menuTglMenikah.save(date)
-      this.$refs.menuTglMenikahCalon.save(date)
-      this.$refs.menuTglKrisma.save(date)
-      this.$refs.menuTglMulaiBelajar.save(date)
-      this.$refs.menuTglMulaiEkaristi.save(date)
-      this.$refs.menuTglMulaiKegiatan.save(date)
-    },
     changeStatusPerkawinan() {
       this.formData.calon_pasangan = null
       this.formData.tgl_menikah_calon = null
@@ -587,27 +586,13 @@ export default {
 
       let formData = new FormData()
 
-      if(this.formData.cara_menikah === 'Cara lain') {
-        this.formData.cara_menikah = this.temp_cara_menikah
-      }
-      if(this.formData.pembatalan_perkawinan === 'Cara lain') {
-        this.formData.pembatalan_perkawinan = this.temp_pembatalan_perkawinan
-      }
-      if(this.formData.status_perkawinan === 'Akan menikah') {
-        formData.append('tgl_menikah_calon', this.formData.tgl_menikah_calon)        
-      } else if(this.formData.status_perkawinan === 'Sudah menikah') {
-        formData.append('tgl_menikah', this.formData.tgl_menikah)
-      }
-
       formData.append('id_keluarga', this.formData.id_keluarga)
       formData.append('id_lingkungan', this.formData.id_lingkungan)
       formData.append('id_umat', this.formData.id_umat)
       formData.append('nama_baptis', this.formData.nama_baptis)
       formData.append('status_perkawinan', this.formData.status_perkawinan)
       formData.append('calon_pasangan', this.formData.calon_pasangan)
-      formData.append('cara_menikah', this.formData.cara_menikah)
       formData.append('tempat_menikah', this.formData.tempat_menikah)
-      formData.append('pembatalan_perkawinan', this.formData.pembatalan_perkawinan)
       formData.append('tgl_mulai_belajar_agama', this.formData.tgl_mulai_belajar_agama)
       formData.append('tgl_mulai_ikut_ekaristi', this.formData.tgl_mulai_ikut_ekaristi)
       formData.append('tgl_mulai_kegiatan_lingkungan', this.formData.tgl_mulai_kegiatan_lingkungan)
@@ -616,6 +601,19 @@ export default {
       formData.append('tgl_krisma_wali', this.formData.tgl_krisma_wali)
       formData.append('tempat_krisma_wali', this.formData.tempat_krisma_wali)
       formData.append('file_syarat_baptis', this.formData.file_syarat_baptis)
+      formData.append('cara_menikah', this.formData.cara_menikah === 'Cara lain'
+        ? this.formData.cara_menikah
+        : this.temp_cara_menikah
+      )
+      formData.append('pembatalan_perkawinan', this.formData.pembatalan_perkawinan === 'Cara lain'
+        ? this.formData.cara_menikah
+        : this.temp_pembatalan_perkawinan
+      )
+      if(this.formData.status_perkawinan === 'Akan menikah') {
+        formData.append('tgl_menikah_calon', this.formData.tgl_menikah_calon)        
+      } else if(this.formData.status_perkawinan === 'Sudah menikah') {
+        formData.append('tgl_menikah', this.formData.tgl_menikah)
+      }
 
       if (this.formData.id_lingkungan == this.$store.state.keluarga.lingkunganId) {
         this.formData.isKetuaLingkungan = true

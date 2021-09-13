@@ -266,17 +266,27 @@
             </ol>
             Syarat yang memiliki tanda * harap discan/difoto lalu dimasukan ke dalam file <em>.zip</em> dan diupload disini.
           </v-alert>
-          <div class="my-5">
-            <v-btn v-if="(typeof formData.file_syarat_baptis) == 'string'"
+          <div class="my-5" v-if="(!editFileSyarat)">
+            <v-btn v-if="formData.file_syarat_baptis && (typeof formData.file_syarat_baptis) == 'string'"
               text
               small
               color="blue"
               @click="downloadFile(formData.file_syarat_baptis)"
             >
-              klik untuk melihat file
+              Klik untuk melihat file
+            </v-btn>
+            <v-btn
+              v-if="isEditable"
+              class="text-none"
+              color="orange"
+              dark
+              depressed
+              @click="editFileSyarat = true"
+            >
+              Ubah file
             </v-btn>
           </div>
-          <div class="d-flex mb-5">
+          <div class="d-flex mb-5" v-if="editFileSyarat">
             <v-file-input
               accept="application/zip"
               style="display: none;"
@@ -297,7 +307,7 @@
                 Upload file
               </v-btn>
             </div>
-            <div v-if="(typeof formData.file_syarat_baptis) != 'string'" class="ml-5">
+            <div v-if="formData.file_syarat_baptis && (typeof formData.file_syarat_baptis) != 'string'" class="ml-5">
               <p class="ma-0">{{formData.file_syarat_baptis.name}}</p>
               <small>{{ fileSize }} Mb</small>
             </div>
@@ -351,7 +361,11 @@ export default {
     caraMenikahList,
     isDatePickerTglNikahActive: false,
     isDatePickerTglKrismaWaliActive: false,
-    formData: {},
+    
+    editFileSyarat: false,
+    formData: {
+      file_syarat_baptis: null,
+    },
     temp_cara_ortu_menikah: '',
     anggotaKeluarga: [],
     isAlertUmurActive: false,
